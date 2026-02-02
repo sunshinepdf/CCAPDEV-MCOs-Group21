@@ -1,0 +1,114 @@
+.navbar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 5;
+}
+
+.navbar {
+    display: flex;
+    align-items: flex-end;
+
+    padding-left: 1rem;
+    margin-left: 1rem;
+    background-color: transparent;
+
+    position: relative;
+}
+
+.navbar-icons {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    padding-right: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.navtab {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    --tab-bg: var(--tab-color);
+    --text-color: #ffffff;
+    background-color: var(--tab-bg);
+    padding: 0.75rem 1.75rem;
+
+    border-radius: 12px 12px 0 0;
+    margin-right: -14px;
+    overflow: visible;
+    z-index: 1;
+
+    height: 20px;
+    min-width: 110px;
+
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+}
+
+.navtab::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -10px;
+    height: 100%;
+    width: 40px;
+    background-color: inherit;
+    transform: skewX(25deg);
+    transform-origin: top right;
+    border-radius: 0 12px 0 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.navtext {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    color: var(--text-color);
+    letter-spacing: 0.05em;
+}
+
+.navtab:hover {
+    cursor: pointer;
+    background-color: #ffffff;
+    z-index: 20;
+}
+
+.navtab:hover .navtext,
+.navbar label:hover .navtext,
+.navbar a:hover .navtext {
+    color: var(--tab-color);
+}
+
+.navtab:active .navtext {
+    color: var(--tab-color);
+}
+
+.navbar input[type="radio"] {
+    display: none;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.navbar input[type="radio"]:checked + a label {
+    --tab-bg: var(--page-color);
+    z-index: 10;
+
+    box-shadow: none;
+}
+
+.navbar input[type="radio"]:checked + a label .navtext {
+    color: var(--text-color);
+}
+
+.navbar input[type="radio"]:checked + a label:hover .navtext,
+.navbar input[type="radio"]:checked + a:hover label .navtext {
+    color: var(--page-color);
+}

@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Profile</title>
+        <title>Edit Profile</title>
         <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="navbar.css">
         <link rel="stylesheet" href="profile.css">
+        <style>
+            /* Show editing elements in edit mode */
+            .tag-remove {
+                display: inline !important;
+            }
+            .tag-input {
+                display: inline-flex !important;
+            }
+        </style>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +32,7 @@
                 <div class="profile-topbar">
                     <div class="profile-title">
                         <img src="assets/profile-icon.png" alt="profile" width="20" height="20">
-                        <h1 class="poppins-extrabold">Profile Page</h1>
+                        <h1 class="poppins-extrabold">Edit Profile</h1>
                     </div>
                     <div class="profile-search-bar">
                         <img src="assets/search-icon.png" alt="search" width="16" height="16" class="search-icon">
@@ -43,28 +52,34 @@
                         </div>
                     </div>
                     <div class="profile-info">
-                        <button class="btn-edit-profile poppins-extrabold" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
+                        <button class="btn-edit-profile poppins-extrabold" onclick="window.location.href='profile.html'">Save Changes</button>
                         <div class="profile-content">
-                            <h2 class="poppins-extrabold">Username</h2>
-                            <h4 class="poppins-extrabold-italic">About Me</h4>
-                            <p class="poppins-regular">This is a sample bio for the user profile. Blah Blah Blah proper name, placename, backstory stuff! It's no use Jo, we got to have it out! I've loved you ever since I have known you Jo, I couldn't help it. I tried to show you, and you won't let me, which is fine, but, I must make you hear now and give me an answer because I cannot go on like this any longer! I gave up billiards, I gave up everything you didn't like, I'm happy I did, it's fine, and I waited and I never complained because-- You know, I figured you would love me Jo. </p>
+                            <input type="text" class="poppins-extrabold" value="Username" style="font-size: 24px; border: 2px solid #504e76; padding: 8px; border-radius: 8px; width: 100%;">
+                            <textarea class="poppins-extrabold-italic" placeholder="About Me" style="font-size: 16px; border: 2px solid #504e76; padding: 8px; border-radius: 8px; width: 100%; margin-top: 10px; font-family: Poppins; resize: vertical;"></textarea>
+                            <textarea class="poppins-regular" placeholder="This is a sample bio for the user profile..." style="font-size: 14px; border: 2px solid #504e76; padding: 8px; border-radius: 8px; width: 100%; margin-top: 10px; font-family: Poppins; min-height: 100px; resize: vertical;"></textarea>
                             <div class="profile-tags">
                                 <div class="profile-tag">
                                     <img src="assets/college-icon.png" alt="College" width="16" height="16">
                                     <span class="poppins-extrabold">CCS</span>
+                                    <button class="tag-remove" aria-label="Remove tag">×</button>
                                 </div>
                                 <div class="profile-tag">
                                     <img src="assets/batch-icon.png" alt="Batch" width="16" height="16">
                                     <span class="poppins-extrabold">ID 124</span>
+                                    <button class="tag-remove" aria-label="Remove tag">×</button>
                                 </div>
                                 <div class="profile-tag">
                                     <span class="poppins-extrabold">Friendly</span>
+                                    <button class="tag-remove" aria-label="Remove tag">×</button>
                                 </div>
+                                <input type="text" class="tag-input" placeholder="Add a tag..." id="newTagInput">
+                            </div>
                         </div>
                     </div>
             </div>
         </div>
     </div>
     <script src="navbar.js"></script>
+    <script src="profile.js"></script>
     </body>
 </html>
