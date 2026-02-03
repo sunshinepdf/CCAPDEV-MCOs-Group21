@@ -1,0 +1,16 @@
+.popular-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: #f1642e;
+    color: #fdf8e2;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+}
+
+.popular-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
