@@ -2,6 +2,11 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.page-section .content-box {
+    height: auto;
+    overflow: hidden;
+}
+
 .discover-titlebar {
     display: flex;
     align-items: center;
@@ -29,8 +34,8 @@ body {
 
 .discover-content {
     background-color: #f1b02e;
-    
-    padding: 1rem 2rem;   
+    padding: 1rem 2rem;
+    border-radius: 12px;
 }
 
 

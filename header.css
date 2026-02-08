@@ -1,0 +1,16 @@
+.header {
+    background-color: var(--header-bg);
+    padding: 1rem;
+    padding-bottom: 3.5rem;
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-content img {
+    display: block;
+}
