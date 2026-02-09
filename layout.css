@@ -1,11 +1,15 @@
-.topbar {
+body {
+    margin: 0;
+    min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    background-color: #fdf8e2;
+}
 
-    background-color: #ffffff;
-    padding: 1rem 2rem;
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
 }
 
 .container {
@@ -32,11 +36,12 @@
 
     padding: 2rem;
     margin: 2rem;
-    height: 100vh;
+    min-height: 100vh;
 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: center;
     z-index: 10;
 }
+
 
 

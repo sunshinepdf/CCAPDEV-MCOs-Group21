@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Home</title>
-        <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
-        <link rel="stylesheet" href="style.css">
+        <title>Discover</title>
+        <link rel="icon" href="assets\placeholder.png" type="image/png">
+        <link rel="stylesheet" href="discover.css">
+        <link rel="stylesheet" href="global-sidebar.css">
+        <link rel="stylesheet" href="header.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="navbar.css">
 
@@ -12,18 +14,182 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     </head>
     <body>
-    <div class="topbar">
+    <div class="main-content">
+        <div class="container">
+            <nav-bar active="discover"></nav-bar>
+            <div class="page-section" style="--page-color: #f1b02e;">
+                <div class="content-box" style="--content-bg: #fdf8e2;">
+                <div class="discover-content">  
+                <div class="discover-titlebar">
+                    <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
+                    <h1 class="poppins-extrabold">Discover Posts</h1>
+                </div>
 
-        <h1 class="poppins-extrabold">AnimoCommons</h1>
-    </div>
-    <div class="container">
-        <nav-bar active="discover"></nav-bar>
-        <div class="page-section" style="--page-color: #f1b02e;">
-            <div class="content">
-                <h1 class="poppins-extrabold">Discover Page</h1>
+                <div class="content">
+                    <div class="discover-controls">
+                        <div class="search-wrapper">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Search posts..."
+                                onkeyup="filterPosts()"
+                            />
+
+                            <button class="filter-btn" onclick="toggleFilter()">
+                                    <img src="assets/filter-icon.png" alt="Filter">
+                                </button>
+                        </div>
+
+                        <div class="filter-panel" id="filterPanel">
+                            <h4>Filter by Category</h4>
+
+                            <label>
+                                <input type="checkbox" value="news" onchange="applyFilters()"> News
+                            </label>
+
+                            <label>
+                                <input type="checkbox" value="discussion" onchange="applyFilters()"> Discussion
+                            </label>
+
+                            <label>
+                                <input type="checkbox" value="help" onchange="applyFilters()"> Help
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="posts-grid">
+                        <div class="post-card" data-category="discussion" onclick="openPost(1)">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img src="assets/placeholder.png" class="avatar">
+                                    <span class="username">user123</span>
+                                    <span class="meta">· 2 hours ago · 120 views</span>
+                                </div>
+                                <span class="more">•••</span>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="post-title">M&Ms</h3>
+                            <p class="post-desc">
+                                Whenever I get a package of plain M&Ms, I make it my duty to continue the strength and 
+                                robustness of the candy as a species. To this end, I hold M&M duels. Taking two candies
+                                between my thumb and forefinger, I apply pressure, squeezing them together until one of them 
+                                cracks and splinters. That is the "loser"...
+                            </p>
+
+                            <div class="tags">
+                                <span>Discussion</span>
+                            </div>
+                        </div>
+
+            
+                        <div class="post-card" data-category="news" onclick="openPost(2)">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img src="assets/placeholder.png" class="avatar">
+                                    <span class="username">user6000</span>
+                                    <span class="meta">· 5 hours ago · 300 views</span>
+                                </div>
+                                <span class="more">•••</span>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="post-title">Lost earphones</h3>
+
+                            <div class="post-content with-image">
+                                <img src="assets/placeholder.png" class="post-image">
+                                <p class="post-desc">
+                                    hi, i lost my earphones around the library area yesterday. if anyone found it please let me know. thanks!
+                                </p>
+                            </div>
+
+                            <div class="tags">
+                                <span>General Question</span>
+                            </div>
+                        </div>
+                        <div class="post-card" data-category="help" onclick="openPost(3)">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img src="assets/placeholder.png" class="avatar">
+                                    <span class="username">steve40</span>
+                                    <span class="meta">· 1 day ago · 89 views</span>
+                                </div>
+                                <span class="more">•••</span>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="post-title">Need help with math homework</h3>
+                            <p class="post-desc">
+                                I’m struggling with integrals and would appreciate any tips or resources.
+                            </p>
+
+                            <div class="tags">
+                                <span>Homework</span>
+                            </div>
+                        </div>
+
+                        <div class="post-card" data-category="discussion" onclick="openPost(4)">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img src="assets/placeholder.png" class="avatar">
+                                    <span class="username">pheonix1011</span>
+                                    <span class="meta">· 2 days ago · 210 views</span>
+                                </div>
+                                <span class="more">•••</span>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="post-title">Best study spots on campus?</h3>
+
+                            <div class="post-content with-image">
+                                <img src="assets/placeholder.png" class="post-image">
+                                <p class="post-desc">
+                                    Where do you usually study when you need to focus?
+                                </p>
+                            </div>
+
+                            <div class="tags">
+                                <span>Discussion</span>
+                            </div>
+                        </div>
+
+                        <div class="post-card" data-category="news" onclick="openPost(5)">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img src="assets/placeholder.png" class="avatar">
+                                    <span class="username">J4X1</span>
+                                    <span class="meta">· 3 days ago · 540 views</span>
+                                </div>
+                                <span class="more">•••</span>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="post-title">Book borrowing available during term breaks?</h3>
+                            <p class="post-desc">
+                                I borrowed books brefore the term break and was asked to return it in April 12(right before break starts) 
+                                so I'm wondering if book borrowing is even allowed, or if the library is even open during term breaks.
+                            </p>
+
+                            <div class="tags">
+                                <span>General Question</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+                </div>
+            </div>
+            <script src="discover.js"></script>
         </div>
-        <script src="navbar.js"></script>
     </div>
+    <script src="header.js"></script>
+    <script src="global-sidebar.js"></script>
+    <script src="navbar.js"></script>
     </body>
 </html>
