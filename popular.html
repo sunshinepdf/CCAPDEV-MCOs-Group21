@@ -2,7 +2,7 @@
 <html>
         <head>
         <title>Popular</title>
-        <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
+        <link rel="icon" href="assets/placeholder.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="header.css">
@@ -20,10 +20,8 @@
         </style>
     </head>
     <body>
-    <div class="main-content">
-            <header-component></header-component>
-            <global-sidebar></global-sidebar>
-                <div class="container">
+        <div class="main-content">
+            <div class="container">
                 <nav-bar active="popular"></nav-bar>
                 <div class="page-section" style="--page-color: #f1642e;">
                     <div class="content-box" style="--content-bg: #fdf8e2;">
@@ -169,5 +167,80 @@
             <script src="global-sidebar.js"></script>
             <script src="navbar.js"></script>
     </body>
-</html>
+    <script src="data.js"></script>
+    <script src="header.js"></script>
+    <script src="global-sidebar.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        function loadVotes() {
+            var posts = document.querySelectorAll('.post');
+            posts.forEach(function (post) {
+                var postId = post.dataset.postId;
+                var scoreElement = document.getElementById('score-' + postId);
+                var upvoteBtn = post.querySelector('.upvote');
+                var downvoteBtn = post.querySelector('.downvote');
 
+                var votes = JSON.parse(localStorage.getItem('votes') || '{}');
+                var postVotes = votes[postId] || { score: parseInt(scoreElement.textContent, 10), userVote: null };
+
+                scoreElement.textContent = postVotes.score;
+
+                if (postVotes.userVote === 'up') {
+                    upvoteBtn.classList.add('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                } else if (postVotes.userVote === 'down') {
+                    downvoteBtn.classList.add('downvoted');
+                    upvoteBtn.classList.remove('upvoted');
+                } else {
+                    upvoteBtn.classList.remove('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                }
+            });
+        }
+
+        function vote(postId, voteType) {
+            var votes = JSON.parse(localStorage.getItem('votes') || '{}');
+            var scoreElement = document.getElementById('score-' + postId);
+            var postVotes = votes[postId] || { score: parseInt(scoreElement.textContent, 10), userVote: null };
+
+            var upvoteBtn = document.querySelector('[data-post-id="' + postId + '"] .upvote');
+            var downvoteBtn = document.querySelector('[data-post-id="' + postId + '"] .downvote');
+
+            if (postVotes.userVote === voteType) {
+                if (voteType === 'up') {
+                    postVotes.score -= 1;
+                    upvoteBtn.classList.remove('upvoted');
+                } else {
+                    postVotes.score += 1;
+                    downvoteBtn.classList.remove('downvoted');
+                }
+                postVotes.userVote = null;
+            } else {
+                if (postVotes.userVote === 'up') {
+                    postVotes.score -= 1;
+                    upvoteBtn.classList.remove('upvoted');
+                } else if (postVotes.userVote === 'down') {
+                    postVotes.score += 1;
+                    downvoteBtn.classList.remove('downvoted');
+                }
+
+                if (voteType === 'up') {
+                    postVotes.score += 1;
+                    upvoteBtn.classList.add('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                } else {
+                    postVotes.score -= 1;
+                    downvoteBtn.classList.add('downvoted');
+                    upvoteBtn.classList.remove('upvoted');
+                }
+                postVotes.userVote = voteType;
+            }
+
+            votes[postId] = postVotes;
+            localStorage.setItem('votes', JSON.stringify(votes));
+            scoreElement.textContent = postVotes.score;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadVotes);
+    </script>
+</html>
