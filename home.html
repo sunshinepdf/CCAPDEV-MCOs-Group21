@@ -1,34 +1,113 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Home</title>
-       <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="layout.css">
-        <link rel="stylesheet" href="header.css">
-        <link rel="stylesheet" href="global-sidebar.css">
-        <link rel="stylesheet" href="navbar.css">
+<head>
+  <title>Home</title>
+  <link rel="icon" href="assets/placeholder.png" type="image/png">
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div class="main-content"> 
-            <header-component></header-component>
-            <global-sidebar></global-sidebar> 
-            <div class="container">
-                <nav-bar active="home"></nav-bar>
-                <div class="page-section" style="--page-color: #a3b565;">
-                    <div class="content">
-                        <h1 class="poppins-extrabold">Home Page</h1>
-                    </div>
-                </div>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="global-sidebar.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="alert.css">
+  <link rel="stylesheet" href="home.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="main-content">
+    <global-sidebar></global-sidebar>
+
+    <div class="container">
+      <nav-bar active="home"></nav-bar>
+
+      <div class="page-section" style="--page-color: #a3b565;">
+        <div class="content-box" style="--content-bg: #fdf8e2;">
+
+     
+          <div class="home-masthead">
+            <div class="masthead-left">
+              <div class="home-badge poppins-extrabold">ANIMO COMMONS DAILY</div>
+              <div class="masthead-sub poppins-regular" id="mastheadDate">—</div>
             </div>
+
+            <div class="masthead-right">
+              <a class="mini-link poppins-extrabold" id="profileLink" href="profile.html">Profile</a>
+              <a class="mini-link poppins-extrabold" href="popular.html">Popular</a>
+              <a class="mini-link poppins-extrabold" href="discover.html">Discover</a>
+              <span class="login-pill poppins-regular" id="loginStatus">—</span>
+            </div>
+          </div>
+
+     
+          <div class="home-grid">
+
+        
+            <section class="paper-section">
+              <div class="section-titlebar">
+                <h2 class="poppins-extrabold">Latest Posts</h2>
+              </div>
+
+              <div class="paper-grid" id="paperGrid"></div>
+
+          
+              <div class="guest-gate" id="viewMoreGate" style="display:none;">
+                <p class="poppins-regular">
+                  You’re in <b>Guest mode</b>. Login / Sign up to view more posts and interact.
+                </p>
+                <div class="gate-actions">
+                  <a class="gate-btn poppins-extrabold" href="login.html">Login</a>
+                  <a class="gate-btn outline poppins-extrabold" href="sign-up.html">Sign Up</a>
+                </div>
+              </div>
+            </section>
+
+            
+            <aside class="right-rail">
+
+             
+              <section class="preview-block">
+                <div class="popular-topbar">
+                  <div class="popular-title">
+                    <img src="assets/popular-icon.png" alt="popular" width="20" height="20">
+                    <h3 class="poppins-extrabold">Popular</h3>
+                  </div>
+                  <a class="view-more poppins-extrabold" href="popular.html">View More</a>
+                </div>
+
+                <div class="preview-list" id="popularPreview"></div>
+              </section>
+
+       
+              <section class="preview-block">
+                <div class="discover-titlebar-mini">
+                  <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
+                  <h3 class="poppins-extrabold">Discover Posts</h3>
+                  <a class="view-more poppins-extrabold" href="discover.html">View More</a>
+                </div>
+
+                <div class="posts-grid-mini" id="discoverPreview"></div>
+              </section>
+
+            </aside>
+
+          </div>
+
         </div>
-    <script src="data.js"></script>
-    <script src="header.js"></script>
-    <script src="global-sidebar.js"></script>
-    <script src="navbar.js"></script>    
-    </body>
+      </div>
+
+    </div>
+  </div>
+
+ 
+  <script src="data.js"></script>
+  <script src="alert.js"></script>
+  <script src="header.js"></script>
+  <script src="global-sidebar.js"></script>
+  <script src="navbar.js"></script>
+  <script src="home.js"></script>
+</body>
 </html>
