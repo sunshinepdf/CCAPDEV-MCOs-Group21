@@ -1,8 +1,7 @@
 .popular-topbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     background-color: #f1642e;
     color: #fdf8e2;
     padding: 1rem 2rem;
@@ -13,4 +12,25 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.popular-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+    margin-left: 0;
+
+}
+
+.popular-controls select {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 2px solid #f1642e;
+    background-color: #f1642e;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 600;
 }
