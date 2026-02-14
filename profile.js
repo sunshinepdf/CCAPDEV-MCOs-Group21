@@ -1,13 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
     var storageKey = "animoProfile";
 
-    function loadProfileData() {
+    function parseJson(value) {
         try {
-            var raw = localStorage.getItem(storageKey);
-            return raw ? JSON.parse(raw) : {};
+            return value ? JSON.parse(value) : null;
         } catch (error) {
-            return {};
+            return null;
         }
+    }
+
+    function getDatabase() {
+        var localDb = parseJson(localStorage.getItem("mockDatabase"));
+        return typeof mockDatabase !== "undefined" ? mockDatabase : localDb;
+    }
+
+    function getCurrentUserId() {
+        return typeof CURRENT_USER_ID !== "undefined" ? CURRENT_USER_ID : "u1";
+    }
+
+    function loadProfileData() {
+        var db = getDatabase();
+        var currentUserId = getCurrentUserId();
+
+        if (db && Array.isArray(db.users)) {
+            var user = db.users.find(function (item) {
+                return item && item.id === currentUserId;
+            });
+            if (user) {
+                return {
+                    name: user.username || "",
+                    aboutTitle: "About Me",
+                    bio: user.bio || "",
+                    pronouns: user.pronouns || "",
+                    year: user.year || "",
+                    major: user.major || "",
+                    avatar: user.photo || "",
+                    tags: Array.isArray(user.tags) ? user.tags.slice() : []
+                };
+            }
+        }
+
+        var localProfile = parseJson(localStorage.getItem(storageKey));
+        return localProfile || {};
     }
 
     function saveProfileData(data) {
@@ -24,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var majorEl = document.getElementById("profile-major");
     var avatarEl = document.getElementById("profile-avatar-img");
     var tagsView = document.getElementById("profile-tags");
+    var postsStatEl = document.getElementById("stats-posts");
+    var reputationStatEl = document.getElementById("stats-reputation");
 
     if (nameEl && data.name) {
         nameEl.textContent = data.name;
@@ -47,10 +83,35 @@ document.addEventListener("DOMContentLoaded", function () {
         avatarEl.src = data.avatar;
     }
 
+    if (postsStatEl || reputationStatEl) {
+        var db = getDatabase();
+        var currentUserId = getCurrentUserId();
+        if (db && Array.isArray(db.posts)) {
+            var postCount = 0;
+            var reputationTotal = 0;
+            db.posts.forEach(function (post) {
+                if (!post || post.authorId !== currentUserId) {
+                    return;
+                }
+                postCount += 1;
+                var upvotes = Number(post.upvotes) || 0;
+                var downvotes = Number(post.downvotes) || 0;
+                reputationTotal += upvotes - downvotes;
+            });
+
+            if (postsStatEl) {
+                postsStatEl.textContent = String(postCount);
+            }
+            if (reputationStatEl) {
+                reputationStatEl.textContent = String(reputationTotal);
+            }
+        }
+    }
+
     var defaultTags = ["CCS", "ID 124", "Friendly"];
     var tags = Array.isArray(data.tags) && data.tags.length ? data.tags.slice() : defaultTags.slice();
 
-    function renderTags(container, editable) {
+    function renderTags(container) {
         if (!container) {
             return;
         }
@@ -64,173 +125,9 @@ document.addEventListener("DOMContentLoaded", function () {
             label.textContent = tag;
             tagEl.appendChild(label);
 
-            if (editable) {
-                var remove = document.createElement("button");
-                remove.className = "tag-remove";
-                remove.type = "button";
-                remove.setAttribute("aria-label", "Remove tag");
-                remove.textContent = "x";
-                remove.dataset.index = String(index);
-                tagEl.appendChild(remove);
-            }
-
             container.appendChild(tagEl);
         });
-
-        if (editable) {
-            var input = document.createElement("input");
-            input.type = "text";
-            input.className = "tag-input";
-            input.id = "newTagInput";
-            input.placeholder = "Add a tag...";
-            container.appendChild(input);
-
-            input.addEventListener("keydown", function (event) {
-                if (event.key !== "Enter") {
-                    return;
-                }
-                event.preventDefault();
-                var value = input.value.trim();
-                if (!value) {
-                    return;
-                }
-                tags.push(value);
-                input.value = "";
-                renderTags(container, true);
-            });
-        }
     }
 
-    renderTags(tagsView, false);
-
-    var saveButton = document.getElementById("save-profile");
-    if (!saveButton) {
-        return;
-    }
-    var resetButton = document.getElementById("reset-profile");
-
-    var nameInput = document.getElementById("edit-name");
-    var aboutTitleInput = document.getElementById("edit-about-title");
-    var bioInput = document.getElementById("edit-bio");
-    var pronounsInput = document.getElementById("edit-pronouns");
-    var yearInput = document.getElementById("edit-year");
-    var majorInput = document.getElementById("edit-major");
-    var avatarInput = document.getElementById("edit-avatar");
-    var avatarPreview = document.getElementById("edit-avatar-preview");
-    var tagsEdit = document.getElementById("edit-tags");
-
-    if (nameInput && data.name) {
-        nameInput.value = data.name;
-    }
-    if (aboutTitleInput && data.aboutTitle) {
-        aboutTitleInput.value = data.aboutTitle;
-    }
-    if (bioInput && data.bio) {
-        bioInput.value = data.bio;
-    }
-    if (pronounsInput && data.pronouns) {
-        pronounsInput.value = data.pronouns;
-    }
-    if (yearInput && data.year) {
-        yearInput.value = data.year;
-    }
-    if (majorInput && data.major) {
-        majorInput.value = data.major;
-    }
-    if (avatarPreview && data.avatar) {
-        avatarPreview.src = data.avatar;
-    }
-    renderTags(tagsEdit, true);
-
-    if (tagsEdit) {
-        tagsEdit.addEventListener("click", function (event) {
-            var target = event.target;
-            if (!target || !target.classList.contains("tag-remove")) {
-                return;
-            }
-            var index = Number(target.dataset.index);
-            if (Number.isNaN(index)) {
-                return;
-            }
-            tags.splice(index, 1);
-            renderTags(tagsEdit, true);
-        });
-    }
-
-    if (avatarInput && avatarPreview) {
-        avatarInput.addEventListener("change", function () {
-            var file = avatarInput.files && avatarInput.files[0];
-            if (!file) {
-                return;
-            }
-            var reader = new FileReader();
-            reader.onload = function () {
-                avatarPreview.src = String(reader.result);
-                data.avatar = String(reader.result);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    var defaultData = {
-        name: "Username",
-        aboutTitle: "About Me",
-        bio: "This is a sample bio for the user profile. You can edit this bio to share more about yourself, your interests, and anything else you'd like others to know! Feel free to make it as long or as short as you'd like.",
-        pronouns: "They/Them",
-        year: "2nd Year",
-        major: "Software Technology",
-        tags: defaultTags.slice()
-    };
-
-    function applyDefaultValues() {
-        if (nameInput) {
-            nameInput.value = defaultData.name;
-        }
-        if (aboutTitleInput) {
-            aboutTitleInput.value = defaultData.aboutTitle;
-        }
-        if (bioInput) {
-            bioInput.value = defaultData.bio;
-        }
-        if (pronounsInput) {
-            pronounsInput.value = defaultData.pronouns;
-        }
-        if (yearInput) {
-            yearInput.value = defaultData.year;
-        }
-        if (majorInput) {
-            majorInput.value = defaultData.major;
-        }
-        if (avatarPreview) {
-            avatarPreview.src = "assets/placeholder.png";
-        }
-        tags = defaultData.tags.slice();
-        renderTags(tagsEdit, true);
-        data.avatar = "";
-    }
-
-    if (resetButton) {
-        resetButton.addEventListener("click", function () {
-            localStorage.removeItem(storageKey);
-            applyDefaultValues();
-            saveProfileData(defaultData);
-        });
-    }
-
-    saveButton.addEventListener("click", function () {
-        var nextData = {
-            name: nameInput ? nameInput.value.trim() : "",
-            aboutTitle: aboutTitleInput ? aboutTitleInput.value.trim() : "",
-            bio: bioInput ? bioInput.value.trim() : "",
-            pronouns: pronounsInput ? pronounsInput.value.trim() : "",
-            year: yearInput ? yearInput.value.trim() : "",
-            major: majorInput ? majorInput.value.trim() : "",
-            tags: tags.slice()
-        };
-        if (data.avatar) {
-            nextData.avatar = data.avatar;
-        }
-        saveProfileData(nextData);
-        window.location.href = "profile.html";
-    });
+    renderTags(tagsView);
 });

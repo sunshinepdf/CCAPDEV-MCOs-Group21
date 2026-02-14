@@ -3,6 +3,9 @@
     padding: 1rem;
     padding-bottom: 3.5rem;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .header-content {
@@ -14,3 +17,43 @@
 .header-content img {
     display: block;
 }
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logout-btn {
+    background-color: rgba(253, 248, 226, 0.14);
+    color: #fdf8e2;
+    border: 1px solid rgba(253, 248, 226, 0.2);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: rgba(253, 248, 226, 0.25);
+}
+
+.logout-btn:active {
+    transform: scale(0.98);
+}
+
+.logout-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-text {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.9rem;
+    color: #fdf8e2;
+}
+

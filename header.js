@@ -14,11 +14,19 @@ document.addEventListener("DOMContentLoaded", function () {
     var headerBg = document.body.getAttribute("data-header-bg") || "#fdf8e2";
     header.style.setProperty("--header-bg", headerBg);
 
-    header.innerHTML =
-        '<div class="header-content">' +
+    var contentDiv = document.createElement("div");
+    contentDiv.className = "header-content";
+    contentDiv.innerHTML =
         '<img src="assets/logo.png" alt="Animo Commons Logo" width="32" height="32">' +
-        '<h1 class="poppins-extrabold">Animo Commons</h1>' +
-        "</div>";
+        '<h1 class="poppins-extrabold">Animo Commons</h1>';
+
+    var userDiv = document.createElement("div");
+    userDiv.className = "header-user";
+    userDiv.innerHTML = '';
+
+    header.appendChild(userDiv);
+    header.appendChild(contentDiv);
 
     mainContent.insertBefore(header, mainContent.firstChild);
 });
+

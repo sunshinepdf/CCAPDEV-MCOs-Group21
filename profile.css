@@ -117,9 +117,9 @@
 }
 
 .profile-avatar {
-    width: 220px;
-    height: 220px;
-    border-radius: 36px;
+    width: 280px;
+    height: 280px;
+    border-radius: 100%;
     overflow: visible;
     background-color: #504e76;
     display: flex;
@@ -133,12 +133,11 @@
 }
 
 .profile-avatar img {
-    width: 200px;
-    height: 200px;
+    width: 260px;
+    height: 260px;
     object-fit: cover;
-    align-items: center;
+    border-radius: 50%;
     display: block;
-    border-radius: 26px;
 }
 
 .profile-info{
@@ -339,6 +338,7 @@
     display: flex;
     justify-content: space-between;
     color: #504e76;
+    align-items: center;
 }
 
 .stat-label {
@@ -347,6 +347,19 @@
 
 .stat-value {
     font-weight: 700;
+}
+
+.stat-row .stat-value {
+    max-width: 180px;
+    font-size: 13px;
+    text-align: right;
+    word-break: break-word;
+}
+
+#profile-major {
+    display: block;
+    text-align: right;
+    word-break: break-word;
 }
 
 .sidebar-badges {
@@ -360,7 +373,10 @@
     color: #fdf8e2;
     padding: 6px 10px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
 }
 
 /*   USER POSTS   */

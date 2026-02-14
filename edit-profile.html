@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Edit Profile</title>
-        <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
+        <link rel="icon" href="C:\Users\Raina Helaga\CCAPDEV-Phase1-Group21\assets\placeholder.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="header.css">
@@ -36,16 +36,16 @@
                 </div>
                 <div class="user-profile-header">
                     <div class="profile-avatar">
-                        <img src="assets/placeholder.png" alt="Profile photo" id="edit-avatar-preview">
+                        <img src="assets/placeholder.png" alt="Profile photo" id="user-profile-photo" width="120" height="120" style="border-radius: 50%; object-fit: cover; border: 2px solid #504e76;">
                         <label class="btn-edit-pfp" for="edit-avatar">
                             <img src="assets/edit-image.png" alt="Status" width="12" height="12">
                         </label>
-                        <input type="file" id="edit-avatar" accept="image/*" style="display: none;">
+                        <input type="file" id="upload-profile-photo" accept="image/*" style="display: none;">
                     </div>
                     <div class="profile-info">
                         <div class="profile-actions">
-                            <button class="btn-edit-profile poppins-extrabold" id="save-profile" type="button">Save Changes</button>
-                            <button class="btn-reset-profile poppins-extrabold" id="reset-profile" type="button">Reset</button>
+                            <button class="btn-edit-profile poppins-extrabold" id="save-profile-edits" type="button">Save Changes</button>
+                            <button class="btn-reset-profile poppins-extrabold" id="reset-profile-to-default" type="button">Reset</button>
                         </div>
                         <div class="profile-content">
                             <input type="text" class="poppins-extrabold" id="edit-name" value="Username" style="font-size: 24px; border: 2px solid #504e76; padding: 8px; border-radius: 8px; width: 100%;">
@@ -76,6 +76,7 @@
     <script src="header.js"></script>
     <script src="global-sidebar.js"></script>
     <script src="navbar.js"></script>
-    <script src="profile.js"></script>
+    <script src="data.js"></script>
+    <script src="edit-profile.js"></script>
     </body>
 </html>

@@ -20,79 +20,12 @@
             <nav-bar active="profile"></nav-bar>
             <div class="page-section" style="--page-color: #504e76;">
                 <div class="content-box" style="--content-bg: #fdf8e2;">
-                <div class="profile-topbar">
-                    <div class="profile-title">
-                        <img src="assets/profile-icon.png" alt="profile" width="20" height="20">
-                        <h1 class="poppins-extrabold">Profile Page</h1>
-                    </div>
-                    <div class="profile-search-bar">
-                        <img src="assets/search-icon.png" alt="search" width="16" height="16" class="search-icon">
-                        <input type="text" placeholder="Find previous posts...">
-                    </div>
-                </div>
+                <profile-topbar></profile-topbar>
                 <div class="profile-layout">
-                    <aside class="profile-sidebar">
-                        <div class="sidebar-card card">
-                            <h3 class="poppins-extrabold card__title">User Info</h3>
-                            <div class="sidebar-stats poppins-regular">
-                                <div class="stat-row"><span class="badge-pill poppins-extrabold">Pronouns:</span><span class="stat-value" id="profile-pronouns">They/them</span></div>
-                                <div class="stat-row"><span class="badge-pill poppins-extrabold">Year:</span><span class="stat-value" id="profile-year">2nd Year</span></div>
-                                <div class="stat-row"><span class="badge-pill poppins-extrabold">Major:</span><span class="stat-value" id="profile-major">Software Technology</span></div>
-                            </div>
-                        </div>
-                        <div class="sidebar-card card">
-                            <h3 class="poppins-extrabold card__title">Stats</h3>
-                            <div class="sidebar-stats poppins-regular">
-                                <div class="stat-row"><span class="stat-label">Posts</span><span class="stat-value">24</span></div>
-                                <div class="stat-row"><span class="stat-label">Friends</span><span class="stat-value">89</span></div>
-                                <div class="stat-row"><span class="stat-label">Badges</span><span class="stat-value">6</span></div>
-                            </div>
-                        </div>
-                    </aside>
-                    <div class="profile-main">
-                        <div class="user-profile-header">
-                            <div class="profile-avatar">
-                                <img src="assets/placeholder.png" alt="Profile photo" id="profile-avatar-img">
-                            </div>
-                            <div class="profile-info">
-                                <button class="btn-edit-profile poppins-extrabold" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
-                                <div class="profile-content">
-                                    <h2 class="poppins-extrabold" id="profile-name">Username</h2>
-                                    <h4 class="poppins-extrabold-italic" id="profile-about-title">About Me</h4>
-                                    <p class="poppins-regular" id="profile-bio">This is a sample bio for the user profile. You can edit this bio to share more about yourself, your interests, and anything else you'd like others to know! Feel free to make it as long or as short as you'd like.</p>
-                                    <div class="profile-tags" id="profile-tags">
-                                        <div class="profile-tag">
-                                            <img src="assets/college-icon.png" alt="College" width="16" height="16">
-                                            <span class="poppins-extrabold">CCS</span>
-                                        </div>
-                                        <div class="profile-tag">
-                                            <img src="assets/batch-icon.png" alt="Batch" width="16" height="16">
-                                            <span class="poppins-extrabold">ID 124</span>
-                                        </div>
-                                        <div class="profile-tag">
-                                            <span class="poppins-extrabold">Friendly</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <profile-sidebar></profile-sidebar>
+                    <profile-main></profile-main>
                 </div>
-                <section class="profile-posts-section card card--dark">
-                    <h1 class="poppins-extrabold card__title">User Posts</h1>
-                    <div class="profile-posts">
-                        <div class="profile-post card card--light">
-                            <h3 class="post-title poppins-extrabold">My First Post</h3>
-                            <p class="post-content poppins-regular">This is the content of my first post. I'm excited to share my thoughts with the community!</p>
-                            <div class="post-meta poppins-regular">Posted on Jan 1, 2026 · 150 views</div>
-                        </div>
-                        <div class="profile-post card card--light">
-                            <h3 class="post-title poppins-extrabold">What's the best coffee spot around campus?</h3>
-                            <p class="post-content poppins-regular">Hi! I'm looking for a good coffee spot around campus. Do any of you guys have suggestions?</p>
-                            <div class="post-meta poppins-regular">Posted on Feb 4, 2026 · 150 views</div>
-                        </div>
-                    </div>
-                </section>
+                    <profile-posts></profile-posts>
                 </div>
             </div>
         </div>
@@ -100,6 +33,8 @@
     <script src="header.js"></script>
     <script src="global-sidebar.js"></script>
     <script src="navbar.js"></script>
+    <script src="profile-components.js"></script>
+    <script src="data.js"></script>
     <script src="profile.js"></script>
     </body>
 </html>

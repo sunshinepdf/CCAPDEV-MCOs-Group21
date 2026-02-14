@@ -7,24 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
             '<div class="sidebar-brand">' +
             '<img src="assets/logo.png" alt="Animo Commons Logo" width="32" height="32">' +
             "</div>" +
-            '<nav class="sidebar-nav">' +
-            '<a class="sidebar-link" href="home.html" aria-label="Home" title="Home">' +
-            '<img src="assets/home-icon.png" alt="Home">' +
-            "</a>" +
-            '<a class="sidebar-link" href="discover.html" aria-label="Discover" title="Discover">' +
-            '<img src="assets/discover-icon.png" alt="Discover">' +
-            "</a>" +
-            '<a class="sidebar-link" href="popular.html" aria-label="Popular" title="Popular">' +
-            '<img src="assets/popular-icon.png" alt="Popular">' +
-            "</a>" +
-            '<a class="sidebar-link" href="profile.html" aria-label="Profile" title="Profile">' +
-            '<img src="assets/profile-icon.png" alt="Profile">' +
-            "</a>" +
-            "</nav>" +
             '<div class="sidebar-footer">' +
-            '<a class="sidebar-link" href="edit-profile.html" aria-label="Edit Profile" title="Edit Profile">' +
-            '<img src="assets/settings-icon.png" alt="Edit Profile">' +
-            "</a>" +
+            '<div class="logout-container">' +
+            '<button class="logout-btn" onclick="logout()" aria-label="Logout" title="Logout">' +
+            '<img src="assets/logout-icon.png" alt="Logout">' +
+            "</button>" +
+            '<span class="logout-text">Logout</span>' +
+            "</div>" +
             "</div>";
 
         var mainContent = document.querySelector(".main-content");

@@ -17,56 +17,6 @@
 }
 
 
-/* Progress Bar */
-.xp-bar {
-    width: 300px;
-    height: 10px;
-    background: #eee;
-    border-radius: 10px;
-    margin: 10px 0;
-}
-
-.xp-fill {
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(90deg, #ff8a8a, #ffc3a0);
-    border-radius: 10px;
-}
-
-/* Stats and Cards */
-.quick-stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 20px;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.info-card {
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-}
-
-.badge-row {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.badge-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 15px;
-    margin: 0 auto 8px;
-    /* Apply different colors to .purple, .blue, etc. */
-}
-
 /* Posts and Voting System */
 .posts-container {
     margin-top: 2rem;

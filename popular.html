@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
+        <head>
         <title>Popular</title>
-        <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
+        <link rel="icon" href="assets/placeholder.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="header.css">
@@ -20,149 +20,227 @@
         </style>
     </head>
     <body>
-    <div class="topbar">
-        <h1 class="poppins-extrabold">AnimoCommons</h1>
-    </div>
-    <div class="container">
-        <nav-bar active="popular"></nav-bar>
-        <div class="page-section" style="--page-color: #f1642e;">
-            <div class="content-box" style="--content-bg: #fdf8e2;">
-                <div class="popular-topbar">
-                    <div class="popular-title">
-                        <img src="assets/popular-icon.png" alt="popular" width="20" height="20">
-                        <h1 class="poppins-extrabold">Popular</h1>
+        <div class="main-content">
+            <div class="container">
+                <nav-bar active="popular"></nav-bar>
+                <div class="page-section" style="--page-color: #f1642e;">
+                    <div class="content-box" style="--content-bg: #fdf8e2;">
+                        <div class="popular-topbar">
+                            <div class="popular-title">
+                                <img src="assets/popular-icon.png" alt="popular" width="20" height="20">
+                                <h1 class="poppins-extrabold">Popular</h1>
+                            </div>
+                        </div>
+                        <div class="posts-container">
+                            <div class="post" data-post-id="1">
+                                <div class="vote-section">
+                                    <button class="vote-btn upvote" onclick="vote('1', 'up')">▲</button>
+                                    <div class="score" id="score-1">42</div>
+                                    <button class="vote-btn downvote" onclick="vote('1', 'down')">▼</button>
+                                </div>
+                                <div class="post-content">
+                                    <h3 class="post-title">Amazing sunset at the campus</h3>
+                                    <p class="post-text">Just witnessed the most beautiful sunset from the rooftop. The sky was painted in hues of orange and pink. Nature is truly amazing!</p>
+                                    <div class="post-meta">
+                                        <span class="author">Posted by u/JohnDoe</span>
+                                        <span class="time">2 hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post" data-post-id="2">
+                                <div class="vote-section">
+                                    <button class="vote-btn upvote" onclick="vote('2', 'up')">▲</button>
+                                    <div class="score" id="score-2">28</div>
+                                    <button class="vote-btn downvote" onclick="vote('2', 'down')">▼</button>
+                                </div>
+                                <div class="post-content">
+                                    <h3 class="post-title">New coffee shop in town</h3>
+                                    <p class="post-text">Found this hidden gem of a coffee shop. Their latte art is incredible and the ambiance is perfect for studying. Highly recommend!</p>
+                                    <div class="post-meta">
+                                        <span class="author">Posted by u/CoffeeLover</span>
+                                        <span class="time">4 hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post" data-post-id="3">
+                                <div class="vote-section">
+                                    <button class="vote-btn upvote" onclick="vote('3', 'up')">▲</button>
+                                    <div class="score" id="score-3">15</div>
+                                    <button class="vote-btn downvote" onclick="vote('3', 'down')">▼</button>
+                                </div>
+                                <div class="post-content">
+                                    <h3 class="post-title">Group study session tips</h3>
+                                    <p class="post-text">Anyone have tips for effective group study sessions? We're struggling to stay focused and productive. Looking for advice!</p>
+                                    <div class="post-meta">
+                                        <span class="author">Posted by u/StudyBuddy</span>
+                                        <span class="time">6 hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <script src="header.js"></script>
+                    <script src="global-sidebar.js"></script>
+                    <script src="navbar.js"></script>
                 </div>
-                <div class="posts-container">
-                    <div class="post" data-post-id="1">
-                        <div class="vote-section">
-                            <button class="vote-btn upvote" onclick="vote('1', 'up')">▲</button>
-                            <div class="score" id="score-1">42</div>
-                            <button class="vote-btn downvote" onclick="vote('1', 'down')">▼</button>
-                        </div>
-                        <div class="post-content">
-                            <h3 class="post-title">Amazing sunset at the campus</h3>
-                            <p class="post-text">Just witnessed the most beautiful sunset from the rooftop. The sky was painted in hues of orange and pink. Nature is truly amazing!</p>
-                            <div class="post-meta">
-                                <span class="author">Posted by u/JohnDoe</span>
-                                <span class="time">2 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post" data-post-id="2">
-                        <div class="vote-section">
-                            <button class="vote-btn upvote" onclick="vote('2', 'up')">▲</button>
-                            <div class="score" id="score-2">28</div>
-                            <button class="vote-btn downvote" onclick="vote('2', 'down')">▼</button>
-                        </div>
-                        <div class="post-content">
-                            <h3 class="post-title">New coffee shop in town</h3>
-                            <p class="post-text">Found this hidden gem of a coffee shop. Their latte art is incredible and the ambiance is perfect for studying. Highly recommend!</p>
-                            <div class="post-meta">
-                                <span class="author">Posted by u/CoffeeLover</span>
-                                <span class="time">4 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post" data-post-id="3">
-                        <div class="vote-section">
-                            <button class="vote-btn upvote" onclick="vote('3', 'up')">▲</button>
-                            <div class="score" id="score-3">15</div>
-                            <button class="vote-btn downvote" onclick="vote('3', 'down')">▼</button>
-                        </div>
-                        <div class="post-content">
-                            <h3 class="post-title">Group study session tips</h3>
-                            <p class="post-text">Anyone have tips for effective group study sessions? We're struggling to stay focused and productive. Looking for advice!</p>
-                            <div class="post-meta">
-                                <span class="author">Posted by u/StudyBuddy</span>
-                                <span class="time">6 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <script src="navbar.js"></script>
+                <script>
+                    // Load votes from localStorage
+                    function loadVotes() {
+                        const posts = document.querySelectorAll('.post');
+                        posts.forEach(post => {
+                            const postId = post.dataset.postId;
+                            const scoreElement = document.getElementById(`score-${postId}`);
+                            const upvoteBtn = post.querySelector('.upvote');
+                            const downvoteBtn = post.querySelector('.downvote');
+                            
+                            const votes = JSON.parse(localStorage.getItem('votes') || '{}');
+                            const postVotes = votes[postId] || { score: parseInt(scoreElement.textContent), userVote: null };
+                            
+                            scoreElement.textContent = postVotes.score;
+                            
+                            if (postVotes.userVote === 'up') {
+                                upvoteBtn.classList.add('upvoted');
+                                downvoteBtn.classList.remove('downvoted');
+                            } else if (postVotes.userVote === 'down') {
+                                downvoteBtn.classList.add('downvoted');
+                                upvoteBtn.classList.remove('upvoted');
+                            } else {
+                                upvoteBtn.classList.remove('upvoted');
+                                downvoteBtn.classList.remove('downvoted');
+                            }
+                        });
+                    }
+        
+                    // Handle voting
+                    function vote(postId, voteType) {
+                        const votes = JSON.parse(localStorage.getItem('votes') || '{}');
+                        const postVotes = votes[postId] || { score: parseInt(document.getElementById(`score-${postId}`).textContent), userVote: null };
+                        
+                        const upvoteBtn = document.querySelector(`[data-post-id="${postId}"] .upvote`);
+                        const downvoteBtn = document.querySelector(`[data-post-id="${postId}"] .downvote`);
+                        const scoreElement = document.getElementById(`score-${postId}`);
+                        
+                        if (postVotes.userVote === voteType) {
+                            // Remove vote
+                            if (voteType === 'up') {
+                                postVotes.score -= 1;
+                                upvoteBtn.classList.remove('upvoted');
+                            } else {
+                                postVotes.score += 1;
+                                downvoteBtn.classList.remove('downvoted');
+                            }
+                            postVotes.userVote = null;
+                        } else {
+                            // Change or add vote
+                            if (postVotes.userVote === 'up') {
+                                postVotes.score -= 1;
+                                upvoteBtn.classList.remove('upvoted');
+                            } else if (postVotes.userVote === 'down') {
+                                postVotes.score += 1;
+                                downvoteBtn.classList.remove('downvoted');
+                            }
+                            
+                            if (voteType === 'up') {
+                                postVotes.score += 1;
+                                upvoteBtn.classList.add('upvoted');
+                                downvoteBtn.classList.remove('downvoted');
+                            } else {
+                                postVotes.score -= 1;
+                                downvoteBtn.classList.add('downvoted');
+                                upvoteBtn.classList.remove('upvoted');
+                            }
+                            postVotes.userVote = voteType;
+                        }
+                        
+                        votes[postId] = postVotes;
+                        localStorage.setItem('votes', JSON.stringify(votes));
+                        scoreElement.textContent = postVotes.score;
+                    }
+        
+                    // Load votes on page load
+                    document.addEventListener('DOMContentLoaded', loadVotes);
+                </script>
             </div>
+            <script src="data.js"></script>
             <script src="header.js"></script>
             <script src="global-sidebar.js"></script>
             <script src="navbar.js"></script>
-        </div>
-        <script src="navbar.js"></script>
-        <script>
-            // Load votes from localStorage
-            function loadVotes() {
-                const posts = document.querySelectorAll('.post');
-                posts.forEach(post => {
-                    const postId = post.dataset.postId;
-                    const scoreElement = document.getElementById(`score-${postId}`);
-                    const upvoteBtn = post.querySelector('.upvote');
-                    const downvoteBtn = post.querySelector('.downvote');
-                    
-                    const votes = JSON.parse(localStorage.getItem('votes') || '{}');
-                    const postVotes = votes[postId] || { score: parseInt(scoreElement.textContent), userVote: null };
-                    
-                    scoreElement.textContent = postVotes.score;
-                    
-                    if (postVotes.userVote === 'up') {
-                        upvoteBtn.classList.add('upvoted');
-                        downvoteBtn.classList.remove('downvoted');
-                    } else if (postVotes.userVote === 'down') {
-                        downvoteBtn.classList.add('downvoted');
-                        upvoteBtn.classList.remove('upvoted');
-                    } else {
-                        upvoteBtn.classList.remove('upvoted');
-                        downvoteBtn.classList.remove('downvoted');
-                    }
-                });
-            }
-
-            // Handle voting
-            function vote(postId, voteType) {
-                const votes = JSON.parse(localStorage.getItem('votes') || '{}');
-                const postVotes = votes[postId] || { score: parseInt(document.getElementById(`score-${postId}`).textContent), userVote: null };
-                
-                const upvoteBtn = document.querySelector(`[data-post-id="${postId}"] .upvote`);
-                const downvoteBtn = document.querySelector(`[data-post-id="${postId}"] .downvote`);
-                const scoreElement = document.getElementById(`score-${postId}`);
-                
-                if (postVotes.userVote === voteType) {
-                    // Remove vote
-                    if (voteType === 'up') {
-                        postVotes.score -= 1;
-                        upvoteBtn.classList.remove('upvoted');
-                    } else {
-                        postVotes.score += 1;
-                        downvoteBtn.classList.remove('downvoted');
-                    }
-                    postVotes.userVote = null;
-                } else {
-                    // Change or add vote
-                    if (postVotes.userVote === 'up') {
-                        postVotes.score -= 1;
-                        upvoteBtn.classList.remove('upvoted');
-                    } else if (postVotes.userVote === 'down') {
-                        postVotes.score += 1;
-                        downvoteBtn.classList.remove('downvoted');
-                    }
-                    
-                    if (voteType === 'up') {
-                        postVotes.score += 1;
-                        upvoteBtn.classList.add('upvoted');
-                        downvoteBtn.classList.remove('downvoted');
-                    } else {
-                        postVotes.score -= 1;
-                        downvoteBtn.classList.add('downvoted');
-                        upvoteBtn.classList.remove('upvoted');
-                    }
-                    postVotes.userVote = voteType;
-                }
-                
-                votes[postId] = postVotes;
-                localStorage.setItem('votes', JSON.stringify(votes));
-                scoreElement.textContent = postVotes.score;
-            }
-
-            // Load votes on page load
-            document.addEventListener('DOMContentLoaded', loadVotes);
-        </script>
-    </div>
     </body>
+    <script src="data.js"></script>
+    <script src="header.js"></script>
+    <script src="global-sidebar.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        function loadVotes() {
+            var posts = document.querySelectorAll('.post');
+            posts.forEach(function (post) {
+                var postId = post.dataset.postId;
+                var scoreElement = document.getElementById('score-' + postId);
+                var upvoteBtn = post.querySelector('.upvote');
+                var downvoteBtn = post.querySelector('.downvote');
+
+                var votes = JSON.parse(localStorage.getItem('votes') || '{}');
+                var postVotes = votes[postId] || { score: parseInt(scoreElement.textContent, 10), userVote: null };
+
+                scoreElement.textContent = postVotes.score;
+
+                if (postVotes.userVote === 'up') {
+                    upvoteBtn.classList.add('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                } else if (postVotes.userVote === 'down') {
+                    downvoteBtn.classList.add('downvoted');
+                    upvoteBtn.classList.remove('upvoted');
+                } else {
+                    upvoteBtn.classList.remove('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                }
+            });
+        }
+
+        function vote(postId, voteType) {
+            var votes = JSON.parse(localStorage.getItem('votes') || '{}');
+            var scoreElement = document.getElementById('score-' + postId);
+            var postVotes = votes[postId] || { score: parseInt(scoreElement.textContent, 10), userVote: null };
+
+            var upvoteBtn = document.querySelector('[data-post-id="' + postId + '"] .upvote');
+            var downvoteBtn = document.querySelector('[data-post-id="' + postId + '"] .downvote');
+
+            if (postVotes.userVote === voteType) {
+                if (voteType === 'up') {
+                    postVotes.score -= 1;
+                    upvoteBtn.classList.remove('upvoted');
+                } else {
+                    postVotes.score += 1;
+                    downvoteBtn.classList.remove('downvoted');
+                }
+                postVotes.userVote = null;
+            } else {
+                if (postVotes.userVote === 'up') {
+                    postVotes.score -= 1;
+                    upvoteBtn.classList.remove('upvoted');
+                } else if (postVotes.userVote === 'down') {
+                    postVotes.score += 1;
+                    downvoteBtn.classList.remove('downvoted');
+                }
+
+                if (voteType === 'up') {
+                    postVotes.score += 1;
+                    upvoteBtn.classList.add('upvoted');
+                    downvoteBtn.classList.remove('downvoted');
+                } else {
+                    postVotes.score -= 1;
+                    downvoteBtn.classList.add('downvoted');
+                    upvoteBtn.classList.remove('upvoted');
+                }
+                postVotes.userVote = voteType;
+            }
+
+            votes[postId] = postVotes;
+            localStorage.setItem('votes', JSON.stringify(votes));
+            scoreElement.textContent = postVotes.score;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadVotes);
+    </script>
 </html>
