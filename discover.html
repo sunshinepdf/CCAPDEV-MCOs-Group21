@@ -19,45 +19,58 @@
             <global-sidebar></global-sidebar>
             <div class="container">
                 <nav-bar active="discover"></nav-bar>
+
                 <div class="page-section" style="--page-color: #f1b02e;">
                     <div class="content-box" style="--content-bg: #fdf8e2;">
-                    <div class="discover-content">  
-                    <div class="discover-titlebar">
-                        <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
-                        <h1 class="poppins-extrabold">Discover Posts</h1>
+
+                    <div class="discover-topbar">  
+                        <div class="discover-title">
+                            <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
+                            <h1 class="poppins-extrabold">Discover Posts</h1>
+                        </div>
                     </div>
 
-                    <div class="content">
-                        <div class="discover-controls">
-                            <div class="search-wrapper">
-                                <input 
-                                    type="text" 
-                                    id="searchInput" 
-                                    placeholder="Search posts..."
-                                    onkeyup="filterPosts()"
-                                />
+                    
+                    <div class="discover-controls">
+                        <div class="search-wrapper">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Search posts..."
+                                onkeyup="filterPosts()"
+                            />
 
-                                <button class="filter-btn" onclick="toggleFilter()">
-                                        <img src="assets/filter-icon.png" alt="Filter">
-                                    </button>
-                            </div>
+                            <button class="filter-btn" onclick="toggleFilter()">
+                                    <img src="assets/filter-icon.png" alt="Filter">
+                                </button>
+                        </div>
+                    </div>
 
+                        <div class="filter-overlay" id="filterOverlay">
                             <div class="filter-panel" id="filterPanel">
                                 <h4>Filter by Category</h4>
 
-                                <label>
-                                    <input type="checkbox" value="news" onchange="applyFilters()"> News
+                                <label class="filter-option">
+                                    <input type="checkbox" value="news"> 
+                                    <span class="tags-preview"><span>General Question</span></span>
                                 </label>
 
-                                <label>
-                                    <input type="checkbox" value="discussion" onchange="applyFilters()"> Discussion
+                                <label class="filter-option">
+                                    <input type="checkbox" value="discussion"> 
+                                    <span class="tags-preview"><span>Discussion</span></span>
                                 </label>
 
-                                <label>
-                                    <input type="checkbox" value="help" onchange="applyFilters()"> Help
+                                <label class="filter-option">
+                                    <input type="checkbox" value="help"> 
+                                    <span class="tags-preview"><span>Help</span></span>
                                 </label>
+
+                                <div class="filter-actions">
+                                    <button onclick="applyFilters()">Filter</button>
+                                </div>
                             </div>
                         </div>
+
 
                         <div class="posts-grid">
                             <div class="post-card" data-category="discussion" onclick="openPost(1)">
@@ -183,9 +196,9 @@
                             </div>
 
                         </div>
+                    
                     </div>
-                </div>
-                    </div>
+                
                 </div>
                 <script src="discover.js"></script>
             </div>
