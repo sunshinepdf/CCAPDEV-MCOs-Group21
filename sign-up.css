@@ -2,13 +2,15 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-image: url('assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }  
 
 .sign-up-banner{
-    background-color: rgb(244, 244, 207);
-    background-image: url('assets/sign-up-banner.jpg');
-    background-size: cover;
-    background-position: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
     border-radius: 12px 12px 0 0;
     padding: 2rem;
     display: flex;
@@ -19,9 +21,14 @@
     gap: 0.25rem;
 }
 
-.sign-up-banner h2,
+.sign-up-banner h2 {
+    margin: 0;
+    color: #000000;
+}
+
 .sign-up-banner p {
     margin: 0;
+    color: #000000;
 }
 
 .sign-up-form-container {
@@ -30,17 +37,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
+    background-color: transparent;
 }
 
 .sign-up-form {
     width: 60%;
     max-width: 500px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.6);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     text-align: center;
+    backdrop-filter: blur(10px);
 }
 
 .sign-up-form form {

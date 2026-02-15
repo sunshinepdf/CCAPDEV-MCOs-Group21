@@ -43,7 +43,7 @@ const defaultDatabase = {
         },
         { 
           id: "u4", 
-          username: "urmom", 
+          username: "ccsstudent", 
           email: "psychology.student@dlsu.edu.ph", 
           password: "password", 
           photo: "assets/placeholder.png", 

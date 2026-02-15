@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sidebar.className = "global-sidebar";
         sidebar.innerHTML =
             '<div class="sidebar-brand">' +
-            '<img src="assets/logo.png" alt="Animo Commons Logo" width="100" height="100">' +
+            '<img src="assets/logo-b.png" alt="Animo Commons Logo" width="100" height="100">' +
             "</div>" +
             '<div class="sidebar-footer">' +
             '<div class="logout-container">' +
