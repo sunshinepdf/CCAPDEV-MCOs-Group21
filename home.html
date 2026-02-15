@@ -113,8 +113,8 @@
       var mastheadDate = document.getElementById("mastheadDate");
 
       function isLoggedIn() {
-        var id = (window.CURRENT_USER_ID || "").trim();
-        return !!id;
+        var id = (localStorage.getItem("currentUserId") || "").trim();
+        return id.length > 0;
       }
 
       function getAuthorName(authorId) {
@@ -289,6 +289,8 @@
         }
 
         var logged = isLoggedIn();
+        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+
         if (loginStatus) loginStatus.textContent = logged ? "Logged in" : "Guest mode";
 
         if (profileLink && !logged) {
@@ -361,26 +363,67 @@
             var id = t.getAttribute("data-id");
             if (!action || !id) return;
 
-            // find article container and check lock
             var article = t.closest(".article");
             var isLocked = article && article.getAttribute("data-locked") === "1";
 
-            if (!logged || isLocked) {
-              AlertModal.show("Please login or sign up to view and interact with posts.", "error");
-              return;
+            // strict guard: must be logged in AND not locked
+            var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+            var loggedNow = activeUserId.length > 0;
+
+            if (!loggedNow || isLocked) {
+                AlertModal.show("Please login or sign up to view and interact with posts.", "error");
+                return;
+            }
+
+            var post = posts.find(function (p) { return p && p.id === id; });
+            if (!post) return;
+
+            // init per-user vote map (stored inside post)
+            post.votes = post.votes || {}; // { userId: "up" | "down" }
+
+            var prev = post.votes[activeUserId] || null;
+
+            function applyVote(next) {
+                // remove previous
+                if (prev === "up") post.upvotes = (Number(post.upvotes) || 0) - 1;
+                if (prev === "down") post.downvotes = (Number(post.downvotes) || 0) - 1;
+
+                // apply next
+                if (next === "up") post.upvotes = (Number(post.upvotes) || 0) + 1;
+                if (next === "down") post.downvotes = (Number(post.downvotes) || 0) + 1;
+
+                // store new state
+                if (next) post.votes[activeUserId] = next;
+                else delete post.votes[activeUserId];
             }
 
             if (action === "open") {
-              addView(id);
-              AlertModal.show("Opened post (views updated)!", "success");
-              render();
-              return;
+                addView(id);
+                AlertModal.show("Opened post (views updated)!", "success");
+                render();
+                return;
             }
 
-            // If you later re-add voting logic, keep it behind this same lock guard.
-            AlertModal.show("Voting is available when logged in.", "error");
+            if (action === "up") {
+                // toggle: up -> none, none/down -> up
+                applyVote(prev === "up" ? null : "up");
+                AlertModal.show("Vote updated!", "success");
+                render();
+                return;
+            }
+
+            if (action === "down") {
+                // toggle: down -> none, none/up -> down
+                applyVote(prev === "down" ? null : "down");
+                AlertModal.show("Vote updated!", "success");
+                render();
+                return;
+            }
+
           };
+            
         }
+    
       }
 
       render();
