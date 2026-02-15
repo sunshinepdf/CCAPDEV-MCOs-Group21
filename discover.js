@@ -1,9 +1,5 @@
 let selectedCategories = [];
 
-// =============================
-// RENDER POSTS FROM DATABASE
-// =============================
-
 function renderDiscoverPosts() {
     const container = document.getElementById("discoverPosts");
     if (!container) return;
@@ -12,7 +8,6 @@ function renderDiscoverPosts() {
 
     // Always get fresh database from localStorage
     let db = mockDatabase;
-
     const saved = localStorage.getItem("mockDatabase");
     if (saved) {
         db = JSON.parse(saved);
@@ -23,7 +18,12 @@ function renderDiscoverPosts() {
         return;
     }
 
-    db.posts.forEach(post => {
+    // ✅ Sort newest → oldest
+    const sortedPosts = [...db.posts].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    sortedPosts.forEach(post => {
         const user = db.users.find(u => u.id === post.authorId) || { username: "Unknown" };
 
         const postCard = document.createElement("div");
@@ -35,9 +35,8 @@ function renderDiscoverPosts() {
                 <div class="user-info">
                     <img src="assets/placeholder.png" class="avatar">
                     <span class="username">${user.username}</span>
-                    <span class="meta">· ${post.date} · ${post.views || 0} views</span>
+                    <span class="meta">· ${post.date} • ${post.views || 0} views</span>
                 </div>
-                <span class="more">•••</span>
             </div>
 
             <hr>
@@ -54,10 +53,6 @@ function renderDiscoverPosts() {
     });
 }
 
-
-// =============================
-// FILTER + SEARCH (UNCHANGED)
-// =============================
 
 function toggleFilter() {
     const overlay = document.getElementById("filterOverlay");
@@ -110,10 +105,6 @@ function filterPosts() {
         post.style.display = (matchesSearch && matchesCategory) ? "flex" : "none";
     });
 }
-
-// =============================
-// INIT
-// =============================
 
 document.addEventListener("DOMContentLoaded", () => {
     renderDiscoverPosts();
