@@ -11,7 +11,7 @@ body {
   padding: 18px 18px 12px 18px;
   border-radius: 12px;
   background: #f7f1d6;
-  border: 2px solid #e6dfc5;
+  border: 8px solid #e6dfc5;
   margin-bottom: 18px;
 }
 
@@ -263,11 +263,18 @@ body {
   gap: 18px;
 }
 
-.preview-block {
-  background: #fdf8e2;
+.preview-block-popular {
+  background: #f1642e;
   border-radius: 12px;
   padding: 12px;
   border: 2px solid #e6dfc5;
+}
+
+.preview-block-discover {
+  background: #f1b02e;
+  border-radius: 12px;
+  padding: 12px;
+  border: 10px solid #e6dfc5;
 }
 
 .popular-topbar {
@@ -279,12 +286,26 @@ body {
   color: #fdf8e2;
   padding: 12px 14px;
   border-radius: 12px;
+  border: 6px solid #fdf8e2
+}
+
+.discover-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  background-color: #f1b02e;
+  color: #fdf8e2;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 6px solid #fdf8e2
 }
 
 .popular-title {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 18px
 }
 
 .view-more {
@@ -309,27 +330,21 @@ body {
 }
 
 
-.discover-titlebar-mini {
+
+.discover-titlebar-mini img {
+  background-color: #edce41;
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.discover-title {
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #fdf8e2;
-  color: #f1b02e;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.06);
-  justify-content: space-between;
+  font-size: 15px
 }
 
-.discover-titlebar-mini img {
-  filter: brightness(0) saturate(100%) invert(64%) sepia(88%) saturate(460%) hue-rotate(5deg);
-}
 
-.discover-titlebar-mini h3 {
-  margin: 0;
-  font-size: 14px;
-  flex: 1;
-}
 
 
 .posts-grid-mini {
@@ -343,9 +358,10 @@ body {
   background: #fdf8e2;
   border-radius: 12px;
   padding: 12px;
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 4px solid #e1d4a8;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 
 .post-card-mini:hover {
   transform: translateY(-2px);

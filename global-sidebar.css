@@ -1,92 +1,142 @@
+/* ===== Base layout ===== */
 body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    background-color: #fdf8e2;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  background-color: #fdf8e2;
 }
 
 .main-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
+/* ===== Sidebar ===== */
 .global-sidebar {
-    width: 110px;
-    background-color: var(--sidebar-color, #4f4d73);
-    color: #fdf8e2;
-    padding: 20px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.12);
+  width: 110px;
+  background-color: var(--sidebar-color, #4f4d73);
+  color: #fdf8e2;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== Brand (LOGO ONLY — no box) ===== */
 .sidebar-brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-    background-color: rgba(253, 248, 226, 0.14);
-    border: 1px solid rgba(253, 248, 226, 0.2);
-    border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .sidebar-brand img {
-    width: 32px;
-    height: 32px;
-    display: block;
+  width: 100px;
+  height: 100px;
+  display: block;
 }
 
+/* ===== Navigation + footer ===== */
 .sidebar-nav,
 .sidebar-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
+/* ===== Nav icons (icon-only, no box) ===== */
 .sidebar-link {
-    text-decoration: none;
-    color: #fdf8e2;
-    width: 46px;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.sidebar-link:hover {
-    background-color: rgba(253, 248, 226, 0.18);
-    color: #ffffff;
+  text-decoration: none;
+  color: #fdf8e2;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 6px;
 }
 
 .sidebar-link img {
-    width: 22px;
-    height: 22px;
-    display: block;
+  width: 22px;
+  height: 22px;
+  display: block;
 }
 
+/* Subtle hover feedback */
+.sidebar-link:hover img {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: 0.2s ease;
+}
+
+/* ===== Logout (icon-only, no button box) ===== */
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logout-btn:focus,
+.logout-btn:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.logout-btn img {
+  width: 60px;
+  height: 60px;
+  display: block;
+}
+
+.logout-btn:hover img {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: 0.2s ease;
+}
+
+.logout-text {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ===== Mobile layout ===== */
 @media (max-width: 900px) {
-    body {
-        flex-direction: column;
-    }
+  body {
+    flex-direction: column;
+  }
 
-    .global-sidebar {
-        width: 100%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+  .global-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-    .sidebar-nav,
-    .sidebar-footer {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-    }
+  .sidebar-nav,
+  .sidebar-footer {
+    flex-direction: row;
+    gap: 12px;
+  }
 }
