@@ -6,7 +6,6 @@ function renderDiscoverPosts() {
 
     container.innerHTML = "";
 
-    // Always get fresh database from localStorage
     let db = mockDatabase;
     const saved = localStorage.getItem("mockDatabase");
     if (saved) {
@@ -17,8 +16,8 @@ function renderDiscoverPosts() {
         container.innerHTML = "<p>No posts found.</p>";
         return;
     }
+    generateCategoryFilters(db);
 
-    // ✅ Sort newest → oldest
     const sortedPosts = [...db.posts].sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     });
@@ -71,6 +70,34 @@ document.addEventListener("click", function (event) {
         overlay.style.display = "none";
     }
 });
+
+function generateCategoryFilters(db) {
+    const container = document.getElementById("dynamicFilters");
+    container.innerHTML = "";
+
+    const categories = [...new Set(
+        db.posts.map(post => post.category.toLowerCase())
+    )];
+
+    categories.forEach(category => {
+        const label = document.createElement("label");
+        label.className = "filter-option";
+
+        label.innerHTML = `
+            <input type="checkbox" value="${category}">
+            <span class="tags-preview">
+                <span>${capitalize(category)}</span>
+            </span>
+        `;
+
+        container.appendChild(label);
+    });
+}
+
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 
 function applyFilters() {
     const checkboxes = document.querySelectorAll(".filter-panel input[type='checkbox']");
