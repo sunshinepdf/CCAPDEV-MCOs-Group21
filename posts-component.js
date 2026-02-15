@@ -1,5 +1,22 @@
 /* posts-component.js
    Animo Commons — PostsComponent (GLOBAL)
+
+   ✅ Posts rendering (newspaper + cards)
+   ✅ Per-user post vote toggling (up/down)
+   ✅ Views + lastEdited support
+   ✅ Filtering / sorting (recent/hot/top/trending)
+
+   ✅ COMMENTS (All Pages)
+   - Logged-in users can comment on any post (including their own)
+   - Comment shows: avatar + username + timestamp
+   - Replies create threads (indented)
+   - Owner can edit/delete anytime
+   - Edited indicator shown
+   - Comment upvote/downvote (per-user toggle like posts)
+
+   IMPORTANT:
+   - Pages must NOT define their own openPostModal/renderComments/comment submit logic.
+   - Use the global openPostModal() from this file.
 */
 
 (function () {
@@ -34,6 +51,7 @@
   }
 
   function formatTs(ts) {
+    // ts can be millis, ISO string, or "Feb 11, 2026"
     if (!ts) return "";
     if (typeof ts === "string" && ts.match(/^\w{3}\s+\d{1,2},\s+\d{4}$/)) return ts;
 
@@ -106,23 +124,95 @@
       var uid = getCurrentUserId();
       if (!uid) return false;
 
+      // Ensure vote counts exist
+      if (typeof post.upvotes !== "number") post.upvotes = 0;
+      if (typeof post.downvotes !== "number") post.downvotes = 0;
       if (!post.votes || typeof post.votes !== "object") post.votes = {};
-      var current = post.votes[uid] || null;
 
-      if (direction === "up") post.votes[uid] = (current === "up") ? null : "up";
-      else post.votes[uid] = (current === "down") ? null : "down";
+      var currentVote = post.votes[uid] || null;
+      var newVote = null;
 
-      if (post.votes[uid] == null) delete post.votes[uid];
+      // Determine new vote state based on current vote and direction
+      if (direction === "up") {
+        if (currentVote === "up") {
+          // Clicking upvote again - remove the upvote
+          newVote = null;
+          post.upvotes = Math.max(0, post.upvotes - 1);
+        } else if (currentVote === "down") {
+          // Changing from downvote to upvote
+          newVote = "up";
+          post.downvotes = Math.max(0, post.downvotes - 1);
+          post.upvotes = post.upvotes + 1;
+        } else {
+          // No previous vote - add upvote
+          newVote = "up";
+          post.upvotes = post.upvotes + 1;
+        }
+      } else if (direction === "down") {
+        if (currentVote === "down") {
+          // Clicking downvote again - remove the downvote
+          newVote = null;
+          post.downvotes = Math.max(0, post.downvotes - 1);
+        } else if (currentVote === "up") {
+          // Changing from upvote to downvote
+          newVote = "down";
+          post.upvotes = Math.max(0, post.upvotes - 1);
+          post.downvotes = post.downvotes + 1;
+        } else {
+          // No previous vote - add downvote
+          newVote = "down";
+          post.downvotes = post.downvotes + 1;
+        }
+      }
 
-      var up = 0, down = 0;
-      Object.keys(post.votes).forEach(k => {
-        if (post.votes[k] === "up") up++;
-        if (post.votes[k] === "down") down++;
+      // Update user's vote
+      if (newVote === null) {
+        delete post.votes[uid];
+      } else {
+        post.votes[uid] = newVote;
+      }
+
+      post.lastInteraction = nowTs();
+      this.persistDatabase();
+      return true;
+    }
+
+    // -------------------------
+    // Post Editing / Deletion
+    // -------------------------
+    editPost(postId, newTitle, newContent) {
+      var post = this.getPostById(postId);
+      if (!post) return false;
+
+      var uid = getCurrentUserId();
+      if (!uid || String(post.authorId) !== String(uid)) return false;
+
+      post.title = String(newTitle || "").trim();
+      post.content = String(newContent || "").trim();
+      
+      var now = new Date();
+      post.lastEdited = now.toLocaleDateString("en-US", { 
+        month: "short", 
+        day: "numeric", 
+        year: "numeric" 
       });
-      post.upvotes = up;
-      post.downvotes = down;
       post.lastInteraction = nowTs();
 
+      this.persistDatabase();
+      return true;
+    }
+
+    deletePost(postId) {
+      var uid = getCurrentUserId();
+      if (!uid) return false;
+
+      var postIndex = this.db.posts.findIndex(p => String(p.id) === String(postId));
+      if (postIndex === -1) return false;
+
+      var post = this.db.posts[postIndex];
+      if (String(post.authorId) !== String(uid)) return false;
+
+      this.db.posts.splice(postIndex, 1);
       this.persistDatabase();
       return true;
     }
@@ -182,6 +272,7 @@
           return (ib + sb * 1000) - (ia + sa * 1000);
         });
       } else {
+        // "recent" based on post.date string, fallback to lastInteraction
         posts.sort((a, b) => {
           var da = new Date(a.date || 0).getTime();
           var db = new Date(b.date || 0).getTime();
@@ -195,11 +286,24 @@
       return posts;
     }
 
-
+    // -------------------------
+    // Rendering: Newspaper Article
+    // -------------------------
     buildNewspaperArticle(post, index, locked) {
       var user = this.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-      var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+      var upvotes = Number(post.upvotes) || 0;
+      var downvotes = Number(post.downvotes) || 0;
       var isLead = (index === 0);
+      
+      // Count comments
+      this.normalizeComments(post);
+      var commentCount = (post.comments || []).length;
+
+      // Check current user's vote
+      var currentUserId = getCurrentUserId();
+      var userVote = (post.votes && currentUserId && post.votes[currentUserId]) ? post.votes[currentUserId] : null;
+      var upActive = (userVote === "up") ? ' data-active="1"' : "";
+      var downActive = (userVote === "down") ? ' data-active="1"' : "";
 
       var el = document.createElement("article");
       el.className = "article" + (isLead ? " lead" : "") + (locked ? " locked" : "");
@@ -220,18 +324,18 @@
         '</div>' +
         '<h3 class="headline poppins-extrabold">' + escapeHtml(post.title || "") + '</h3>' +
         '<div class="section-row poppins-regular"><span>' +
-          (Number(post.views) || 0) + ' Views &#8226; Score ' + score +
+          (Number(post.views) || 0) + ' Views &#8226; ▲ ' + upvotes + ' ▼ ' + downvotes +
         '</span></div>' +
         '<div class="rule"></div>' +
         '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, 180)) + '</p>' +
         '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>' +
         '<div class="article-actions">' +
           '<div class="vote">' +
-            '<button type="button" data-action="up" data-id="' + escapeHtml(post.id) + '">▲</button>' +
-            '<button type="button" data-action="down" data-id="' + escapeHtml(post.id) + '">▼</button>' +
+            '<button type="button" data-action="up" data-id="' + escapeHtml(post.id) + '"' + upActive + '>▲</button>' +
+            '<button type="button" data-action="down" data-id="' + escapeHtml(post.id) + '"' + downActive + '>▼</button>' +
           '</div>' +
           '<div class="comment-view-actions">' +
-            '<button type="button" class="comment-btn poppins-regular" data-action="comment" data-id="' + escapeHtml(post.id) + '">Comment</button>' +
+            '<button type="button" class="comment-btn poppins-regular" data-action="comment" data-id="' + escapeHtml(post.id) + '" data-comment-count="' + commentCount + '">Comments (' + commentCount + ')</button>' +
             '<button type="button" class="open-btn poppins-extrabold" data-action="open" data-id="' + escapeHtml(post.id) + '">Open</button>' +
           '</div>' +
         '</div>';
@@ -246,6 +350,7 @@
       post.comments = Array.isArray(post.comments) ? post.comments : [];
 
       post.comments = post.comments.map((c, idx) => {
+        // Old format: string
         if (typeof c === "string") {
           return {
             id: makeId("c"),
@@ -258,11 +363,19 @@
           };
         }
 
+        // Old format: { userId, text, date }
         if (!c.id) c.id = makeId("c");
         if (!("parentId" in c)) c.parentId = null;
 
-        if (!("createdAt" in c)) c.createdAt = c.date ? c.date : nowTs();
-        if (!("editedAt" in c)) c.editedAt = c.lastEdited ? c.lastEdited : null;
+        if (!("createdAt" in c)) {
+          // If they used `date` before, keep it but also add createdAt
+          c.createdAt = c.date ? c.date : nowTs();
+        }
+
+        if (!("editedAt" in c)) {
+          // If they used `lastEdited` before, map it
+          c.editedAt = c.lastEdited ? c.lastEdited : null;
+        }
 
         if (!c.votes || typeof c.votes !== "object") c.votes = {};
         if (!c.text) c.text = "";
@@ -271,18 +384,14 @@
       });
     }
 
-    getCommentVoteCounts(commentObj) {
-      var votes = (commentObj && commentObj.votes && typeof commentObj.votes === "object")
-        ? commentObj.votes
-        : {};
-
-      var likes = 0, unlikes = 0;
+    getCommentScore(commentObj) {
+      var votes = commentObj && commentObj.votes ? commentObj.votes : {};
+      var score = 0;
       Object.keys(votes).forEach(uid => {
-        if (votes[uid] === "up") likes += 1;
-        if (votes[uid] === "down") unlikes += 1;
+        if (votes[uid] === "up") score += 1;
+        if (votes[uid] === "down") score -= 1;
       });
-
-      return { likes: likes, unlikes: unlikes };
+      return score;
     }
 
     getCommentTree(postId) {
@@ -303,6 +412,7 @@
         else roots.push(node);
       });
 
+      // Optional: stable order (oldest-first within each thread)
       function sortThread(nodes) {
         nodes.sort((a, b) => {
           var ta = new Date(a.createdAt || 0).getTime();
@@ -384,7 +494,7 @@
       var current = c.votes[uid] || null;
 
       if (direction === "up") c.votes[uid] = (current === "up") ? null : "up";
-      else if (direction === "down") c.votes[uid] = (current === "down") ? null : "down";
+      else c.votes[uid] = (current === "down") ? null : "down";
 
       if (c.votes[uid] == null) delete c.votes[uid];
 
@@ -423,6 +533,7 @@
       if (!target) return false;
       if (String(target.userId) !== String(userId)) return false;
 
+      // Delete target + descendants
       var toDelete = new Set([String(commentId)]);
       var changed = true;
       while (changed) {
@@ -441,7 +552,7 @@
     }
 
     // -------------------------
-    // COMMENTS: 
+    // COMMENTS: Modal binding + rendering (All pages)
     // -------------------------
     setupCommentSystem() {
       if (this._commentSystemBound) return;
@@ -474,16 +585,36 @@
           wrapper.style.marginLeft = (depth * 18) + "px";
 
           var user = this.getUserById(node.userId) || { username: "Unknown", photo: "assets/placeholder.png" };
-          var counts = this.getCommentVoteCounts(node);
+          
+          // Calculate upvote and downvote counts
+          var upvotes = 0;
+          var downvotes = 0;
+          if (node.votes) {
+            for (var uid in node.votes) {
+              if (node.votes[uid] === "up") upvotes++;
+              if (node.votes[uid] === "down") downvotes++;
+            }
+          }
+          
           var isOwner = currentUserId && String(currentUserId) === String(node.userId);
 
           var createdLabel = formatTs(node.createdAt);
-          var editedIndicator = node.editedAt ? (" • edited") : "";
+          var editedIndicator = node.editedAt ? (" • edited") : ""; // indicator
           var editedTs = node.editedAt ? (" (" + formatTs(node.editedAt) + ")") : "";
 
           var myVote = (currentUserId && node.votes && node.votes[currentUserId]) ? node.votes[currentUserId] : null;
           var upActive = (myVote === "up") ? ' data-active="1"' : "";
           var downActive = (myVote === "down") ? ' data-active="1"' : "";
+
+          // Check if this is a reply and get parent user info
+          var replyToText = "";
+          if (node.parentId) {
+            var parentComment = this.findComment(postId, node.parentId);
+            if (parentComment) {
+              var parentUser = this.getUserById(parentComment.userId) || { username: "Unknown" };
+              replyToText = '<span style="color:#888; font-size:11px; font-style:italic;"> replied to ' + escapeHtml(parentUser.username) + '</span>';
+            }
+          }
 
           wrapper.innerHTML =
             '<div class="comment-header poppins-regular" style="display:flex; align-items:center; gap:10px;">' +
@@ -491,7 +622,7 @@
                    'alt="' + escapeHtml(user.username) + '" ' +
                    'style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">' +
               '<div style="display:flex; flex-direction:column; gap:2px;">' +
-                '<span class="comment-author poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
+                '<span class="comment-author poppins-extrabold">' + escapeHtml(user.username) + replyToText + '</span>' +
                 '<span class="comment-date">' + escapeHtml(createdLabel + editedIndicator + editedTs) + '</span>' +
               '</div>' +
             '</div>' +
@@ -500,9 +631,9 @@
 
             '<div class="comment-actions" style="display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;">' +
               '<button type="button" data-action="c_up" data-cid="' + escapeHtml(node.id) + '"' + upActive + '>▲</button>' +
-              '<span class="poppins-regular">' + counts.likes + '</span>' +
+              '<span class="poppins-regular">' + upvotes + '</span>' +
               '<button type="button" data-action="c_down" data-cid="' + escapeHtml(node.id) + '"' + downActive + '>▼</button>' +
-              '<span class="poppins-regular">' + counts.unlikes + '</span>' +
+              '<span class="poppins-regular">' + downvotes + '</span>' +
               '<button type="button" class="poppins-regular" data-action="c_reply_toggle" data-cid="' + escapeHtml(node.id) + '">Reply</button>' +
               (isOwner
                 ? (
@@ -533,7 +664,7 @@
         tree.forEach(n => renderNode(n, 0));
       };
 
-      // Submit top-level comment
+      // Submit top-level comment (Logged-in users can comment anywhere, including own posts)
       submitBtn.addEventListener("click", () => {
         var postId = modal.getAttribute("data-post-id");
         var uid = getCurrentUserId();
@@ -557,9 +688,14 @@
         commentInput.value = "";
         this.renderCommentsInModal(postId);
         AlertModal.show("Comment posted!", "success");
+        
+        // Trigger update of post list to refresh comment counts
+        if (typeof window.triggerPostsUpdate === "function") {
+          window.triggerPostsUpdate();
+        }
       });
 
-      // Comment actions
+      // Comment actions (vote, reply, edit, delete)
       commentsList.addEventListener("click", (e) => {
         var btn = e.target.closest("button");
         if (!btn) return;
@@ -608,6 +744,11 @@
           if (ta) ta.value = "";
           this.renderCommentsInModal(postId);
           AlertModal.show("Reply posted!", "success");
+          
+          // Trigger update of post list to refresh comment counts
+          if (typeof window.triggerPostsUpdate === "function") {
+            window.triggerPostsUpdate();
+          }
           return;
         }
 
@@ -656,6 +797,11 @@
 
           this.renderCommentsInModal(postId);
           AlertModal.show("Comment deleted.", "success");
+          
+          // Trigger update of post list to refresh comment counts
+          if (typeof window.triggerPostsUpdate === "function") {
+            window.triggerPostsUpdate();
+          }
           return;
         }
       });
@@ -670,7 +816,7 @@
   window.PostsComponent_Instance = new PostsComponent();
 
   // -------------------------
-  // Global Modal Functions 
+  // Global Modal Functions (All Pages)
   // -------------------------
   window.openPostModal = function (postId) {
     var post = window.PostsComponent_Instance.getPostById(postId);
@@ -680,10 +826,10 @@
     var modalContent = document.getElementById("modal-post-content");
     if (!modal || !modalContent) return;
 
+    // Always count a view when opening full post
     window.PostsComponent_Instance.incrementViewCount(postId);
 
     var user = window.PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-    var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
 
     modalContent.innerHTML =
       '<div class="post-author-header poppins-regular">' +
@@ -700,7 +846,6 @@
       '<div class="section-row poppins-regular">' +
         '<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' +
           (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) +
-          ' &#8226; Score ' + score +
         '</span>' +
       '</div>' +
       '<div class="rule"></div>' +
@@ -710,11 +855,13 @@
     modal.style.display = "flex";
     modal.setAttribute("data-post-id", postId);
 
+    // Bind comment system once, then render
     window.PostsComponent_Instance.setupCommentSystem();
     if (typeof window.PostsComponent_Instance.renderCommentsInModal === "function") {
       window.PostsComponent_Instance.renderCommentsInModal(postId);
     }
 
+    // Backdrop click close
     var backdrop = modal.querySelector(".modal-backdrop");
     if (backdrop) {
       backdrop.onclick = function (e) {

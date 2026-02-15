@@ -108,30 +108,42 @@ document.addEventListener("DOMContentLoaded", function () {
         avatarEl.src = data.avatar;
     }
 
-    if (postsStatEl || reputationStatEl) {
-        var db = getDatabase();
-        var currentUserId = getCurrentUserId();
-        if (db && Array.isArray(db.posts)) {
-            var postCount = 0;
-            var reputationTotal = 0;
-            db.posts.forEach(function (post) {
-                if (!post || post.authorId !== currentUserId) {
-                    return;
-                }
-                postCount += 1;
-                var upvotes = Number(post.upvotes) || 0;
-                var downvotes = Number(post.downvotes) || 0;
-                reputationTotal += upvotes - downvotes;
-            });
+    // Function to update stats
+    function updateStats() {
+        var postsStatEl = document.getElementById("stats-posts");
+        var reputationStatEl = document.getElementById("stats-reputation");
+        
+        if (postsStatEl || reputationStatEl) {
+            var db = getDatabase();
+            var currentUserId = getCurrentUserId();
+            if (db && Array.isArray(db.posts)) {
+                var postCount = 0;
+                var reputationTotal = 0;
+                db.posts.forEach(function (post) {
+                    if (!post || post.authorId !== currentUserId) {
+                        return;
+                    }
+                    postCount += 1;
+                    var upvotes = Number(post.upvotes) || 0;
+                    var downvotes = Number(post.downvotes) || 0;
+                    reputationTotal += upvotes - downvotes;
+                });
 
-            if (postsStatEl) {
-                postsStatEl.textContent = String(postCount);
-            }
-            if (reputationStatEl) {
-                reputationStatEl.textContent = String(reputationTotal);
+                if (postsStatEl) {
+                    postsStatEl.textContent = String(postCount);
+                }
+                if (reputationStatEl) {
+                    reputationStatEl.textContent = String(reputationTotal);
+                }
             }
         }
     }
+
+    // Initial stats update
+    updateStats();
+
+    // Expose updateStats globally for profile-components to use
+    window.updateProfileStats = updateStats;
 
     var defaultTags = ["CCS", "ID 124", "Friendly"];
     var tags = Array.isArray(data.tags) && data.tags.length ? data.tags.slice() : defaultTags.slice();
@@ -156,43 +168,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderTags(tagsView);
 
-    // Comment submission
-    const submitBtn = document.getElementById("submit-comment-btn");
-    if (submitBtn) {
-        submitBtn.onclick = function() {
-            const modal = document.getElementById("post-view-modal");
-            const postId = modal.getAttribute("data-post-id");
-            const commentText = document.getElementById("comment-input").value.trim();
-            const currentUserId = (localStorage.getItem("currentUserId") || "").trim();
-            
-            if (!currentUserId) {
-                AlertModal.show("Please login to add comments.", "error");
-                return;
-            }
-            
-            if (!commentText) {
-                AlertModal.show("Comment cannot be empty.", "error");
-                return;
-            }
-            
-            const post = PostsComponent_Instance.getPostById(postId);
-            if (!post) return;
-            
-            // Add comment to post
-            post.comments = post.comments || [];
-            post.comments.push({
-                userId: currentUserId,
-                text: commentText,
-                date: new Date().toLocaleDateString()
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('mockDatabase', JSON.stringify(PostsComponent_Instance.getDatabase()));
-            
-            // Clear input and re-render
-            document.getElementById("comment-input").value = "";
-            renderComments(post);
-            AlertModal.show("Comment posted!", "success");
-        };
+    // Function to refresh profile posts
+    function refreshProfilePosts() {
+        const profilePostsElement = document.querySelector('profile-posts');
+        if (profilePostsElement) {
+            profilePostsElement.render();
+            profilePostsElement.attachListeners();
+        }
     }
+
+    // Expose render function globally for comment updates
+    window.triggerPostsUpdate = refreshProfilePosts;
 });

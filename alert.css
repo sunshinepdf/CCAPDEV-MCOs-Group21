@@ -7,7 +7,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 3000 !important;
     justify-content: center;
     align-items: center;
 }
@@ -25,6 +25,8 @@
     width: 90%;
     text-align: center;
     animation: modalFadeIn 0.3s ease;
+    position: relative;
+    z-index: 3001 !important;
 }
 
 @keyframes modalFadeIn {

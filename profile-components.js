@@ -10,10 +10,7 @@ class ProfileTopbar extends HTMLElement {
             '<img src="assets/profile-icon.png" alt="profile" width="20" height="20">' +
             '<h1 class="poppins-extrabold">Profile Page</h1>' +
             '</div>' +
-            '<div class="profile-search-bar" id="profile-search-bar">' +
-            '<img src="assets/search-icon.png" alt="search" width="16" height="16" class="search-icon">' +
-            '<input type="text" id="profile-search-input" placeholder="Find previous posts...">' +
-            '</div>' +
+            '<search-bar placeholder="Find previous posts..." target=".profile-post-wrapper"></search-bar>' +
             '</div>';
     }
 }
@@ -118,7 +115,7 @@ class ProfilePosts extends HTMLElement {
                 wrapper.setAttribute('data-id', post.id);
                 
                 // Render as newspaper article
-                const articleElement = PostsComponent_Instance.buildNewspaperArticle(post, index, false, 'default');
+                const articleElement = PostsComponent_Instance.buildNewspaperArticle(post, index, false);
                 
                 // Add three-dot menu for edit/delete
                 const menuHTML = document.createElement('div');
@@ -159,8 +156,13 @@ class ProfilePosts extends HTMLElement {
                 const postId = btn.getAttribute('data-id');
                 if (typeof PostsComponent_Instance !== 'undefined') {
                     PostsComponent_Instance.voteOnPost(postId, action);
+                    // Refresh the entire profile posts section to update vote counts
                     self.render();
                     self.attachListeners();
+                    // Update stats sidebar
+                    if (typeof window.updateProfileStats === 'function') {
+                        window.updateProfileStats();
+                    }
                 }
             };
         });
@@ -175,9 +177,9 @@ class ProfilePosts extends HTMLElement {
                     return;
                 }
                 const postId = btn.getAttribute('data-id');
-                if (typeof PostsComponent_Instance !== 'undefined' && typeof openPostModal !== 'undefined') {
+                if (typeof PostsComponent_Instance !== 'undefined' && typeof window.openPostModal !== 'undefined') {
                     PostsComponent_Instance.incrementViewCount(postId);
-                    openPostModal(postId);
+                    window.openPostModal(postId);
                 }
             };
         });
@@ -251,6 +253,10 @@ class ProfilePosts extends HTMLElement {
                         modal.style.display = 'none';
                         self.render();
                         self.attachListeners();
+                        // Update stats sidebar
+                        if (typeof window.updateProfileStats === 'function') {
+                            window.updateProfileStats();
+                        }
                     };
                     
                     // Cancel/Close handler
@@ -269,6 +275,29 @@ class ProfilePosts extends HTMLElement {
                             closeHandler();
                         }
                     };
+                }
+            };
+        });
+        
+        // Delete button handlers
+        this.querySelectorAll('.post-delete-btn').forEach(btn => {
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                const postId = btn.getAttribute('data-id');
+                
+                if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                    if (typeof PostsComponent_Instance !== 'undefined') {
+                        PostsComponent_Instance.deletePost(postId);
+                        if (typeof AlertModal !== 'undefined') {
+                            AlertModal.show('Post deleted!', 'success');
+                        }
+                        self.render();
+                        self.attachListeners();
+                        // Update stats sidebar
+                        if (typeof window.updateProfileStats === 'function') {
+                            window.updateProfileStats();
+                        }
+                    }
                 }
             };
         });

@@ -113,12 +113,13 @@ function applyFilters() {
     if (cb.checked) selectedCategories.push(String(cb.value || "").toLowerCase());
   });
 
-  filterPosts();
+  filterPostsWithCategories();
   toggleFilter();
 }
 
-function filterPosts() {
-  const rawInput = document.getElementById("searchInput")?.value || "";
+function filterPostsWithCategories() {
+  const searchBar = document.querySelector("search-bar");
+  const rawInput = searchBar?.getValue() || "";
   const searchInput = normalizeText(rawInput);
 
   const posts = document.querySelectorAll(".article");
@@ -127,99 +128,11 @@ function filterPosts() {
     const content = normalizeText(post.querySelector(".excerpt")?.innerText || "");
     const category = String(post.getAttribute("data-category") || "discussion").toLowerCase();
 
-    const matchesSearch = title.includes(searchInput) || content.includes(searchInput);
+    const matchesSearch = searchInput === "" || title.includes(searchInput) || content.includes(searchInput);
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(category);
 
     post.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
   });
-}
-
-function openPostModal(postId) {
-  const post = PostsComponent_Instance.getPostById(postId);
-  if (!post) return;
-
-  const user = PostsComponent_Instance.getUserById(post.authorId) || {
-    username: "Unknown",
-    photo: "assets/placeholder.png"
-  };
-
-  const modalContent = document.getElementById("modal-post-content");
-  modalContent.innerHTML =
-    '<div class="post-author-header poppins-regular">' +
-      '<img src="' + user.photo + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
-      '<div class="post-author-info">' +
-        '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-        '<span class="post-author-date">' + escapeHtml(post.date) + (post.lastEdited ? ' &#8226; Edited ' + post.lastEdited : '') + '</span>' +
-      '</div>' +
-    '</div>' +
-    '<h2 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h2>' +
-    '<div class="section-row poppins-regular">' +
-      '<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' + (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) + '</span>' +
-    '</div>' +
-    '<div class="rule"></div>' +
-    '<p class="excerpt poppins-regular">' + escapeHtml(post.content) + '</p>' +
-    '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>';
-
-  renderComments(post);
-
-  const modal = document.getElementById("post-view-modal");
-  modal.style.display = "flex";
-  modal.setAttribute("data-post-id", postId);
-
-  const backdrop = modal.querySelector(".modal-backdrop");
-  backdrop.onclick = function (e) {
-    if (e.target === backdrop) modal.style.display = "none";
-  };
-}
-
-function renderComments(post) {
-  const commentsList = document.getElementById("comments-list");
-  const commentCount = document.getElementById("comment-count");
-  if (!commentsList || !commentCount) return;
-
-  const tree = PostsComponent_Instance.getCommentTree(post.id);
-  commentCount.textContent = (post.comments || []).length;
-  commentsList.innerHTML = "";
-
-  function renderNode(node, depth) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "comment-item";
-    wrapper.style.marginLeft = (depth * 18) + "px";
-
-    const user = PostsComponent_Instance.getUserById(node.userId) || { username: "Unknown" };
-    const score = PostsComponent_Instance.getCommentScore(node);
-
-    wrapper.innerHTML = `
-      <div class="comment-header poppins-regular">
-        <span class="comment-author poppins-extrabold">${escapeHtml(user.username)}</span>
-        <span class="comment-date">${escapeHtml(node.date || "")}</span>
-      </div>
-
-      <p class="comment-text poppins-regular">${escapeHtml(node.text)}</p>
-
-      <div class="comment-actions" style="display:flex; gap:10px; align-items:center; margin-top:8px;">
-        <button data-action="c_up" data-cid="${node.id}">👍</button>
-        <button data-action="c_down" data-cid="${node.id}">👎</button>
-        <span class="poppins-regular">Score ${score}</span>
-        <button class="poppins-regular" data-action="c_reply_toggle" data-cid="${node.id}">Reply</button>
-      </div>
-
-      <div class="reply-box" data-replybox="${node.id}" style="display:none; margin-top:10px;">
-        <textarea class="comment-textarea" rows="2" placeholder="Write a reply..."></textarea>
-        <button class="submit-comment-btn poppins-extrabold" data-action="c_reply_submit" data-cid="${node.id}" style="margin-top:8px;">Reply</button>
-      </div>
-    `;
-
-    commentsList.appendChild(wrapper);
-
-    (node.replies || []).forEach(r => renderNode(r, depth + 1));
-  }
-
-  tree.forEach(n => renderNode(n, 0));
-}
-
-function closePostModal() {
-  document.getElementById("post-view-modal").style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -256,86 +169,11 @@ document.addEventListener("DOMContentLoaded", () => {
         renderDiscoverPosts();
       } else if (action === "open" || action === "comment") {
         PostsComponent_Instance.incrementViewCount(id);
-        openPostModal(id);
+        window.openPostModal(id);
       }
-    };
-  }
-
-  // Top-level comment submit (modal)
-  const submitBtn = document.getElementById("submit-comment-btn");
-  if (submitBtn) {
-    submitBtn.onclick = function () {
-      const modal = document.getElementById("post-view-modal");
-      const postId = modal.getAttribute("data-post-id");
-      const commentText = (document.getElementById("comment-input").value || "").trim();
-      const currentUserId = (localStorage.getItem("currentUserId") || "").trim();
-
-      if (!currentUserId) {
-        AlertModal.show("Please login to add comments.", "error");
-        return;
-      }
-      if (!commentText) {
-        AlertModal.show("Comment cannot be empty.", "error");
-        return;
-      }
-
-      PostsComponent_Instance.addComment(postId, currentUserId, commentText);
-
-      document.getElementById("comment-input").value = "";
-      const post = PostsComponent_Instance.getPostById(postId);
-      renderComments(post);
-
-      AlertModal.show("Comment posted!", "success");
-      renderDiscoverPosts();
-    };
-  }
-
-  // Replies + like/dislike on comments (modal)
-  const commentsList = document.getElementById("comments-list");
-  if (commentsList) {
-    commentsList.onclick = function (e) {
-      const btn = e.target.closest("button");
-      if (!btn) return;
-
-      const action = btn.getAttribute("data-action");
-      const cid = btn.getAttribute("data-cid");
-      if (!action || !cid) return;
-
-      const modal = document.getElementById("post-view-modal");
-      const postId = modal.getAttribute("data-post-id");
-      const currentUserId = (localStorage.getItem("currentUserId") || "").trim();
-
-      if (!currentUserId) {
-        AlertModal.show("Please login to interact with comments.", "error");
-        return;
-      }
-
-      if (action === "c_up") {
-        PostsComponent_Instance.voteOnComment(postId, cid, "up", currentUserId);
-      } else if (action === "c_down") {
-        PostsComponent_Instance.voteOnComment(postId, cid, "down", currentUserId);
-      } else if (action === "c_reply_toggle") {
-        const box = document.querySelector(`[data-replybox="${cid}"]`);
-        if (box) box.style.display = (box.style.display === "none" ? "block" : "none");
-        return;
-      } else if (action === "c_reply_submit") {
-        const box = document.querySelector(`[data-replybox="${cid}"]`);
-        const ta = box ? box.querySelector("textarea") : null;
-        const text = (ta ? ta.value : "").trim();
-
-        if (!text) {
-          AlertModal.show("Reply cannot be empty.", "error");
-          return;
-        }
-
-        PostsComponent_Instance.replyToComment(postId, cid, currentUserId, text);
-        if (ta) ta.value = "";
-        AlertModal.show("Reply posted!", "success");
-      }
-
-      const post = PostsComponent_Instance.getPostById(postId);
-      renderComments(post);
-      renderDiscoverPosts();
     };
   }
 });
+
+// Expose render function globally for comment updates
+window.triggerPostsUpdate = renderDiscoverPosts;
