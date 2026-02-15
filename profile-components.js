@@ -48,6 +48,10 @@ class ProfileMain extends HTMLElement {
     }
 
     render() {
+        // Check if viewing own profile
+        const isOwnProfile = typeof window.isViewingOwnProfile === 'function' ? window.isViewingOwnProfile() : true;
+        const editButtonHTML = isOwnProfile ? '<button class="btn-edit-profile poppins-extrabold" id="edit-profile-button" onclick="window.location.href=\'edit-profile.html\'">Edit Profile</button>' : '';
+        
         this.innerHTML =
             '<div class="profile-main" id="profile-main">' +
             '<div class="user-profile-header" id="profile-header">' +
@@ -55,7 +59,7 @@ class ProfileMain extends HTMLElement {
             '<img src="assets/placeholder.png" alt="Profile photo" id="profile-avatar-img">' +
             '</div>' +
             '<div class="profile-info">' +
-            '<button class="btn-edit-profile poppins-extrabold" id="edit-profile-button" onclick="window.location.href=\'edit-profile.html\'">Edit Profile</button>' +
+            editButtonHTML +
             '<div class="profile-content" id="profile-content">' +
             '<h2 class="poppins-extrabold" id="profile-name">Username</h2>' +
             '<h4 class="poppins-extrabold-italic" id="profile-about-title">About Me</h4>' +
@@ -87,17 +91,25 @@ class ProfilePosts extends HTMLElement {
     }
 
     render() {
-        const currentUserId = typeof CURRENT_USER_ID !== 'undefined' ? CURRENT_USER_ID : "u1";
+        const viewedUserId = typeof window.getViewedUserId === 'function' ? window.getViewedUserId() : (typeof CURRENT_USER_ID !== 'undefined' ? CURRENT_USER_ID : "u1");
+        const isOwnProfile = typeof window.isViewingOwnProfile === 'function' ? window.isViewingOwnProfile() : true;
         const db = typeof PostsComponent_Instance !== 'undefined' ? PostsComponent_Instance.getDatabase() : null;
         
         let userPosts = [];
         if (db && db.posts) {
-            userPosts = db.posts.filter(post => post.authorId === currentUserId);
+            userPosts = db.posts.filter(post => post.authorId === viewedUserId);
         }
 
         let postsHTML = '<section class="profile-posts-section" id="profile-posts-section">' +
-            '<h1 class="poppins-extrabold" style="color: #fdf8e2; margin-bottom: 12px;">User Posts</h1>' +
-            '<div class="profile-posts" id="profile-posts-list">';
+            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">' +
+            '<h1 class="poppins-extrabold" style="color: #fdf8e2; margin: 0;">User Posts</h1>';
+        
+        // Add create post button only if viewing own profile
+        if (isOwnProfile) {
+            postsHTML += '<button class="profile-create-btn poppins-extrabold" onclick="openCreatePostModal()">+ Create Post</button>';
+        }
+        
+        postsHTML += '</div><div class="profile-posts" id="profile-posts-list">';
 
         if (userPosts.length === 0) {
             postsHTML += '<p class="poppins-regular" style="text-align: center; padding: 20px; color: #fdf8e2;">No posts yet</p>';
@@ -117,20 +129,22 @@ class ProfilePosts extends HTMLElement {
                 // Render as newspaper article
                 const articleElement = PostsComponent_Instance.buildNewspaperArticle(post, index, false);
                 
-                // Add three-dot menu for edit/delete
-                const menuHTML = document.createElement('div');
-                menuHTML.className = 'post-menu-container';
-                menuHTML.innerHTML = 
-                    '<button class="post-menu-btn" data-id="' + post.id + '">&#8942;</button>' +
-                    '<div class="post-menu-dropdown" data-id="' + post.id + '" style="display: none;">' +
-                        '<button class="post-menu-item post-edit-btn" data-id="' + post.id + '">Edit</button>' +
-                        '<button class="post-menu-item post-delete-btn" data-id="' + post.id + '">Delete</button>' +
-                    '</div>';
-                
-                // Insert menu into article at the top
-                const authorHeader = articleElement.querySelector('.post-author-header');
-                if (authorHeader) {
-                    authorHeader.appendChild(menuHTML);
+                // Add three-dot menu for edit/delete only if viewing own profile
+                if (isOwnProfile) {
+                    const menuHTML = document.createElement('div');
+                    menuHTML.className = 'post-menu-container';
+                    menuHTML.innerHTML = 
+                        '<button class="post-menu-btn" data-id="' + post.id + '">&#8942;</button>' +
+                        '<div class="post-menu-dropdown" data-id="' + post.id + '" style="display: none;">' +
+                            '<button class="post-menu-item post-edit-btn" data-id="' + post.id + '">Edit</button>' +
+                            '<button class="post-menu-item post-delete-btn" data-id="' + post.id + '">Delete</button>' +
+                        '</div>';
+                    
+                    // Insert menu into article at the top
+                    const authorHeader = articleElement.querySelector('.post-author-header');
+                    if (authorHeader) {
+                        authorHeader.appendChild(menuHTML);
+                    }
                 }
                 
                 wrapper.appendChild(articleElement);
@@ -178,7 +192,6 @@ class ProfilePosts extends HTMLElement {
                 }
                 const postId = btn.getAttribute('data-id');
                 if (typeof PostsComponent_Instance !== 'undefined' && typeof window.openPostModal !== 'undefined') {
-                    PostsComponent_Instance.incrementViewCount(postId);
                     window.openPostModal(postId);
                 }
             };
@@ -216,8 +229,6 @@ class ProfilePosts extends HTMLElement {
                     const titleInput = document.getElementById('edit-post-title');
                     const contentInput = document.getElementById('edit-post-content');
                     const saveBtn = document.getElementById('modal-save-btn');
-                    const cancelBtn = document.getElementById('modal-cancel-btn');
-                    const closeBtn = document.getElementById('modal-close');
                     
                     // Populate modal with current post data
                     titleInput.value = post.title;
@@ -250,7 +261,7 @@ class ProfilePosts extends HTMLElement {
                             AlertModal.show('Post updated!', 'success');
                         }
                         
-                        modal.style.display = 'none';
+                        closeEditPostModal();
                         self.render();
                         self.attachListeners();
                         // Update stats sidebar
@@ -259,20 +270,13 @@ class ProfilePosts extends HTMLElement {
                         }
                     };
                     
-                    // Cancel/Close handler
-                    const closeHandler = () => {
-                        modal.style.display = 'none';
-                    };
-                    
-                    // Remove old listeners to prevent duplicates
+                    // Remove old listener to prevent duplicates
                     saveBtn.onclick = saveHandler;
-                    cancelBtn.onclick = closeHandler;
-                    closeBtn.onclick = closeHandler;
                     
-                    // Close modal when clicking outside
+                    // Close modal when clicking outside (on backdrop)
                     modal.onclick = (e) => {
-                        if (e.target === modal) {
-                            closeHandler();
+                        if (e.target === modal || e.target.classList.contains('modal-backdrop')) {
+                            closeEditPostModal();
                         }
                     };
                 }

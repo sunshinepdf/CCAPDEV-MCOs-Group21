@@ -106,7 +106,6 @@ function attachPostListeners() {
                     return;
                 }
                 
-                PostsComponent_Instance.incrementViewCount(postId);
                 window.openPostModal(postId);
             };
         }

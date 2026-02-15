@@ -1,3 +1,24 @@
+// Define these functions immediately so they're available to profile-components.js
+function getCurrentUserId() {
+    return typeof CURRENT_USER_ID !== "undefined" ? CURRENT_USER_ID : "u1";
+}
+
+// Get the userId from URL parameter if viewing another user's profile
+function getViewedUserId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdParam = urlParams.get('userId');
+    return userIdParam || getCurrentUserId();
+}
+
+// Check if viewing own profile
+function isViewingOwnProfile() {
+    return getViewedUserId() === getCurrentUserId();
+}
+
+// Expose profile viewing info globally immediately
+window.getViewedUserId = getViewedUserId;
+window.isViewingOwnProfile = isViewingOwnProfile;
+
 document.addEventListener("DOMContentLoaded", function () {
     var storageKey = "animoProfile";
 
@@ -39,17 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return typeof mockDatabase !== "undefined" ? mockDatabase : localDb;
     }
 
-    function getCurrentUserId() {
-        return typeof CURRENT_USER_ID !== "undefined" ? CURRENT_USER_ID : "u1";
-    }
-
     function loadProfileData() {
         var db = getDatabase();
-        var currentUserId = getCurrentUserId();
+        var viewedUserId = getViewedUserId();
 
         if (db && Array.isArray(db.users)) {
             var user = db.users.find(function (item) {
-                return item && item.id === currentUserId;
+                return item && item.id === viewedUserId;
             });
             if (user) {
                 return {
@@ -115,12 +132,12 @@ document.addEventListener("DOMContentLoaded", function () {
         
         if (postsStatEl || reputationStatEl) {
             var db = getDatabase();
-            var currentUserId = getCurrentUserId();
+            var viewedUserId = getViewedUserId();
             if (db && Array.isArray(db.posts)) {
                 var postCount = 0;
                 var reputationTotal = 0;
                 db.posts.forEach(function (post) {
-                    if (!post || post.authorId !== currentUserId) {
+                    if (!post || post.authorId !== viewedUserId) {
                         return;
                     }
                     postCount += 1;
@@ -202,3 +219,88 @@ function closeCreatePostModal() {
   }
 }
 
+function submitNewPost() {
+  var title = document.getElementById("create-title");
+  var content = document.getElementById("create-content");
+  var category = document.getElementById("create-category");
+
+  if (!title || !content || !category) return;
+
+  var titleVal = title.value.trim();
+  var contentVal = content.value.trim();
+  var categoryVal = category.value.trim();
+
+  if (!titleVal) {
+    AlertModal.show("Please enter a post title", "error");
+    return;
+  }
+
+  if (!contentVal) {
+    AlertModal.show("Please enter post content", "error");
+    return;
+  }
+
+  if (!categoryVal) {
+    AlertModal.show("Please select a category", "error");
+    return;
+  }
+
+  var currentUserId = typeof CURRENT_USER_ID !== "undefined" ? CURRENT_USER_ID : localStorage.getItem("currentUserId");
+  
+  if (!currentUserId) {
+    AlertModal.show("You must be logged in to create a post", "error");
+    return;
+  }
+
+  // Create new post using PostsComponent
+  if (typeof PostsComponent_Instance !== "undefined") {
+    var newPost = {
+      id: "p" + Date.now(),
+      authorId: currentUserId,
+      category: categoryVal,
+      title: titleVal,
+      content: contentVal,
+      date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      upvotes: 0,
+      downvotes: 0,
+      views: 0,
+      votes: {},
+      comments: [],
+      lastInteraction: Date.now()
+    };
+
+    PostsComponent_Instance.getDatabase().posts.unshift(newPost);
+    PostsComponent_Instance.persistDatabase();
+
+    AlertModal.show("Post created successfully!", "success");
+
+    // Clear form
+    title.value = "";
+    content.value = "";
+    category.value = "";
+
+    closeCreatePostModal();
+
+    // Refresh posts display on profile page
+    if (typeof window.triggerPostsUpdate === 'function') {
+      window.triggerPostsUpdate();
+    }
+    
+    // Update stats
+    if (typeof window.updateProfileStats === 'function') {
+      window.updateProfileStats();
+    }
+    
+    // Also refresh home page if it exists (in case user navigates there)
+    if (typeof window.renderHomePosts === 'function') {
+      window.renderHomePosts();
+    }
+  }
+}
+
+function closeEditPostModal() {
+  var modal = document.getElementById("edit-post-modal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}

@@ -882,16 +882,19 @@
 }
 
 .profile-create-btn {
-    background-color: #504e76;
-    color: #fdf8e2;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-family: "Poppins", sans-serif;
-    cursor: pointer;
-    margin-bottom: 15px;
+  background-color: #504e76;
+  color: #fdf8e2;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
 .profile-create-btn:hover {
-    background-color: #625a8f;
+  background-color: #3a3857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(80, 78, 118, 0.3);
 }

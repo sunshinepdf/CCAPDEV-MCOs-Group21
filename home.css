@@ -13,25 +13,6 @@ body {
   background: #f7f1d6;
   border: 2px solid #e6dfc5;
   margin-bottom: 18px;
-  position: relative;
-}
-
-.home-create-btn {
-    background-color: #5f764e; 
-    color: #fdf8e2;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-family: "Poppins", sans-serif;
-    cursor: pointer;
-    margin-left: auto;
-    position: absolute;
-    top: 18px;
-    right: 18px;
-}
-
-.home-create-btn:hover {
-    background-color: #2e7d32;
 }
 
 .home-badge {

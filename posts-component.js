@@ -315,7 +315,7 @@
         '<div class="post-author-header poppins-regular">' +
           '<img src="' + escapeHtml(user.photo) + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
           '<div class="post-author-info">' +
-            '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
+            '<a href="profile.html?userId=' + escapeHtml(post.authorId) + '" class="post-author-username poppins-extrabold" style="color: #5f764e; text-decoration: none;">' + escapeHtml(user.username) + '</a>' +
             '<span class="post-author-date">' +
               escapeHtml(post.date || "") +
               (post.lastEdited ? ' &#8226; Edited ' + escapeHtml(post.lastEdited) : "") +
@@ -612,7 +612,7 @@
             var parentComment = this.findComment(postId, node.parentId);
             if (parentComment) {
               var parentUser = this.getUserById(parentComment.userId) || { username: "Unknown" };
-              replyToText = '<span style="color:#888; font-size:11px; font-style:italic;"> replied to ' + escapeHtml(parentUser.username) + '</span>';
+              replyToText = '<span style="color:#888; font-size:11px; font-style:italic;"> replied to <a href="profile.html?userId=' + escapeHtml(parentComment.userId) + '" style="color:#888; text-decoration: underline;">' + escapeHtml(parentUser.username) + '</a></span>';
             }
           }
 
@@ -622,7 +622,7 @@
                    'alt="' + escapeHtml(user.username) + '" ' +
                    'style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">' +
               '<div style="display:flex; flex-direction:column; gap:2px;">' +
-                '<span class="comment-author poppins-extrabold">' + escapeHtml(user.username) + replyToText + '</span>' +
+                '<a href="profile.html?userId=' + escapeHtml(node.userId) + '" class="comment-author poppins-extrabold" style="color: #5f764e; text-decoration: none;">' + escapeHtml(user.username) + '</a>' + replyToText +
                 '<span class="comment-date">' + escapeHtml(createdLabel + editedIndicator + editedTs) + '</span>' +
               '</div>' +
             '</div>' +

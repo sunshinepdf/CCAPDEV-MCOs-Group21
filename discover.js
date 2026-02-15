@@ -62,7 +62,7 @@ function renderDiscoverPosts() {
     container.appendChild(article);
   });
 
-  filterPosts();
+  filterPostsWithCategories();
 }
 
 function toggleFilter() {
@@ -135,6 +135,9 @@ function filterPostsWithCategories() {
   });
 }
 
+// Expose for search-bar component
+window.filterPostsWithCategories = filterPostsWithCategories;
+
 document.addEventListener("DOMContentLoaded", () => {
   setDiscoverDate();
   renderDiscoverPosts();
@@ -163,12 +166,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (action === "up") {
         PostsComponent_Instance.voteOnPost(id, "up");
-        renderDiscoverPosts();
+        // Update just the vote counts instead of full re-render
+        const post = PostsComponent_Instance.getPostById(id);
+        if (post && article) {
+          const upvotes = Number(post.upvotes) || 0;
+          const downvotes = Number(post.downvotes) || 0;
+          const voteCounts = article.querySelector(".section-row span");
+          if (voteCounts) {
+            voteCounts.innerHTML = (Number(post.views) || 0) + ' Views &#8226; ▲ ' + upvotes + ' ▼ ' + downvotes;
+          }
+          // Update active states
+          const upBtn = article.querySelector('[data-action="up"]');
+          const downBtn = article.querySelector('[data-action="down"]');
+          const userVote = (post.votes && currentUserId && post.votes[currentUserId]) ? post.votes[currentUserId] : null;
+          if (upBtn) upBtn.setAttribute('data-active', userVote === 'up' ? '1' : '0');
+          if (downBtn) downBtn.setAttribute('data-active', userVote === 'down' ? '1' : '0');
+        }
       } else if (action === "down") {
         PostsComponent_Instance.voteOnPost(id, "down");
-        renderDiscoverPosts();
+        // Update just the vote counts instead of full re-render
+        const post = PostsComponent_Instance.getPostById(id);
+        if (post && article) {
+          const upvotes = Number(post.upvotes) || 0;
+          const downvotes = Number(post.downvotes) || 0;
+          const voteCounts = article.querySelector(".section-row span");
+          if (voteCounts) {
+            voteCounts.innerHTML = (Number(post.views) || 0) + ' Views &#8226; ▲ ' + upvotes + ' ▼ ' + downvotes;
+          }
+          // Update active states
+          const upBtn = article.querySelector('[data-action="up"]');
+          const downBtn = article.querySelector('[data-action="down"]');
+          const userVote = (post.votes && currentUserId && post.votes[currentUserId]) ? post.votes[currentUserId] : null;
+          if (upBtn) upBtn.setAttribute('data-active', userVote === 'up' ? '1' : '0');
+          if (downBtn) downBtn.setAttribute('data-active', userVote === 'down' ? '1' : '0');
+        }
       } else if (action === "open" || action === "comment") {
-        PostsComponent_Instance.incrementViewCount(id);
         window.openPostModal(id);
       }
     };
