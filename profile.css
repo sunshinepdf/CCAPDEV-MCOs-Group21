@@ -841,3 +841,18 @@
   font-size: 16px;
   letter-spacing: 0.5px;
 }
+
+.profile-create-btn {
+    background-color: #504e76;
+    color: #fdf8e2;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.profile-create-btn:hover {
+    background-color: #625a8f;
+}

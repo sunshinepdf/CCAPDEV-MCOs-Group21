@@ -196,3 +196,25 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 });
+
+function openCreatePostModal() {
+  var currentUser = (localStorage.getItem("currentUserId") || "").trim();
+
+  if (!currentUser) {
+    AlertModal.show("You must be logged in to create a post.", "error");
+    return;
+  }
+
+  var modal = document.getElementById("create-post-modal");
+  if (modal) {
+    modal.style.display = "flex";
+  }
+}
+
+function closeCreatePostModal() {
+  var modal = document.getElementById("create-post-modal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+

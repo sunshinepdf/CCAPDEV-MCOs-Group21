@@ -33,8 +33,10 @@
               <div class="home-badge poppins-extrabold">ANIMO COMMONS DAILY</div>
               <div class="masthead-sub poppins-regular" id="mastheadDate">—</div>
             </div>
-
             <div class="masthead-right">
+              <button class="create-post-btn home-create-btn" onclick="openCreatePostModal()">
+                + Create Post
+              </button>
               <a class="mini-link poppins-extrabold" id="profileLink" href="profile.html">Profile</a>
               <a class="mini-link poppins-extrabold" href="popular.html">Popular</a>
               <a class="mini-link poppins-extrabold" href="discover.html">Discover</a>
@@ -500,6 +502,64 @@
 
       render();
     });
+
+    function openCreatePostModal() {
+      var currentUser = (localStorage.getItem("currentUserId") || "").trim();
+
+      if (!currentUser) {
+        AlertModal.show("You must be logged in to create a post.", "error");
+        return;
+      }
+
+      document.getElementById("create-post-modal").style.display = "flex";
+    }
+
+    function closeCreatePostModal() {
+      document.getElementById("create-post-modal").style.display = "none";
+    }
+
+    function submitNewPost() {
+
+      var title = document.getElementById("create-title").value.trim();
+      var content = document.getElementById("create-content").value.trim();
+      var category = document.getElementById("create-category").value;
+
+      if (!title || !content || !category) {
+        AlertModal.show("Please complete all fields.", "error");
+        return;
+      }
+
+      var db = PostsComponent_Instance.getDatabase();
+      var currentUserId = localStorage.getItem("currentUserId");
+
+      var newPost = {
+        id: "p" + Date.now(),
+        authorId: currentUserId,
+        category: category,
+        title: title,
+        content: content,
+        date: new Date().toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric"
+        }),
+        upvotes: 0,
+        downvotes: 0,
+        views: 0,
+        lastInteraction: Date.now(),
+        comments: []
+      };
+
+      db.posts.unshift(newPost);
+
+      localStorage.setItem("mockDatabase", JSON.stringify(db));
+
+      document.getElementById("create-post-modal").style.display = "none";
+
+      location.reload();
+    }
+
+
   </script>
 
   <!-- Post View Modal -->
@@ -520,6 +580,44 @@
             <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="create-post-modal" style="display: none;">
+    <div class="modal-backdrop">
+      <div class="modal-container">
+        <button class="modal-close-btn" onclick="closeCreatePostModal()">×</button>
+
+        <h2 class="poppins-extrabold">Create New Post</h2>
+
+        <input 
+          type="text" 
+          id="create-title" 
+          placeholder="Post Title" 
+          class="modal-input"
+        />
+
+        <textarea 
+          id="create-content" 
+          placeholder="Write your post here..." 
+          rows="6"
+          class="modal-textarea"
+        ></textarea>
+
+        <select id="create-category" class="modal-select">
+          <option value="">Select Category</option>
+          <option value="discussion">Discussion</option>
+          <option value="news">News</option>
+          <option value="help">Help</option>
+        </select>
+
+        <button 
+          class="submit-comment-btn poppins-extrabold"
+          onclick="submitNewPost()"
+        >
+          Publish Post
+        </button>
       </div>
     </div>
   </div>
