@@ -1,13 +1,67 @@
 let selectedCategories = [];
 
+// =============================
+// RENDER POSTS FROM DATABASE
+// =============================
+
+function renderDiscoverPosts() {
+    const container = document.getElementById("discoverPosts");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    // Always get fresh database from localStorage
+    let db = mockDatabase;
+
+    const saved = localStorage.getItem("mockDatabase");
+    if (saved) {
+        db = JSON.parse(saved);
+    }
+
+    if (!db.posts || db.posts.length === 0) {
+        container.innerHTML = "<p>No posts found.</p>";
+        return;
+    }
+
+    db.posts.forEach(post => {
+        const user = db.users.find(u => u.id === post.authorId) || { username: "Unknown" };
+
+        const postCard = document.createElement("div");
+        postCard.className = "post-card";
+        postCard.setAttribute("data-category", post.category.toLowerCase());
+
+        postCard.innerHTML = `
+            <div class="post-header">
+                <div class="user-info">
+                    <img src="assets/placeholder.png" class="avatar">
+                    <span class="username">${user.username}</span>
+                    <span class="meta">· ${post.date} · ${post.views || 0} views</span>
+                </div>
+                <span class="more">•••</span>
+            </div>
+
+            <hr>
+
+            <h3 class="post-title">${post.title}</h3>
+            <p class="post-desc">${post.content}</p>
+
+            <div class="tags">
+                <span>${post.category}</span>
+            </div>
+        `;
+
+        container.appendChild(postCard);
+    });
+}
+
+
+// =============================
+// FILTER + SEARCH (UNCHANGED)
+// =============================
+
 function toggleFilter() {
     const overlay = document.getElementById("filterOverlay");
-
-    if (overlay.style.display === "flex") {
-        overlay.style.display = "none";
-    } else {
-        overlay.style.display = "flex";
-    }
+    overlay.style.display = overlay.style.display === "flex" ? "none" : "flex";
 }
 
 document.addEventListener("click", function (event) {
@@ -29,7 +83,7 @@ function applyFilters() {
 
     checkboxes.forEach(cb => {
         if (cb.checked) {
-            selectedCategories.push(cb.value);
+            selectedCategories.push(cb.value.toLowerCase());
         }
     });
 
@@ -53,10 +107,14 @@ function filterPosts() {
             selectedCategories.length === 0 ||
             selectedCategories.includes(category);
 
-        if (matchesSearch && matchesCategory) {
-            post.style.display = "flex";
-        } else {
-            post.style.display = "none";
-        }
+        post.style.display = (matchesSearch && matchesCategory) ? "flex" : "none";
     });
 }
+
+// =============================
+// INIT
+// =============================
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderDiscoverPosts();
+});
