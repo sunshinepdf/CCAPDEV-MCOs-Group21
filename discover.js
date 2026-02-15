@@ -33,38 +33,10 @@ function renderDiscoverPosts() {
             db.users.find(u => u.id === post.authorId) ||
             { username: "Unknown" };
 
-        const article = document.createElement("article");
-        article.className = "article";
-        article.setAttribute("data-category", post.category.toLowerCase());
-
-        article.innerHTML = `
-            <div class="section-row poppins-regular">
-                <span>${post.category.toUpperCase()}</span>
-                <span>${post.views || 0} views</span>
-            </div>
-
-            <h2 class="headline poppins-extrabold">${post.title}</h2>
-
-            <div class="byline poppins-regular">
-                By <b>${user.username}</b> • ${post.date}
-            </div>
-
-            <div class="rule"></div>
-
-            <p class="excerpt poppins-regular">${post.content}</p>
-
-            <div class="article-actions">
-                <span class="chip poppins-regular">${post.category}</span>
-                <button class="open-btn" type="button">Open</button>
-            </div>
-        `;
-
-        article.querySelector(".open-btn").addEventListener("click", (e) => {
-            e.stopPropagation();
-            openPostView(post.id);
-        });
-
+        const locked = false; // you can add lock logic later
+        const article = buildNewspaperArticle(post, 0, locked);
         container.appendChild(article);
+
     });
 }
 
@@ -256,3 +228,108 @@ function setDiscoverDate() {
         day: "numeric"
     });
 }
+
+function buildNewspaperArticle(post, index, locked) {
+    function escapeHtml(str) {
+        return String(str == null ? "" : str)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function excerpt(text, n) {
+        var t = String(text || "").trim().replace(/\s+/g, " ");
+        if (t.length <= n) return t;
+        return t.slice(0, n).trim() + "…";
+    }
+
+    function prettyCategory(cat) {
+        var c = String(cat || "").toLowerCase();
+        if (c === "news") return "News";
+        if (c === "help") return "Help";
+        return "Discussion";
+    }
+
+    const score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+
+    const el = document.createElement("article");
+    el.className = "article" + (locked ? " locked" : "");
+    el.setAttribute("data-locked", locked ? "1" : "0");
+    el.setAttribute("data-id", post.id);
+
+    el.innerHTML =
+        '<div class="section-row poppins-regular">' +
+            '<span>' + prettyCategory(post.category) + '</span>' +
+            '<span>' + (Number(post.views) || 0) + ' views</span>' +
+        '</div>' +
+        '<h2 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h2>' +
+        '<div class="byline poppins-regular">By <b>' + escapeHtml(post.authorId) + '</b> • ' + escapeHtml(post.date) + '</div>' +
+        '<div class="rule"></div>' +
+        '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, 140)) + '</p>' +
+        '<div class="article-actions">' +
+            '<span class="chip poppins-regular">Score: <b>' + score + '</b></span>' +
+            '<div class="vote">' +
+                '<button type="button" data-action="up" data-id="' + post.id + '">▲</button>' +
+                '<button type="button" data-action="down" data-id="' + post.id + '">▼</button>' +
+            '</div>' +
+            '<button class="open-btn" type="button" data-action="open" data-id="' + post.id + '">Open</button>' +
+        '</div>';
+
+    return el;
+}
+
+document.getElementById("discoverPosts").onclick = function (e) {
+    const t = e.target;
+    if (!t) return;
+
+    const action = t.getAttribute("data-action");
+    const id = t.getAttribute("data-id");
+    if (!action || !id) return;
+
+    let db = mockDatabase;
+    const saved = localStorage.getItem("mockDatabase");
+    if (saved) db = JSON.parse(saved);
+
+    const post = db.posts.find(p => p.id === id);
+    if (!post) return;
+
+    post.votes = post.votes || {};
+    const userId = (localStorage.getItem("currentUserId") || "").trim();
+    if (!userId) {
+        AlertModal.show("Please login to interact.", "error");
+        return;
+    }
+
+    const prev = post.votes[userId] || null;
+
+    function applyVote(next) {
+        if (prev === "up") post.upvotes--;
+        if (prev === "down") post.downvotes--;
+
+        if (next === "up") post.upvotes++;
+        if (next === "down") post.downvotes++;
+
+        if (next) post.votes[userId] = next;
+        else delete post.votes[userId];
+    }
+
+    if (action === "up") {
+        applyVote(prev === "up" ? null : "up");
+        AlertModal.show("Vote updated!", "success");
+    }
+
+    if (action === "down") {
+        applyVote(prev === "down" ? null : "down");
+        AlertModal.show("Vote updated!", "success");
+    }
+
+    if (action === "open") {
+        openPostView(id);
+        return;
+    }
+
+    localStorage.setItem("mockDatabase", JSON.stringify(db));
+    renderDiscoverPosts();
+};

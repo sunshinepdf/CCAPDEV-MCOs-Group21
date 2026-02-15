@@ -278,3 +278,40 @@ body {
     color: #444;
 }
 
+.article {
+    position: relative;
+    padding-bottom: 60px; 
+}
+
+
+.vote-container {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+
+.vote-btn {
+    background: white;
+    border: 2px solid #7c3aed;  /* purple border */
+    color: #7c3aed;             /* purple arrows */
+
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.vote-btn:hover {
+    background: #f3e8ff;  /* light purple hover */
+}
+
