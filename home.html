@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,38 +93,69 @@
             </aside>
 
           </div>
+
+          <div id="post-view-modal" style="display: none;">
+            <div class="modal-backdrop">
+              <div class="modal-container">
+                <button class="modal-close-btn" onclick="closePostModal()">×</button>
+
+                <div id="modal-post-content"></div>
+
+                <div class="comments-section">
+                  <h3 class="comments-title poppins-extrabold">
+                    Comments (<span id="comment-count">0</span>)
+                  </h3>
+
+                  <div class="comments-list" id="comments-list"></div>
+
+                  <div class="comment-input-area">
+                    <textarea id="comment-input" placeholder="Add a comment..." rows="3" class="comment-textarea"></textarea>
+                    <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Core scripts -->
+
   <script src="data.js"></script>
-  <script src="posts-component.js"></script>
   <script src="alert.js"></script>
+  <script src="posts-component.js"></script>
+
   <script src="header.js"></script>
   <script src="global-sidebar.js"></script>
   <script src="navbar.js"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var paperGrid = document.getElementById("paperGrid");
-      var popularPreview = document.getElementById("popularPreview");
-      var discoverPreview = document.getElementById("discoverPreview");
-      var viewMoreGate = document.getElementById("viewMoreGate");
-      var loginStatus = document.getElementById("loginStatus");
-      var profileLink = document.getElementById("profileLink");
-      var mastheadDate = document.getElementById("mastheadDate");
 
-      function isLoggedIn() {
-        var id = (localStorage.getItem("currentUserId") || "").trim();
-        return id.length > 0;
+  <script>
+    (function () {
+      var postsComp = null;
+
+      // Elements
+      var paperGrid = null;
+      var popularPreview = null;
+      var discoverPreview = null;
+      var viewMoreGate = null;
+      var loginStatus = null;
+      var profileLink = null;
+      var mastheadDate = null;
+
+      // State
+      var LATEST_LIMIT = 20;
+      var FREE_COUNT = 11; 
+
+      function getCurrentUserId() {
+        return (localStorage.getItem("currentUserId") || "").trim();
       }
 
-      function getAuthorName(authorId) {
-        var users = (window.mockDatabase && window.mockDatabase.users) ? window.mockDatabase.users : [];
-        var u = users.find(function (x) { return x && x.id === authorId; });
-        return u ? (u.username || String(authorId || "Anonymous")) : String(authorId || "Anonymous");
+      function isLoggedIn() {
+        return getCurrentUserId().length > 0;
       }
 
       function escapeHtml(str) {
@@ -141,12 +173,6 @@
         return t.slice(0, n).trim() + "…";
       }
 
-      function parseDateSafe(dateStr) {
-        var d = new Date(dateStr);
-        if (!isNaN(d.getTime())) return d;
-        return new Date(0);
-      }
-
       function prettyCategory(cat) {
         var c = String(cat || "").toLowerCase();
         if (c === "news") return "News";
@@ -154,38 +180,53 @@
         return "Discussion";
       }
 
-      // Get posts from the shared database component
-      var posts = PostsComponent_Instance.getDatabase().posts || [];
-
-      function addView(postId) {
-        PostsComponent_Instance.incrementViewCount(postId);
+      function safeTime(post) {
+        var d = new Date(post.date || 0).getTime();
+        if (!isNaN(d) && d > 0) return d;
+        return Number(post.lastInteraction) || 0;
       }
 
-      function buildNewspaperArticle(post, index, locked) {
-        return PostsComponent_Instance.buildNewspaperArticle(post, index, locked);
+      function score(post) {
+        return (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
       }
 
-      function buildPopularRow(post, locked) {
-        var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-        var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+      function setMastheadDate() {
+        if (!mastheadDate) return;
+        var now = new Date();
+        mastheadDate.textContent = now.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+      }
+
+      
+      function buildMiniCard(post, locked, showVotes) {
+        var user = postsComp.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
 
         var el = document.createElement("div");
         el.className = "post-card-mini" + (locked ? " locked" : "");
         el.setAttribute("data-locked", locked ? "1" : "0");
         el.setAttribute("data-id", post.id);
 
+        var votesLine = showVotes
+          ? ('<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' +
+              (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) + '</span>')
+          : ('<span>' + (Number(post.views) || 0) + ' Views &#8226; Score ' + score(post) + '</span>');
+
         el.innerHTML =
           '<div class="post-author-header poppins-regular">' +
-            '<img src="' + user.photo + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
+            '<img src="' + escapeHtml(user.photo) + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
             '<div class="post-author-info">' +
               '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-              '<span class="post-author-date">' + escapeHtml(post.date) + (post.lastEdited ? ' &#8226; Edited ' + post.lastEdited : '') + '</span>' +
+              '<span class="post-author-date">' + escapeHtml(post.date || "") +
+                (post.lastEdited ? ' &#8226; Edited ' + escapeHtml(post.lastEdited) : '') +
+              '</span>' +
             '</div>' +
           '</div>' +
-          '<h4 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h4>' +
-          '<div class="section-row poppins-regular">' +
-            '<span>' + (Number(post.views) || 0) + ' Views &#8226; Score ' + score + '</span>' +
-          '</div>' +
+          '<h4 class="headline poppins-extrabold">' + escapeHtml(post.title || "") + '</h4>' +
+          '<div class="section-row poppins-regular">' + votesLine + '</div>' +
           '<div class="rule"></div>' +
           '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, 90)) + '</p>' +
           '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>';
@@ -193,342 +234,145 @@
         return el;
       }
 
-      function buildDiscoverCard(post, locked) {
-        var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-
-        var el = document.createElement("div");
-        el.className = "post-card-mini" + (locked ? " locked" : "");
-        el.setAttribute("data-category", post.category || "discussion");
-        el.setAttribute("data-locked", locked ? "1" : "0");
-        el.setAttribute("data-id", post.id);
-
-        el.innerHTML =
-          '<div class="post-author-header poppins-regular">' +
-            '<img src="' + user.photo + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
-            '<div class="post-author-info">' +
-              '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-              '<span class="post-author-date">' + escapeHtml(post.date) + (post.lastEdited ? ' &#8226; Edited ' + post.lastEdited : '') + '</span>' +
-            '</div>' +
-          '</div>' +
-          '<h4 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h4>' +
-          '<div class="section-row poppins-regular">' +
-            '<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' + (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) + '</span>' +
-          '</div>' +
-          '<div class="rule"></div>' +
-          '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, 90)) + '</p>' +
-          '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>';
-
-        return el;
-      }
-
-      function render() {
-        if (mastheadDate) {
-          mastheadDate.textContent = new Date().toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-          });
-        }
-
+      function renderHome() {
         var logged = isLoggedIn();
-        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+
+        setMastheadDate();
 
         if (loginStatus) loginStatus.textContent = logged ? "Logged in" : "Guest mode";
 
         if (profileLink && !logged) {
           profileLink.textContent = "Login";
           profileLink.href = "login.html";
+        } else if (profileLink && logged) {
+          profileLink.textContent = "Profile";
+          profileLink.href = "profile.html";
         }
 
-        // ✅ Latest posts: sort by date desc (most recent first)
+        var posts = postsComp.getPosts().slice();
+
+        // Latest posts 
         var latest = posts
           .slice()
-          .sort(function (a, b) {
-            return parseDateSafe(b.date).getTime() - parseDateSafe(a.date).getTime();
-          })
-          .slice(0, 20);
+          .sort(function (a, b) { return safeTime(b) - safeTime(a); })
+          .slice(0, LATEST_LIMIT);
 
-        // ✅ Guest sees only first 15 posts unblurred, others locked/blurred
-        var FREE_COUNT = 14;
-
+        // Latest grid 
         if (paperGrid) {
           paperGrid.innerHTML = "";
-          latest.forEach(function (post, i) {
-            var lockedPost = (!logged && i >= FREE_COUNT);
-            paperGrid.appendChild(buildNewspaperArticle(post, i, lockedPost));
+          latest.forEach(function (post, idx) {
+            var lockedPost = (!logged && idx >= FREE_COUNT);
+            paperGrid.appendChild(postsComp.buildNewspaperArticle(post, idx, lockedPost));
           });
         }
 
-        if (viewMoreGate) {
-          viewMoreGate.style.display = !logged ? "block" : "none";
-        }
+        if (viewMoreGate) viewMoreGate.style.display = (!logged) ? "block" : "none";
 
-        // Popular: sort by score desc (top 4)
+        // Popular preview 
         if (popularPreview) {
           popularPreview.innerHTML = "";
           var popular = posts
             .slice()
-            .sort(function (a, b) {
-              var scoreB = (Number(b.upvotes) || 0) - (Number(b.downvotes) || 0);
-              var scoreA = (Number(a.upvotes) || 0) - (Number(a.downvotes) || 0);
-              return scoreB - scoreA;
-            })
+            .sort(function (a, b) { return score(b) - score(a); })
             .slice(0, 4);
 
-          popular.forEach(function (p, idx) {
-            // guest: lock all (or you can allow 1 free here too — your call)
-            var lockedRow = !logged;
-            popularPreview.appendChild(buildPopularRow(p, lockedRow));
+          popular.forEach(function (p) {
+            var lockedMini = !logged; // lock all popular preview for guests
+            popularPreview.appendChild(buildMiniCard(p, lockedMini, false));
           });
         }
 
-        // ✅ Discover: MOST RECENT posts by date
+        // Discover preview 
         if (discoverPreview) {
           discoverPreview.innerHTML = "";
-
-          // show 4 newest, but guest only gets 1 unlocked (the newest)
           var discover = latest.slice(0, 4);
 
-          discover.forEach(function (p, i) {
-            var lockedCard = (!logged && i >= 1);
-            discoverPreview.appendChild(buildDiscoverCard(p, lockedCard));
+          discover.forEach(function (p, idx) {
+            var lockedMini = (!logged && idx >= 1);
+            discoverPreview.appendChild(buildMiniCard(p, lockedMini, true));
           });
         }
-
-        // ✅ Modal functions
-        function openPostModal(postId) {
-          var post = PostsComponent_Instance.getPostById(postId);
-          if (!post) return;
-          
-          var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-          var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
-          
-          // Render full article in modal
-          var modalContent = document.getElementById("modal-post-content");
-          modalContent.innerHTML = 
-            '<div class="post-author-header poppins-regular">' +
-              '<img src="' + user.photo + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
-              '<div class="post-author-info">' +
-                '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-                '<span class="post-author-date">' + escapeHtml(post.date) + (post.lastEdited ? ' &#8226; Edited ' + post.lastEdited : '') + '</span>' +
-              '</div>' +
-            '</div>' +
-            '<h2 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h2>' +
-            '<div class="section-row poppins-regular">' +
-              '<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' + (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) + '</span>' +
-            '</div>' +
-            '<div class="rule"></div>' +
-            '<p class="excerpt poppins-regular">' + escapeHtml(post.content) + '</p>' +
-            '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>';
-          
-          // Render comments
-          renderComments(post);
-          
-          // Show modal
-          var modal = document.getElementById("post-view-modal");
-          modal.style.display = "flex";
-          modal.setAttribute("data-post-id", postId);
-          
-          // Close backdrop click
-          var backdrop = modal.querySelector(".modal-backdrop");
-          backdrop.onclick = function(e) {
-            if (e.target === backdrop) {
-              modal.style.display = "none";
-            }
-          };
-        }
-
-        function renderComments(post) {
-          var comments = post.comments || [];
-          var commentsList = document.getElementById("comments-list");
-          var commentCount = document.getElementById("comment-count");
-          
-          commentCount.textContent = comments.length;
-          commentsList.innerHTML = "";
-          
-          comments.forEach(function(comment) {
-            var commentEl = document.createElement("div");
-            commentEl.className = "comment-item";
-            
-            var user = PostsComponent_Instance.getUserById(comment.userId) || { username: "Unknown" };
-            
-            commentEl.innerHTML = 
-              '<div class="comment-header poppins-regular">' +
-                '<span class="comment-author poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-                '<span class="comment-date">' + escapeHtml(comment.date || new Date().toLocaleDateString()) + '</span>' +
-              '</div>' +
-              '<p class="comment-text poppins-regular">' + escapeHtml(comment.text) + '</p>';
-            
-            commentsList.appendChild(commentEl);
-          });
-        }
-
-        // ✅ Newspaper voting + open (block if locked/guest)
-        if (paperGrid) {
-          paperGrid.onclick = function (e) {
-            var t = e.target;
-            if (!t) return;
-
-            var action = t.getAttribute("data-action");
-            var id = t.getAttribute("data-id");
-            if (!action || !id) return;
-
-            var article = t.closest(".article");
-            var isLocked = article && article.getAttribute("data-locked") === "1";
-
-            // strict guard: must be logged in AND not locked
-            var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
-            var loggedNow = activeUserId.length > 0;
-
-            if (!loggedNow || isLocked) {
-                AlertModal.show("Please login or sign up to view and interact with posts.", "error");
-                return;
-            }
-
-            if (action === "open" || action === "comment") {
-                addView(id);
-                openPostModal(id);
-                render();
-                return;
-            }
-
-            if (action === "up") {
-                PostsComponent_Instance.voteOnPost(id, "up");
-                AlertModal.show("Vote updated!", "success");
-                render();
-                return;
-            }
-
-            if (action === "down") {
-                PostsComponent_Instance.voteOnPost(id, "down");
-                AlertModal.show("Vote updated!", "success");
-                render();
-                return;
-            }
-
-          };
-            
-        }
-
-        // ✅ Popular preview voting + open
-        if (popularPreview) {
-          popularPreview.onclick = function (e) {
-            var t = e.target.closest(".post-card-mini");
-            if (!t) return;
-
-            var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
-            var loggedNow = activeUserId.length > 0;
-            var isLocked = t.getAttribute("data-locked") === "1";
-            var id = t.getAttribute("data-id");
-
-            if (!loggedNow || isLocked) {
-                AlertModal.show("Please login or sign up to view and interact with posts.", "error");
-                return;
-            }
-
-            addView(id);
-            openPostModal(id);
-            render();
-          };
-        }
-
-        // ✅ Discover preview voting + open
-        if (discoverPreview) {
-          discoverPreview.onclick = function (e) {
-            var t = e.target.closest(".post-card-mini");
-            if (!t) return;
-
-            var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
-            var loggedNow = activeUserId.length > 0;
-            var isLocked = t.getAttribute("data-locked") === "1";
-            var id = t.getAttribute("data-id");
-
-            if (!loggedNow || isLocked) {
-                AlertModal.show("Please login or sign up to view and interact with posts.", "error");
-                return;
-            }
-
-            addView(id);
-            openPostModal(id);
-            render();
-          };
-        }
-
-        // ✅ Comment submission
-        var submitBtn = document.getElementById("submit-comment-btn");
-        if (submitBtn) {
-          submitBtn.onclick = function() {
-            var modal = document.getElementById("post-view-modal");
-            var postId = modal.getAttribute("data-post-id");
-            var commentText = document.getElementById("comment-input").value.trim();
-            var currentUserId = (localStorage.getItem("currentUserId") || "").trim();
-            
-            if (!currentUserId) {
-              AlertModal.show("Please login to add comments.", "error");
-              return;
-            }
-            
-            if (!commentText) {
-              AlertModal.show("Comment cannot be empty.", "error");
-              return;
-            }
-            
-            var post = PostsComponent_Instance.getPostById(postId);
-            if (!post) return;
-            
-            // Add comment to post
-            post.comments = post.comments || [];
-            post.comments.push({
-              userId: currentUserId,
-              text: commentText,
-              date: new Date().toLocaleDateString()
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('mockDatabase', JSON.stringify(PostsComponent_Instance.getDatabase()));
-            
-            // Clear input and re-render
-            document.getElementById("comment-input").value = "";
-            renderComments(post);
-            render();
-            AlertModal.show("Comment posted!", "success");
-          };
-        }
-    
       }
 
-      render();
-    });
-  </script>
+      function bindLatestGridActions() {
+        if (!paperGrid) return;
 
-  <!-- Post View Modal -->
-  <div id="post-view-modal" style="display: none;">
-    <div class="modal-backdrop">
-      <div class="modal-container">
-        <button class="modal-close-btn" onclick="closePostModal()">×</button>
-        
-        <div id="modal-post-content"></div>
-        
-        <div class="comments-section">
-          <h3 class="comments-title poppins-extrabold">Comments (<span id="comment-count">0</span>)</h3>
-          
-          <div class="comments-list" id="comments-list"></div>
-          
-          <div class="comment-input-area">
-            <textarea id="comment-input" placeholder="Add a comment..." rows="3" class="comment-textarea"></textarea>
-            <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        paperGrid.addEventListener("click", function (e) {
+          var btn = e.target.closest("button");
+          if (!btn) return;
 
-  <script>
-    // Global modal functions
-    function closePostModal() {
-      document.getElementById('post-view-modal').style.display = 'none';
-    }
+          var action = btn.getAttribute("data-action");
+          var postId = btn.getAttribute("data-id");
+          if (!action || !postId) return;
+
+          var article = btn.closest("article");
+          var isLocked = article && article.getAttribute("data-locked") === "1";
+          var uid = getCurrentUserId();
+
+          if (isLocked) {
+            AlertModal.show("Please login / sign up to view more posts and interact.", "error");
+            return;
+          }
+
+          if (action === "open" || action === "comment") {
+            window.openPostModal(postId);
+            return;
+          }
+
+          if (action === "up" || action === "down") {
+            if (!uid) {
+              AlertModal.show("Please login to vote.", "error");
+              return;
+            }
+            postsComp.voteOnPost(postId, action);
+            renderHome();
+            return;
+          }
+        });
+      }
+
+      function bindMiniPreviewOpen(containerEl) {
+        if (!containerEl) return;
+
+        containerEl.addEventListener("click", function (e) {
+          var card = e.target.closest(".post-card-mini");
+          if (!card) return;
+
+          var isLocked = card.getAttribute("data-locked") === "1";
+          var uid = getCurrentUserId();
+          var postId = card.getAttribute("data-id");
+
+          if (isLocked || !uid) {
+            AlertModal.show("Please login / sign up to view and interact with posts.", "error");
+            return;
+          }
+
+          window.openPostModal(postId);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // IMPORTANT: posts-component.js must be loaded already
+        postsComp = window.PostsComponent_Instance;
+        if (!postsComp) {
+          console.error("PostsComponent_Instance not found. Make sure posts-component.js is loaded.");
+          return;
+        }
+
+        paperGrid = document.getElementById("paperGrid");
+        popularPreview = document.getElementById("popularPreview");
+        discoverPreview = document.getElementById("discoverPreview");
+        viewMoreGate = document.getElementById("viewMoreGate");
+        loginStatus = document.getElementById("loginStatus");
+        profileLink = document.getElementById("profileLink");
+        mastheadDate = document.getElementById("mastheadDate");
+
+        renderHome();
+        bindLatestGridActions();
+        bindMiniPreviewOpen(popularPreview);
+        bindMiniPreviewOpen(discoverPreview);
+      });
+    })();
   </script>
 </body>
 </html>

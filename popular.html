@@ -1,108 +1,366 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Popular</title>
-    <link rel="icon" href="assets/placeholder.png" type="image/png">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="layout.css">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="global-sidebar.css">
-    <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="alert.css">
-    <link rel="stylesheet" href="popular.css">
+  <title>Popular</title>
+  <link rel="icon" href="assets/placeholder.png" type="image/png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: "Poppins", sans-serif; 
-        }
-    </style>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="global-sidebar.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="alert.css">
+  <link rel="stylesheet" href="popular.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: "Poppins", sans-serif; }
+    .paper-grid { width: 100%; }
+  </style>
 </head>
+
 <body>
-    <div class="main-content">
-        <header-component></header-component>
-        <global-sidebar></global-sidebar>
-        <div class="container">
-            <nav-bar active="popular"></nav-bar>
-            <div class="page-section" style="--page-color: #f1642e;">
-                <div class="content-box" style="--content-bg: #fdf8e2;">
-                    <div class="popular-content">
-                        <div class="popular-topbar">
-                            <div class="popular-title">
-                                <img src="assets/popular-icon.png" alt="popular" width="20" height="20">
-                                <div class="title-group">
-                                    <h1 class="poppins-extrabold">Popular Posts</h1>
-                                    <div id="popularDate" class="masthead-sub poppins-regular">—</div>
-                                </div>
-                            </div>
-                        </div>
+  <div class="main-content">
+    <header-component></header-component>
+    <global-sidebar></global-sidebar>
 
-                        <div class="popular-controls">
-                            <div class="custom-select" id="sortSelect">
-                                <div class="select-trigger">
-                                    <span class="trigger-text">Hot</span>
-                                    <div class="arrow"></div>
-                                </div>
-                                <div class="options-list">
-                                    <div class="option selected" data-value="hot">Hot</div>
-                                    <div class="option" data-value="top">Top</div>
-                                </div>
-                            </div>
+    <div class="container">
+      <nav-bar active="popular"></nav-bar>
 
-                            <div class="custom-select" id="timeSelect" style="display: none;">
-                                <div class="select-trigger">
-                                    <span class="trigger-text">Today</span>
-                                    <div class="arrow"></div>
-                                </div>
-                                <div class="options-list">
-                                    <div class="option selected" data-value="today">Today</div>
-                                    <div class="option" data-value="week">This Week</div>
-                                    <div class="option" data-value="month">This Month</div>
-                                    <div class="option" data-value="year">This Year</div>
-                                    <div class="option" data-value="alltime">All Time</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="paper-grid">
-                            </div>
-                        
-                        <!-- Post View Modal -->
-                        <div id="post-view-modal" style="display: none;">
-                            <div class="modal-backdrop">
-                                <div class="modal-container">
-                                    <button class="modal-close-btn" onclick="closePostModal()">×</button>
-                                    
-                                    <div id="modal-post-content"></div>
-                                    
-                                    <div class="comments-section">
-                                        <h3 class="comments-title poppins-extrabold">Comments (<span id="comment-count">0</span>)</h3>
-                                        
-                                        <div class="comments-list" id="comments-list"></div>
-                                        
-                                        <div class="comment-input-area">
-                                            <textarea id="comment-input" placeholder="Add a comment..." rows="3" class="comment-textarea"></textarea>
-                                            <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div class="page-section" style="--page-color: #f1642e;">
+        <div class="content-box" style="--content-bg: #fdf8e2;">
+          <div class="popular-content">
+            <div class="popular-topbar">
+              <div class="popular-title">
+                <img src="assets/popular-icon.png" alt="popular" width="20" height="20">
+                <div class="title-group">
+                  <h1 class="poppins-extrabold">Popular Posts</h1>
+                  <div id="popularDate" class="masthead-sub poppins-regular">—</div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
 
-    <script src="data.js"></script>
-    <script src="posts-component.js"></script>
-    <script src="alert.js"></script>
-    <script src="popular.js"></script>
-    <script src="header.js"></script>
-    <script src="global-sidebar.js"></script>
-    <script src="navbar.js"></script>
+            <div class="popular-controls">
+              <div class="custom-select" id="sortSelect">
+                <div class="select-trigger">
+                  <span class="trigger-text">Hot</span>
+                  <div class="arrow"></div>
+                </div>
+                <div class="options-list">
+                  <div class="option selected" data-value="hot">Hot</div>
+                  <div class="option" data-value="top">Top</div>
+                </div>
+              </div>
+
+              <div class="custom-select" id="timeSelect" style="display: none;">
+                <div class="select-trigger">
+                  <span class="trigger-text">Today</span>
+                  <div class="arrow"></div>
+                </div>
+                <div class="options-list">
+                  <div class="option selected" data-value="today">Today</div>
+                  <div class="option" data-value="week">This Week</div>
+                  <div class="option" data-value="month">This Month</div>
+                  <div class="option" data-value="year">This Year</div>
+                  <div class="option" data-value="alltime">All Time</div>
+                </div>
+              </div>
+            </div>
+
+     
+            <div class="paper-grid" id="popularGrid"></div>
+
+            <div id="post-view-modal" style="display: none;">
+              <div class="modal-backdrop">
+                <div class="modal-container">
+                  <button class="modal-close-btn" onclick="closePostModal()">×</button>
+
+                  <div id="modal-post-content"></div>
+
+                  <div class="comments-section">
+                    <h3 class="comments-title poppins-extrabold">
+                      Comments (<span id="comment-count">0</span>)
+                    </h3>
+
+                    <div class="comments-list" id="comments-list"></div>
+
+                    <div class="comment-input-area">
+                      <textarea id="comment-input" placeholder="Add a comment..." rows="3" class="comment-textarea"></textarea>
+                      <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="data.js"></script>
+  <script src="alert.js"></script>
+  <script src="posts-component.js"></script>
+
+
+  <script>
+    (function () {
+      var postsComp = null;
+
+      // Elements
+      var popularDateEl = null;
+      var popularGridEl = null;
+
+      var sortSelectEl = null;
+      var sortTriggerEl = null;
+      var sortOptionsListEl = null;
+
+      var timeSelectEl = null;
+      var timeTriggerEl = null;
+      var timeOptionsListEl = null;
+
+      // State
+      var currentSort = "hot";       
+      var currentTimeframe = "today"; 
+      var FREE_COUNT = 14;
+      var clickedOutsideHandlerBound = false;
+
+      function getCurrentUserId() {
+        return (localStorage.getItem("currentUserId") || "").trim();
+      }
+
+      function setPopularDate() {
+        if (!popularDateEl) return;
+        var now = new Date();
+        popularDateEl.textContent = now.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+      }
+
+      function getScore(post) {
+        return (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+      }
+
+      function withinTimeframe(post) {
+        if (currentTimeframe === "alltime") return true;
+
+        var now = Date.now();
+        var start = now;
+
+        if (currentTimeframe === "today") start = now - (1 * 24 * 60 * 60 * 1000);
+        else if (currentTimeframe === "week") start = now - (7 * 24 * 60 * 60 * 1000);
+        else if (currentTimeframe === "month") start = now - (30 * 24 * 60 * 60 * 1000);
+        else if (currentTimeframe === "year") start = now - (365 * 24 * 60 * 60 * 1000);
+
+        var t = Number(post.lastInteraction) || new Date(post.date || 0).getTime() || 0;
+        return t >= start;
+      }
+
+      function getPopularPosts() {
+        if (currentSort === "top") {
+          var posts = postsComp.getPosts().slice().filter(withinTimeframe);
+          posts.sort(function (a, b) {
+            return getScore(b) - getScore(a);
+          });
+          return posts;
+        }
+
+        // hot
+        return postsComp.getFilteredPosts({ sortBy: "hot" });
+      }
+
+      function renderPopular() {
+        if (!popularGridEl) return;
+
+        var posts = getPopularPosts();
+        popularGridEl.innerHTML = "";
+
+        if (!posts.length) {
+          var empty = document.createElement("div");
+          empty.className = "poppins-regular";
+          empty.style.padding = "18px";
+          empty.style.opacity = "0.8";
+          empty.textContent = "No posts available for this filter.";
+          popularGridEl.appendChild(empty);
+          return;
+        }
+
+        var isGuest = !getCurrentUserId();
+
+        posts.forEach(function (post, idx) {
+          var locked = isGuest && idx >= FREE_COUNT;
+          var card = postsComp.buildNewspaperArticle(post, idx, locked);
+          popularGridEl.appendChild(card);
+        });
+      }
+
+      function bindGridActions() {
+        if (!popularGridEl) return;
+
+        popularGridEl.addEventListener("click", function (e) {
+          var btn = e.target.closest("button");
+          if (!btn) return;
+
+          var action = btn.getAttribute("data-action");
+          var postId = btn.getAttribute("data-id");
+          if (!action || !postId) return;
+
+          var article = btn.closest("article");
+          var isLocked = article && article.getAttribute("data-locked") === "1";
+
+          if (isLocked) {
+            AlertModal.show("Please login to view more posts.", "error");
+            return;
+          }
+
+          if (action === "open" || action === "comment") {
+            window.openPostModal(postId);
+            return;
+          }
+
+          if (action === "up" || action === "down") {
+            var uid = getCurrentUserId();
+            if (!uid) {
+              AlertModal.show("Please login to vote.", "error");
+              return;
+            }
+            postsComp.voteOnPost(postId, action);
+            renderPopular();
+            return;
+          }
+        });
+      }
+
+     
+      function closeAllSelects() {
+        if (sortSelectEl) sortSelectEl.classList.remove("open");
+        if (timeSelectEl) timeSelectEl.classList.remove("open");
+      }
+
+      function openSelect(selectEl) {
+        closeAllSelects();
+        if (selectEl) selectEl.classList.add("open");
+      }
+
+      function toggleSelect(selectEl) {
+        if (!selectEl) return;
+        var open = selectEl.classList.contains("open");
+        if (open) selectEl.classList.remove("open");
+        else openSelect(selectEl);
+      }
+
+      function setSelectedOption(selectEl, value) {
+        if (!selectEl) return;
+
+        var opts = selectEl.querySelectorAll(".option");
+        opts.forEach(function (o) {
+          o.classList.toggle("selected", o.getAttribute("data-value") === value);
+        });
+
+        var optEl = selectEl.querySelector('.option[data-value="' + value + '"]');
+        var triggerText = selectEl.querySelector(".trigger-text");
+        if (triggerText && optEl) triggerText.textContent = optEl.textContent.trim();
+      }
+
+      function bindSelectEvents() {
+        if (!sortSelectEl || !timeSelectEl) return;
+
+        sortTriggerEl.addEventListener("click", function () {
+          toggleSelect(sortSelectEl);
+        });
+
+        timeTriggerEl.addEventListener("click", function () {
+          toggleSelect(timeSelectEl);
+        });
+
+        sortOptionsListEl.addEventListener("click", function (e) {
+          var opt = e.target.closest(".option");
+          if (!opt) return;
+
+          var value = opt.getAttribute("data-value");
+          if (!value) return;
+
+          currentSort = value; 
+          setSelectedOption(sortSelectEl, value);
+
+          timeSelectEl.style.display = (currentSort === "top") ? "block" : "none";
+
+          closeAllSelects();
+          renderPopular();
+        });
+
+        timeOptionsListEl.addEventListener("click", function (e) {
+          var opt = e.target.closest(".option");
+          if (!opt) return;
+
+          var value = opt.getAttribute("data-value");
+          if (!value) return;
+
+          currentTimeframe = value;
+          setSelectedOption(timeSelectEl, value);
+
+          closeAllSelects();
+          renderPopular();
+        });
+
+        if (!clickedOutsideHandlerBound) {
+          document.addEventListener("click", function (e) {
+            var inSort = sortSelectEl && sortSelectEl.contains(e.target);
+            var inTime = timeSelectEl && timeSelectEl.contains(e.target);
+            if (!inSort && !inTime) closeAllSelects();
+          });
+          clickedOutsideHandlerBound = true;
+        }
+      }
+
+      // -------------------------
+      // Init
+      // -------------------------
+      document.addEventListener("DOMContentLoaded", function () {
+        postsComp = window.PostsComponent_Instance;
+        if (!postsComp) {
+          console.error("PostsComponent_Instance not found. Make sure posts-component.js is loaded.");
+          return;
+        }
+
+        popularDateEl = document.getElementById("popularDate");
+        popularGridEl = document.getElementById("popularGrid") || document.querySelector(".paper-grid");
+
+        sortSelectEl = document.getElementById("sortSelect");
+        sortTriggerEl = sortSelectEl ? sortSelectEl.querySelector(".select-trigger") : null;
+        sortOptionsListEl = sortSelectEl ? sortSelectEl.querySelector(".options-list") : null;
+
+        timeSelectEl = document.getElementById("timeSelect");
+        timeTriggerEl = timeSelectEl ? timeSelectEl.querySelector(".select-trigger") : null;
+        timeOptionsListEl = timeSelectEl ? timeSelectEl.querySelector(".options-list") : null;
+
+        setPopularDate();
+
+        setSelectedOption(sortSelectEl, currentSort);
+        setSelectedOption(timeSelectEl, currentTimeframe);
+        timeSelectEl.style.display = (currentSort === "top") ? "block" : "none";
+
+        bindSelectEvents();
+        bindGridActions();
+        renderPopular();
+      });
+    })();
+  </script>
+
+
+  <script src="header.js"></script>
+  <script src="global-sidebar.js"></script>
+  <script src="navbar.js"></script>
 </body>
 </html>
