@@ -101,6 +101,16 @@ const defaultDatabase = {
     ]
 };
 
+// Make default post dates dynamic so the "Today" and "This Week" filters always have data
+// This block ensures that there are posts with dates spread across the last 10 days, making the sorting and filtering features more meaningful in demo.
+const realToday = new Date();
+defaultDatabase.posts.forEach((post, index) => {
+    const dynamicDate = new Date(realToday);
+    // Spread the 20 default posts across the last 10 days
+    dynamicDate.setDate(realToday.getDate() - (index % 10)); 
+    post.date = dynamicDate.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
+});
+
 // Function to merge saved data with default data, ensuring that new users are added and 
 // existing users are updated without losing any information
 function mergeWithDefaults(saved, defaults) {
