@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Profile</title>
-        <link rel="icon" href="assets/placeholder.png" type="image/png">
+        <link rel="icon" href="D:\Khyle\HTML\AnimoCommons\assets\placeholder.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="layout.css">
         <link rel="stylesheet" href="header.css">
@@ -27,19 +27,12 @@
                     <profile-sidebar></profile-sidebar>
                     <profile-main></profile-main>
                 </div>
-                    <div style="margin: 20px 0;">
-                    <button class="create-post-btn profile-create-btn"
-                            onclick="openCreatePostModal()">
-                        + Create Post
-                    </button>
-                    </div>
-
                     <profile-posts></profile-posts>
                 </div>
             </div>
         </div>
 
-        <!-- Edit Post Modal (Updated to Match Home) -->
+        <!-- Edit Post Modal -->
         <div id="edit-post-modal" style="display: none;">
             <div class="modal-backdrop">
                 <div class="modal-container">
@@ -73,7 +66,6 @@
             </div>
         </div>
 
-
         <!-- Post View Modal -->
         <div id="post-view-modal" style="display: none;">
             <div class="modal-backdrop">
@@ -94,7 +86,7 @@
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
     <!-- Create Post Modal -->
     <div id="create-post-modal" class="modal" style="display: none;">
@@ -153,7 +145,7 @@
     <script src="posts-component.js"></script>
     <script src="alert.js"></script>
     <script src="search-component.js"></script>
-    <script src="profile-components.js"></script>
     <script src="profile.js"></script>
+    <script src="profile-components.js"></script>
     </body>
 </html>

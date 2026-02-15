@@ -33,10 +33,8 @@
               <div class="home-badge poppins-extrabold">ANIMO COMMONS DAILY</div>
               <div class="masthead-sub poppins-regular" id="mastheadDate">—</div>
             </div>
+
             <div class="masthead-right">
-              <button class="create-post-btn home-create-btn" onclick="openCreatePostModal()">
-                + Create Post
-              </button>
               <a class="mini-link poppins-extrabold" id="profileLink" href="profile.html">Profile</a>
               <a class="mini-link poppins-extrabold" href="popular.html">Popular</a>
               <a class="mini-link poppins-extrabold" href="discover.html">Discover</a>
@@ -321,7 +319,6 @@
             }
 
             if (action === "open" || action === "comment") {
-                addView(id);
                 window.openPostModal(id);
                 render();
                 return;
@@ -359,7 +356,6 @@
                 return;
             }
 
-            addView(id);
             window.openPostModal(id);
             render();
           };
@@ -381,7 +377,6 @@
                 return;
             }
 
-            addView(id);
             window.openPostModal(id);
             render();
           };
