@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<div class="sidebar-footer">' +
             '<div class="logout-container">' +
             '<button class="logout-btn" onclick="logout()" aria-label="Logout" title="Logout">' +
-            '<img src="assets/logout-icon.png" alt="Logout">' +
+            '<img src="assets/logout-icon.png" alt="Logout" width="50" height="50">' +
             "</button>" +
             '<span class="logout-text">Logout</span>' +
             "</div>" +

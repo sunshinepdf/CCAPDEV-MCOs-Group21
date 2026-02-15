@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var contentDiv = document.createElement("div");
     contentDiv.className = "header-content";
     contentDiv.innerHTML =
-        '<img src="assets/logo.png" alt="Animo Commons Logo" width="32" height="32">' +
+        '<img src="assets/logo.png" alt="Animo Commons Logo" width="100" height="100">' +
         '<h1 class="poppins-extrabold">Animo Commons</h1>';
 
     var userDiv = document.createElement("div");

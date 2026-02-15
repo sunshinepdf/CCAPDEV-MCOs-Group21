@@ -19,6 +19,7 @@
 
 <body>
   <div class="main-content">
+    <header-component></header-component>
     <global-sidebar></global-sidebar>
 
     <div class="container">
@@ -27,7 +28,6 @@
       <div class="page-section" style="--page-color: #a3b565;">
         <div class="content-box" style="--content-bg: #fdf8e2;">
 
-     
           <div class="home-masthead">
             <div class="masthead-left">
               <div class="home-badge poppins-extrabold">ANIMO COMMONS DAILY</div>
@@ -42,21 +42,20 @@
             </div>
           </div>
 
-     
           <div class="home-grid">
 
-        
+            <!-- Newspaper posts -->
             <section class="paper-section">
               <div class="section-titlebar">
                 <h2 class="poppins-extrabold">Latest Posts</h2>
+                <span class="hint poppins-regular">Animo Commons posts</span>
               </div>
 
               <div class="paper-grid" id="paperGrid"></div>
 
-          
               <div class="guest-gate" id="viewMoreGate" style="display:none;">
                 <p class="poppins-regular">
-                  You’re in <b>Guest mode</b>. Login / Sign up to view more posts and interact.
+                  You’re in <b>Guest mode</b>. Login / Sign up to view posts and interact.
                 </p>
                 <div class="gate-actions">
                   <a class="gate-btn poppins-extrabold" href="login.html">Login</a>
@@ -65,10 +64,8 @@
               </div>
             </section>
 
-            
+            <!-- Right rail -->
             <aside class="right-rail">
-
-             
               <section class="preview-block">
                 <div class="popular-topbar">
                   <div class="popular-title">
@@ -81,7 +78,6 @@
                 <div class="preview-list" id="popularPreview"></div>
               </section>
 
-       
               <section class="preview-block">
                 <div class="discover-titlebar-mini">
                   <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
@@ -91,23 +87,347 @@
 
                 <div class="posts-grid-mini" id="discoverPreview"></div>
               </section>
-
             </aside>
 
           </div>
-
         </div>
       </div>
-
     </div>
   </div>
 
- 
+  <!-- Core scripts -->
   <script src="data.js"></script>
   <script src="alert.js"></script>
   <script src="header.js"></script>
   <script src="global-sidebar.js"></script>
   <script src="navbar.js"></script>
-  <script src="home.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var paperGrid = document.getElementById("paperGrid");
+      var popularPreview = document.getElementById("popularPreview");
+      var discoverPreview = document.getElementById("discoverPreview");
+      var viewMoreGate = document.getElementById("viewMoreGate");
+      var loginStatus = document.getElementById("loginStatus");
+      var profileLink = document.getElementById("profileLink");
+      var mastheadDate = document.getElementById("mastheadDate");
+
+      function isLoggedIn() {
+        var id = (localStorage.getItem("currentUserId") || "").trim();
+        return id.length > 0;
+      }
+
+      function getAuthorName(authorId) {
+        var users = (window.mockDatabase && window.mockDatabase.users) ? window.mockDatabase.users : [];
+        var u = users.find(function (x) { return x && x.id === authorId; });
+        return u ? (u.username || String(authorId || "Anonymous")) : String(authorId || "Anonymous");
+      }
+
+      function escapeHtml(str) {
+        return String(str == null ? "" : str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function excerpt(text, n) {
+        var t = String(text || "").trim().replace(/\s+/g, " ");
+        if (t.length <= n) return t;
+        return t.slice(0, n).trim() + "…";
+      }
+
+      function parseDateSafe(dateStr) {
+        var d = new Date(dateStr);
+        if (!isNaN(d.getTime())) return d;
+        return new Date(0);
+      }
+
+      function prettyCategory(cat) {
+        var c = String(cat || "").toLowerCase();
+        if (c === "news") return "News";
+        if (c === "help") return "Help";
+        return "Discussion";
+      }
+
+      // 20posts hardcoded
+      var posts = [
+        { id:"p1",  authorId:"u1", category:"discussion", title:"Amazing sunset at the campus", content:"Just witnessed the most beautiful sunset from the rooftop. The sky was painted in hues of orange and pink. Nature is truly amazing!", date:"Feb 11, 2026", upvotes:41, downvotes:2, views:801 },
+        { id:"p2",  authorId:"u2", category:"discussion", title:"New coffee shop in town", content:"Found this hidden gem of a coffee shop. Their latte art is incredible and the ambiance is perfect for studying. Highly recommend!", date:"Feb 11, 2026", upvotes:38, downvotes:0, views:799 },
+        { id:"p3",  authorId:"u3", category:"help", title:"Group study session tips", content:"Anyone have tips for effective group study sessions? We're struggling to stay focused and productive. Looking for advice!", date:"Feb 11, 2026", upvotes:32, downvotes:1, views:609 },
+        { id:"p4",  authorId:"u4", category:"discussion", title:"Best budget meals around campus under ₱120?", content:"Drop your go-to meals. Preferably something filling and not too oily because I have class after.", date:"Feb 11, 2026", upvotes:10, downvotes:3, views:105 },
+        { id:"p5",  authorId:"u5", category:"discussion", title:"M&Ms", content:" Whenever I get a package of plain M&Ms, I make it my duty to continue the strength and robustness of the candy as a species. To this end, I hold M&M duels. Taking two candies between my thumb and forefinger, I apply pressure, squeezing them together until one of them cracks and splinters. That is the ...", date:"Feb 12, 2026", upvotes:29, downvotes:4, views:516 },
+        { id:"p6",  authorId:"u1", category:"news", title:"Lost: black umbrella (with sticker)", content:"Lost my black umbrella with a tiny ‘Animo’ sticker. Last seen near Henry 6th floor.", date:"Feb 07, 2026", upvotes:7,  downvotes:0, views:210 },
+        { id:"p7",  authorId:"u2", category:"help", title:"Where can I print for cheap near campus?", content:"Need to print 40 pages by tomorrow. Any shop reco that doesn’t overcharge?", date:"Feb 09, 2026", upvotes:9,  downvotes:0, views:345 },
+        { id:"p8",  authorId:"u3", category:"discussion", title:"Coffee spots: strong caffeine, not too sweet", content:"I like coffee that tastes like coffee. Any places near campus that do it right?", date:"Feb 08, 2026", upvotes:16, downvotes:2, views:521 },
+        { id:"p9",  authorId:"u4", category:"help", title:"CSS Grid: why isn’t my layout responsive?", content:"My cards overflow on mobile. I used repeat(3,1fr). What’s the clean fix?", date:"Feb 08, 2026", upvotes:13, downvotes:0, views:289 },
+        { id:"p10", authorId:"u5", category:"news", title:"Org recruitment: what to expect", content:"Most orgs ask for a short interview + one mini task. Don’t overthink it — just be genuine.", date:"Feb 03, 2026", upvotes:17, downvotes:1, views:512 },
+        { id:"p11", authorId:"u1", category:"discussion", title:"Study routine check: what actually works for you?", content:"Pomodoro? 3-hour lock in? Share your routine.", date:"Feb 06, 2026", upvotes:28, downvotes:3, views:745 },
+        { id:"p12", authorId:"u2", category:"help", title:"Anyone has notes for last week’s lecture?", content:"I got sick and missed one class. If you have notes, I’ll trade mine from the previous week.", date:"Feb 05, 2026", upvotes:14, downvotes:0, views:305 },
+        { id:"p13", authorId:"u3", category:"discussion", title:"Are term breaks actually restful?", content:"I always say I’ll rest then I end up catching up on everything. Same?", date:"Feb 04, 2026", upvotes:21, downvotes:2, views:640 },
+        { id:"p14", authorId:"u4", category:"help", title:"Quick: APA citation basics", content:"Do I need page numbers for paraphrasing? Confused between quote vs paraphrase rules.", date:"Feb 04, 2026", upvotes:8,  downvotes:0, views:280 },
+        { id:"p15", authorId:"u5", category:"news", title:"Free seminar seats still open (last call)", content:"Need extra certificates? There are still open seats. Registration closes tonight.", date:"Feb 05, 2026", upvotes:10, downvotes:0, views:388 },
+        { id:"p16", authorId:"u1", category:"discussion", title:"Best study spots on campus?", content:"Where do you study when you need deep focus?", date:"Feb 02, 2026", upvotes:20, downvotes:2, views:610 },
+        { id:"p17", authorId:"u2", category:"help", title:"How to join orgs mid-term?", content:"Missed the org fair. Can I still join or wait next term?", date:"Feb 01, 2026", upvotes:12, downvotes:1, views:411 },
+        { id:"p18", authorId:"u3", category:"discussion", title:"Underrated snacks for late-night study", content:"Need snack recos that won’t make me crash in 30 mins.", date:"Jan 30, 2026", upvotes:15, downvotes:2, views:477 },
+        { id:"p19", authorId:"u4", category:"news", title:"Lost: earphones around library", content:"Lost my earphones around the library yesterday. If you found it please message me.", date:"Jan 29, 2026", upvotes:9,  downvotes:0, views:300 },
+        { id:"p20", authorId:"u5", category:"discussion", title:"What app feature would you actually use daily?", content:"If Animo Commons existed for real, what feature would make you open it every day?", date:"Jan 28, 2026", upvotes:17, downvotes:3, views:520 }
+      ];
+
+      function addView(postId) {
+        var post = posts.find(function (p) { return p && p.id === postId; });
+        if (!post) return;
+        post.views = (Number(post.views) || 0) + 1;
+      }
+
+      function buildNewspaperArticle(post, index, locked) {
+        var author = getAuthorName(post.authorId);
+        var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+
+        var el = document.createElement("article");
+        el.className = "article " + (index === 0 ? "lead" : "") + (locked ? " locked" : "");
+        el.setAttribute("data-locked", locked ? "1" : "0");
+
+        el.innerHTML =
+          '<div class="section-row poppins-regular">' +
+            '<span>' + prettyCategory(post.category) + '</span>' +
+            '<span>' + (Number(post.views) || 0) + ' views</span>' +
+          '</div>' +
+          '<h2 class="headline poppins-extrabold">' + escapeHtml(post.title) + "</h2>" +
+          '<div class="byline poppins-regular">By <b>' + escapeHtml(author) + "</b> • " + escapeHtml(post.date) + "</div>" +
+          '<div class="rule"></div>' +
+          '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, index === 0 ? 260 : 140)) + "</p>" +
+          '<div class="article-actions">' +
+            '<span class="chip poppins-regular">Score: <b>' + score + "</b></span>" +
+            '<div class="vote">' +
+              '<button type="button" data-action="up" data-id="' + escapeHtml(post.id) + '">▲</button>' +
+              '<button type="button" data-action="down" data-id="' + escapeHtml(post.id) + '">▼</button>' +
+            "</div>" +
+            '<button class="open-btn" type="button" data-action="open" data-id="' + escapeHtml(post.id) + '">Open</button>' +
+          "</div>";
+
+        return el;
+      }
+
+      function buildPopularRow(post, locked) {
+        var author = getAuthorName(post.authorId);
+        var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
+
+        var el = document.createElement("div");
+        el.className = "post-card-mini" + (locked ? " locked" : "");
+        el.setAttribute("data-locked", locked ? "1" : "0");
+
+        el.innerHTML =
+          '<div class="post-header-mini">' +
+            '<div class="user-info-mini">' +
+              '<img src="assets/placeholder.png" class="avatar-mini" alt="avatar">' +
+              '<span class="username-mini">' + escapeHtml(author) + "</span>" +
+              '<span class="meta-mini">• score ' + score + "</span>" +
+            "</div>" +
+            '<span class="meta-mini">' + (Number(post.views) || 0) + " views</span>" +
+          "</div>" +
+          '<h4 class="post-title-mini poppins-extrabold">' + escapeHtml(post.title) + "</h4>" +
+          '<p class="post-desc-mini poppins-regular">' + escapeHtml(excerpt(post.content, 90)) + "</p>" +
+          '<div class="tags-mini"><span>' + prettyCategory(post.category) + "</span></div>";
+
+        el.addEventListener("click", function () {
+          if (locked) {
+            AlertModal.show("Please login or sign up to view and interact with posts.", "error");
+            return;
+          }
+          addView(post.id);
+          AlertModal.show("Opened post (views updated)!", "success");
+          render();
+        });
+
+        return el;
+      }
+
+      function buildDiscoverCard(post, locked) {
+        var author = getAuthorName(post.authorId);
+
+        var el = document.createElement("div");
+        el.className = "post-card-mini" + (locked ? " locked" : "");
+        el.setAttribute("data-category", post.category || "discussion");
+        el.setAttribute("data-locked", locked ? "1" : "0");
+
+        el.innerHTML =
+          '<div class="post-header-mini">' +
+            '<div class="user-info-mini">' +
+              '<img src="assets/placeholder.png" class="avatar-mini" alt="avatar">' +
+              '<span class="username-mini">' + escapeHtml(author) + "</span>" +
+              '<span class="meta-mini">• ' + escapeHtml(post.date) + "</span>" +
+            "</div>" +
+            '<span class="meta-mini">' + (Number(post.views) || 0) + " views</span>" +
+          "</div>" +
+          '<h4 class="post-title-mini poppins-extrabold">' + escapeHtml(post.title) + "</h4>" +
+          '<p class="post-desc-mini poppins-regular">' + escapeHtml(excerpt(post.content, 90)) + "</p>" +
+          '<div class="tags-mini"><span>' + prettyCategory(post.category) + "</span></div>";
+
+        el.addEventListener("click", function () {
+          if (locked) {
+            AlertModal.show("Please login or sign up to view and interact with posts.", "error");
+            return;
+          }
+          addView(post.id);
+          AlertModal.show("Opened post (views updated)!", "success");
+          render();
+        });
+
+        return el;
+      }
+
+      function render() {
+        if (mastheadDate) {
+          mastheadDate.textContent = new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          });
+        }
+
+        var logged = isLoggedIn();
+        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+
+        if (loginStatus) loginStatus.textContent = logged ? "Logged in" : "Guest mode";
+
+        if (profileLink && !logged) {
+          profileLink.textContent = "Login";
+          profileLink.href = "login.html";
+        }
+
+        // ✅ Latest posts: sort by date desc (most recent first)
+        var latest = posts
+          .slice()
+          .sort(function (a, b) {
+            return parseDateSafe(b.date).getTime() - parseDateSafe(a.date).getTime();
+          })
+          .slice(0, 20);
+
+        // ✅ Guest sees only 1 full post, others locked/blurred
+        var FREE_COUNT = 11;
+
+        if (paperGrid) {
+          paperGrid.innerHTML = "";
+          latest.forEach(function (post, i) {
+            var lockedPost = (!logged && i >= FREE_COUNT);
+            paperGrid.appendChild(buildNewspaperArticle(post, i, lockedPost));
+          });
+        }
+
+        if (viewMoreGate) {
+          viewMoreGate.style.display = !logged ? "block" : "none";
+        }
+
+        // Popular: sort by score desc (top 4)
+        if (popularPreview) {
+          popularPreview.innerHTML = "";
+          var popular = posts
+            .slice()
+            .sort(function (a, b) {
+              var scoreB = (Number(b.upvotes) || 0) - (Number(b.downvotes) || 0);
+              var scoreA = (Number(a.upvotes) || 0) - (Number(a.downvotes) || 0);
+              return scoreB - scoreA;
+            })
+            .slice(0, 4);
+
+          popular.forEach(function (p, idx) {
+            // guest: lock all (or you can allow 1 free here too — your call)
+            var lockedRow = !logged;
+            popularPreview.appendChild(buildPopularRow(p, lockedRow));
+          });
+        }
+
+        // ✅ Discover: MOST RECENT posts by date
+        if (discoverPreview) {
+          discoverPreview.innerHTML = "";
+
+          // show 4 newest, but guest only gets 1 unlocked (the newest)
+          var discover = latest.slice(0, 4);
+
+          discover.forEach(function (p, i) {
+            var lockedCard = (!logged && i >= 1);
+            discoverPreview.appendChild(buildDiscoverCard(p, lockedCard));
+          });
+        }
+
+        // ✅ Newspaper voting + open (block if locked/guest)
+        if (paperGrid) {
+          paperGrid.onclick = function (e) {
+            var t = e.target;
+            if (!t) return;
+
+            var action = t.getAttribute("data-action");
+            var id = t.getAttribute("data-id");
+            if (!action || !id) return;
+
+            var article = t.closest(".article");
+            var isLocked = article && article.getAttribute("data-locked") === "1";
+
+            // strict guard: must be logged in AND not locked
+            var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+            var loggedNow = activeUserId.length > 0;
+
+            if (!loggedNow || isLocked) {
+                AlertModal.show("Please login or sign up to view and interact with posts.", "error");
+                return;
+            }
+
+            var post = posts.find(function (p) { return p && p.id === id; });
+            if (!post) return;
+
+            // init per-user vote map (stored inside post)
+            post.votes = post.votes || {}; // { userId: "up" | "down" }
+
+            var prev = post.votes[activeUserId] || null;
+
+            function applyVote(next) {
+                // remove previous
+                if (prev === "up") post.upvotes = (Number(post.upvotes) || 0) - 1;
+                if (prev === "down") post.downvotes = (Number(post.downvotes) || 0) - 1;
+
+                // apply next
+                if (next === "up") post.upvotes = (Number(post.upvotes) || 0) + 1;
+                if (next === "down") post.downvotes = (Number(post.downvotes) || 0) + 1;
+
+                // store new state
+                if (next) post.votes[activeUserId] = next;
+                else delete post.votes[activeUserId];
+            }
+
+            if (action === "open") {
+                addView(id);
+                AlertModal.show("Opened post (views updated)!", "success");
+                render();
+                return;
+            }
+
+            if (action === "up") {
+                // toggle: up -> none, none/down -> up
+                applyVote(prev === "up" ? null : "up");
+                AlertModal.show("Vote updated!", "success");
+                render();
+                return;
+            }
+
+            if (action === "down") {
+                // toggle: down -> none, none/up -> down
+                applyVote(prev === "down" ? null : "down");
+                AlertModal.show("Vote updated!", "success");
+                render();
+                return;
+            }
+
+          };
+            
+        }
+    
+      }
+
+      render();
+    });
+  </script>
 </body>
 </html>
