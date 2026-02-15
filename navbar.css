@@ -6,7 +6,7 @@
     justify-content: space-between;
     align-items: flex-end;
     position: relative;
-    z-index: 5;
+    z-index: 5 !important;
     margin-top: -2.5rem;
 }
 
@@ -48,7 +48,8 @@
     border-radius: 12px 12px 0 0; /*Rounds the top corners of the tab*/
     margin-right: -14px; /*Overlaps the tabs slightly to create a connected look*/
     overflow: visible; 
-    z-index: 1;
+    z-index: 1 !important;
+    max-z-index: 5 !important;
 
     height: 20px;
     min-width: 110px;
@@ -68,7 +69,7 @@
     transform: skewX(25deg);
     transform-origin: top right;
     border-radius: 0 12px 0 0;
-    z-index: 0;
+    z-index: 0 !important;
     pointer-events: none;
 }
 
@@ -86,7 +87,7 @@
     /*Styles the tab when hovered over*/
     cursor: pointer;
     background-color: #ffffff;
-    z-index: 20;
+    z-index: 4 !important;
 }
 
 .navtab:hover .navtext,
@@ -114,7 +115,7 @@
 .navbar input[type="radio"]:checked + a label {
     /*Styles the selected tab by changing its background color and removing the box shadow*/
     --tab-bg: var(--page-color);
-    z-index: 10;
+    z-index: 3 !important;
 
     box-shadow: none;
 }

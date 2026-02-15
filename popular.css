@@ -100,3 +100,16 @@
 
 .option:hover { background: #fdf8e2; color: #f1642e; }
 .option.selected { background: #f1642e; color: white; }
+
+/* Ensure modal appears above navbar */
+#post-view-modal {
+    z-index: 2000 !important;
+}
+
+.modal-backdrop {
+    z-index: 2000 !important;
+}
+
+.modal-container {
+    z-index: 2001 !important;
+}

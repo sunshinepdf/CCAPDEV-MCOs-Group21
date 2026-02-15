@@ -1,384 +1,98 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Discover</title>
-    <link rel="icon" href="assets/placeholder.png" type="image/png" />
+    <head>
+        <meta charset="UTF-8">
+        <title>Discover</title>
+        <link rel="icon" href="assets\placeholder.png" type="image/png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="layout.css">
+        <link rel="stylesheet" href="header.css">
+        <link rel="stylesheet" href="global-sidebar.css">
+        <link rel="stylesheet" href="navbar.css">
+        <link rel="stylesheet" href="home.css">
+        <link rel="stylesheet" href="alert.css">
+        <link rel="stylesheet" href="discover.css">
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="layout.css" />
-    <link rel="stylesheet" href="header.css" />
-    <link rel="stylesheet" href="global-sidebar.css" />
-    <link rel="stylesheet" href="navbar.css" />
-    <link rel="stylesheet" href="home.css" />
-    <link rel="stylesheet" href="alert.css" />
-    <link rel="stylesheet" href="discover.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="main-content">
+            <header-component></header-component>
+            <global-sidebar></global-sidebar>
+            <div class="container">
+                <nav-bar active="discover"></nav-bar>
 
-  <body>
-    <div class="main-content">
-      <header-component></header-component>
-      <global-sidebar></global-sidebar>
+                <div class="page-section" style="--page-color: #f1b02e;">
+                    <div class="content-box" style="--content-bg: #fdf8e2;">
 
-      <div class="container">
-        <nav-bar active="discover"></nav-bar>
-
-        <div class="page-section" style="--page-color: #f1b02e">
-          <div class="content-box" style="--content-bg: #fdf8e2">
-            <div class="discover-topbar">
-              <div class="discover-title">
-                <img
-                  src="assets/discover-icon.png"
-                  alt="discover"
-                  width="20"
-                  height="20"
-                />
-                <div class="title-group">
-                  <h1 class="poppins-extrabold">Discover Posts</h1>
-                  <div id="discoverDate" class="masthead-sub poppins-regular">
-                    —
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="discover-controls">
-              <div class="search-wrapper">
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="Search posts..."
-                  onkeyup="filterPosts()"
-                />
-
-                <button class="filter-btn" onclick="toggleFilter()">
-                  <img src="assets/filter-icon.png" alt="Filter" />
-                </button>
-              </div>
-            </div>
-
-            <div class="filter-overlay" id="filterOverlay" style="display: none">
-              <div class="filter-panel" id="filterPanel">
-                <h4>Filter by Category</h4>
-                <div id="dynamicFilters"></div>
-                <div class="filter-actions">
-                  <button onclick="applyFilters()">Filter</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="paper-grid" id="discoverPosts"></div>
-
-            <div id="post-view-modal" style="display: none">
-              <div class="modal-backdrop">
-                <div class="modal-container">
-                  <button class="modal-close-btn" onclick="closePostModal()">
-                    ×
-                  </button>
-
-                  <div id="modal-post-content"></div>
-
-                  <div class="comments-section">
-                    <h3 class="comments-title poppins-extrabold">
-                      Comments (<span id="comment-count">0</span>)
-                    </h3>
-
-                    <div class="comments-list" id="comments-list"></div>
-
-                    <div class="comment-input-area">
-                      <textarea
-                        id="comment-input"
-                        placeholder="Add a comment..."
-                        rows="3"
-                        class="comment-textarea"
-                      ></textarea>
-                      <button
-                        id="submit-comment-btn"
-                        class="submit-comment-btn poppins-extrabold"
-                      >
-                        Post Comment
-                      </button>
+                    <div class="discover-topbar">  
+                        <div class="discover-title">
+                            <img src="assets/discover-icon.png" alt="discover" width="20" height="20">
+                            <div class="title-group">
+                                <h1 class="poppins-extrabold">Discover Posts</h1>
+                                <div id="discoverDate" class="masthead-sub poppins-regular">—</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                    
+                    <div class="discover-controls">
+                        <div class="search-filter-wrapper">
+                            <search-bar placeholder="Search posts..." target=".article"></search-bar>
+                            <button class="filter-btn" onclick="toggleFilter()">
+                                <img src="assets/filter-icon.png" alt="Filter">
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-overlay" id="filterOverlay">
+                        <div class="filter-panel" id="filterPanel">
+                            <h4>Filter by Category</h4>
+                            <div id="dynamicFilters"></div>
+                            <div class="filter-actions">
+                                <button onclick="applyFilters()">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="paper-grid" id="discoverPosts"></div>
+                    <div id="singlePostView" style="display:none;"></div>
+                    </div>
                 </div>
-              </div>
             </div>
-        
-          </div>
         </div>
-      </div>
-    </div>
+        
+        <!-- Post View Modal -->
+        <div id="post-view-modal" style="display: none;">
+            <div class="modal-backdrop">
+                <div class="modal-container">
+                    <button class="modal-close-btn" onclick="closePostModal()">×</button>
+                    
+                    <div id="modal-post-content"></div>
+                    
+                    <div class="comments-section">
+                        <h3 class="comments-title poppins-extrabold">Comments (<span id="comment-count">0</span>)</h3>
+                        
+                        <div class="comments-list" id="comments-list"></div>
+                        
+                        <div class="comment-input-area">
+                            <textarea id="comment-input" placeholder="Add a comment..." rows="3" class="comment-textarea"></textarea>
+                            <button id="submit-comment-btn" class="submit-comment-btn poppins-extrabold">Post Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script src="data.js"></script>
-    <script src="alert.js"></script>
-    <script src="posts-component.js"></script>
-
-    <script>
-      (function () {
-        var selectedCategories = new Set();
-        var currentSearch = "";
-        var postsComp = null;
-
-        var discoverPostsEl = null;
-        var dynamicFiltersEl = null;
-        var filterOverlayEl = null;
-        var filterPanelEl = null;
-        var searchInputEl = null;
-        var discoverDateEl = null;
-
-        function safeText(v) {
-          return String(v == null ? "" : v);
-        }
-
-        function normalizeCat(cat) {
-          return safeText(cat || "discussion").trim().toLowerCase();
-        }
-
-        function getCurrentUserId() {
-          return (localStorage.getItem("currentUserId") || "").trim();
-        }
-
-        function setDiscoverDate() {
-          if (!discoverDateEl) return;
-          var now = new Date();
-          discoverDateEl.textContent = now.toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-        }
-
-        function collectCategories(posts) {
-          var map = new Map();
-          posts.forEach(function (p) {
-            var c = normalizeCat(p.category);
-            map.set(c, (map.get(c) || 0) + 1);
-          });
-          return map;
-        }
-
-        function buildFilterUI(catMap) {
-          if (!dynamicFiltersEl) return;
-
-          if (selectedCategories.size === 0) {
-            Array.from(catMap.keys()).forEach(function (c) {
-              selectedCategories.add(c);
-            });
-          }
-
-          dynamicFiltersEl.innerHTML = "";
-
-          var preferred = ["discussion", "help", "news"];
-          var cats = Array.from(catMap.keys());
-          cats.sort(function (a, b) {
-            var ia = preferred.indexOf(a);
-            var ib = preferred.indexOf(b);
-            if (ia !== -1 || ib !== -1) {
-              if (ia === -1) return 1;
-              if (ib === -1) return -1;
-              return ia - ib;
-            }
-            return a.localeCompare(b);
-          });
-
-          cats.forEach(function (cat) {
-            var id = "filter_" + cat.replace(/[^a-z0-9]/g, "_");
-            var checked = selectedCategories.has(cat) ? "checked" : "";
-
-            var row = document.createElement("label");
-            row.className = "filter-row";
-            row.style.display = "flex";
-            row.style.alignItems = "center";
-            row.style.gap = "10px";
-            row.style.margin = "8px 0";
-
-            row.innerHTML =
-              '<input type="checkbox" id="' +
-              id +
-              '" data-cat="' +
-              cat +
-              '" ' +
-              checked +
-              " />" +
-              '<span class="poppins-regular" style="text-transform: capitalize;">' +
-              safeText(cat) +
-              "</span>" +
-              '<span class="poppins-regular" style="opacity:.7;">(' +
-              (catMap.get(cat) || 0) +
-              ")</span>";
-
-            dynamicFiltersEl.appendChild(row);
-          });
-        }
-
-        function passesCategory(post) {
-          if (selectedCategories.size === 0) return true;
-          return selectedCategories.has(normalizeCat(post.category));
-        }
-
-        function passesSearch(post) {
-          var q = currentSearch.trim().toLowerCase();
-          if (!q) return true;
-
-          var title = safeText(post.title).toLowerCase();
-          var body = safeText(post.content).toLowerCase();
-          var cat = normalizeCat(post.category);
-
-          var author = postsComp.getUserById(post.authorId);
-          var username = safeText(author && author.username).toLowerCase();
-
-          return (
-            title.includes(q) ||
-            body.includes(q) ||
-            cat.includes(q) ||
-            username.includes(q)
-          );
-        }
-
-        function getDiscoverPosts() {
-          var posts = postsComp.getFilteredPosts({ sortBy: "recent" });
-          return posts.filter(function (p) {
-            return passesCategory(p) && passesSearch(p);
-          });
-        }
-
-        function renderDiscoverPosts() {
-          if (!discoverPostsEl) return;
-
-          var posts = getDiscoverPosts();
-          discoverPostsEl.innerHTML = "";
-
-          if (!posts.length) {
-            var empty = document.createElement("div");
-            empty.className = "poppins-regular";
-            empty.style.padding = "18px";
-            empty.style.opacity = "0.8";
-            empty.textContent = "No posts match your search/filters.";
-            discoverPostsEl.appendChild(empty);
-            return;
-          }
-
-          posts.forEach(function (post, idx) {
-            var locked = false;
-            var card = postsComp.buildNewspaperArticle(post, idx, locked);
-            discoverPostsEl.appendChild(card);
-          });
-        }
-
-        function bindGridActions() {
-          if (!discoverPostsEl) return;
-
-          discoverPostsEl.addEventListener("click", function (e) {
-            var btn = e.target.closest("button");
-            if (!btn) return;
-
-            var action = btn.getAttribute("data-action");
-            var postId = btn.getAttribute("data-id");
-            if (!action || !postId) return;
-
-            if (action === "open" || action === "comment") {
-              window.openPostModal(postId);
-              return;
-            }
-
-            if (action === "up" || action === "down") {
-              var uid = getCurrentUserId();
-              if (!uid) {
-                AlertModal.show("Please login to vote.", "error");
-                return;
-              }
-              postsComp.voteOnPost(postId, action);
-              renderDiscoverPosts();
-              return;
-            }
-          });
-        }
-
-        function openFilter() {
-          if (!filterOverlayEl) return;
-          filterOverlayEl.style.display = "block";
-        }
-
-        function closeFilter() {
-          if (!filterOverlayEl) return;
-          filterOverlayEl.style.display = "none";
-        }
-
-        window.toggleFilter = function () {
-          if (!filterOverlayEl) return;
-          var open = filterOverlayEl.style.display !== "none";
-          if (open) closeFilter();
-          else openFilter();
-        };
-
-        window.applyFilters = function () {
-          selectedCategories = new Set();
-          if (dynamicFiltersEl) {
-            var checks = dynamicFiltersEl.querySelectorAll(
-              'input[type="checkbox"][data-cat]'
-            );
-            checks.forEach(function (cb) {
-              if (cb.checked) selectedCategories.add(cb.getAttribute("data-cat"));
-            });
-          }
-
-          closeFilter();
-          renderDiscoverPosts();
-        };
-
-        window.filterPosts = function () {
-          currentSearch = safeText(searchInputEl ? searchInputEl.value : "");
-          renderDiscoverPosts();
-        };
-
-        document.addEventListener("DOMContentLoaded", function () {
-          postsComp = window.PostsComponent_Instance;
-          if (!postsComp) {
-            console.error(
-              "PostsComponent_Instance not found. Ensure posts-component.js is loaded."
-            );
-            return;
-          }
-
-          discoverPostsEl = document.getElementById("discoverPosts");
-          dynamicFiltersEl = document.getElementById("dynamicFilters");
-          filterOverlayEl = document.getElementById("filterOverlay");
-          filterPanelEl = document.getElementById("filterPanel");
-          searchInputEl = document.getElementById("searchInput");
-          discoverDateEl = document.getElementById("discoverDate");
-
-          setDiscoverDate();
-
-          var allPosts = postsComp.getPosts();
-          var catMap = collectCategories(allPosts);
-          if (catMap.size === 0) catMap.set("discussion", 0);
-
-          buildFilterUI(catMap);
-
-          if (filterOverlayEl && filterPanelEl) {
-            filterOverlayEl.addEventListener("click", function (e) {
-              if (!filterPanelEl.contains(e.target)) closeFilter();
-            });
-          }
-
-          renderDiscoverPosts();
-          bindGridActions();
-        });
-      })();
-    </script>
-
-    <!-- Components -->
-    <script src="header.js"></script>
-    <script src="global-sidebar.js"></script>
-    <script src="navbar.js"></script>
-  </body>
+        <script src="data.js"></script>
+        <script src="posts-component.js"></script>
+        <script src="search-component.js"></script>
+        <script src="discover.js"></script>
+        <script src="alert.js"></script>
+        <script src="header.js"></script>
+        <script src="global-sidebar.js"></script>
+        <script src="navbar.js"></script>
+    </body>
 </html>

@@ -19,79 +19,6 @@ function prettyCategory(cat) {
     return "Discussion";
 }
 
-function openPostModal(postId) {
-    const post = PostsComponent_Instance.getPostById(postId);
-    if (!post) return;
-    
-    const user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
-    const score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
-    
-    // Render full article in modal
-    const modalContent = document.getElementById("modal-post-content");
-    modalContent.innerHTML = 
-        '<div class="post-author-header poppins-regular">' +
-            '<img src="' + user.photo + '" alt="' + escapeHtml(user.username) + '" class="post-author-avatar">' +
-            '<div class="post-author-info">' +
-                '<span class="post-author-username poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-                '<span class="post-author-date">' + escapeHtml(post.date) + (post.lastEdited ? ' &#8226; Edited ' + post.lastEdited : '') + '</span>' +
-            '</div>' +
-        '</div>' +
-        '<h2 class="headline poppins-extrabold">' + escapeHtml(post.title) + '</h2>' +
-        '<div class="section-row poppins-regular">' +
-            (sortMode === 'top' ? 
-                '<span>' + (Number(post.views) || 0) + ' Views &#8226; Score ' + score + '</span>' :
-                '<span>' + (Number(post.views) || 0) + ' Views &#8226; &#9650; ' + (Number(post.upvotes) || 0) + ' &#9660; ' + (Number(post.downvotes) || 0) + '</span>') +
-        '</div>' +
-        '<div class="rule"></div>' +
-        '<p class="excerpt poppins-regular">' + escapeHtml(post.content) + '</p>' +
-        '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>';
-    
-    // Render comments
-    renderComments(post);
-    
-    // Show modal
-    const modal = document.getElementById("post-view-modal");
-    modal.style.display = "flex";
-    modal.setAttribute("data-post-id", postId);
-    
-    // Close backdrop click
-    const backdrop = modal.querySelector(".modal-backdrop");
-    backdrop.onclick = function(e) {
-        if (e.target === backdrop) {
-            modal.style.display = "none";
-        }
-    };
-}
-
-function renderComments(post) {
-    const comments = post.comments || [];
-    const commentsList = document.getElementById("comments-list");
-    const commentCount = document.getElementById("comment-count");
-    
-    commentCount.textContent = comments.length;
-    commentsList.innerHTML = "";
-    
-    comments.forEach(function(comment) {
-        const commentEl = document.createElement("div");
-        commentEl.className = "comment-item";
-        
-        const user = PostsComponent_Instance.getUserById(comment.userId) || { username: "Unknown" };
-        
-        commentEl.innerHTML = 
-            '<div class="comment-header poppins-regular">' +
-                '<span class="comment-author poppins-extrabold">' + escapeHtml(user.username) + '</span>' +
-                '<span class="comment-date">' + escapeHtml(comment.date || new Date().toLocaleDateString()) + '</span>' +
-            '</div>' +
-            '<p class="comment-text poppins-regular">' + escapeHtml(comment.text) + '</p>';
-        
-        commentsList.appendChild(commentEl);
-    });
-}
-
-function closePostModal() {
-    document.getElementById('post-view-modal').style.display = 'none';
-}
-
 // Logic to check timeframe for "Top" sorting
 function isPostInTimeframe(post, timeframe) {
     const postDate = parsePostDate(post.date);
@@ -180,7 +107,7 @@ function attachPostListeners() {
                 }
                 
                 PostsComponent_Instance.incrementViewCount(postId);
-                openPostModal(postId);
+                window.openPostModal(postId);
             };
         }
     });
@@ -235,44 +162,7 @@ function initCustomSelects() {
 document.addEventListener('DOMContentLoaded', () => {
     initCustomSelects();
     renderPopularPosts();
-    
-    // Comment submission
-    const submitBtn = document.getElementById("submit-comment-btn");
-    if (submitBtn) {
-        submitBtn.onclick = function() {
-            const modal = document.getElementById("post-view-modal");
-            const postId = modal.getAttribute("data-post-id");
-            const commentText = document.getElementById("comment-input").value.trim();
-            const currentUserId = (localStorage.getItem("currentUserId") || "").trim();
-            
-            if (!currentUserId) {
-                AlertModal.show("Please login to add comments.", "error");
-                return;
-            }
-            
-            if (!commentText) {
-                AlertModal.show("Comment cannot be empty.", "error");
-                return;
-            }
-            
-            const post = PostsComponent_Instance.getPostById(postId);
-            if (!post) return;
-            
-            // Add comment to post
-            post.comments = post.comments || [];
-            post.comments.push({
-                userId: currentUserId,
-                text: commentText,
-                date: new Date().toLocaleDateString()
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('mockDatabase', JSON.stringify(PostsComponent_Instance.getDatabase()));
-            
-            // Clear input and re-render
-            document.getElementById("comment-input").value = "";
-            renderComments(post);
-            AlertModal.show("Comment posted!", "success");
-        };
-    }
 });
+
+// Expose render function globally for comment updates
+window.triggerPostsUpdate = renderPopularPosts;

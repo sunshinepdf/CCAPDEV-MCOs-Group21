@@ -62,6 +62,45 @@
     gap: 10px;
 }
 
+/* Search bar component in profile topbar */
+.profile-topbar search-bar {
+    flex: 1;
+    width: 100%;
+    margin-left: 50px;
+    max-width: 1000px;
+}
+
+.profile-topbar search-bar .search-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.profile-topbar search-bar .search-input {
+    width: 100%;
+    background-color: #fdf8e2;
+    border: 2px solid #706d8f;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #504e76;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.profile-topbar search-bar .search-input::placeholder {
+    color: #706d8f;
+}
+
+.profile-topbar search-bar .search-input:focus {
+    color: #fdf8e2;
+    border-color: #fdf8e2;
+    background-color: #706d8f;
+    box-shadow: 0 2px 6px rgba(80, 78, 118, 0.3);
+}
+
+/* Legacy styles - kept for compatibility */
 .profile-search-bar {
     flex: 1;
     width: 100%;

@@ -48,12 +48,27 @@ body {
     margin-bottom: 30px;
 }
 
+.search-filter-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+.search-filter-wrapper search-bar {
+    flex: 0 0 auto;
+}
+
+.search-filter-wrapper search-bar .search-wrapper {
+    margin: 0;
+}
+
 .search-wrapper {
     display: flex;
     align-items: center;
     font-family: "Poppins", sans-serif;
 }
 
+.search-filter-wrapper .search-wrapper .search-input,
+.search-wrapper .search-input,
 #searchInput {
     padding: 14px 22px;
     font-size: 16px;
@@ -238,4 +253,78 @@ body {
 .article {
     position: relative;
     padding-bottom: 60px; 
+}
+
+/* Ensure modal appears above navbar */
+#post-view-modal {
+    z-index: 2000 !important;
+}
+
+.modal-backdrop {
+    z-index: 2000 !important;
+}
+
+.modal-container {
+    z-index: 2001 !important;
+}
+
+/* Ensure modal appears above navbar */
+#post-view-modal {
+    z-index: 2000 !important;
+}
+
+.modal-backdrop {
+    z-index: 2000 !important;
+}
+
+.modal-container {
+    z-index: 2001 !important;
+}
+
+/* Comment action buttons styling */
+.comment-actions button {
+    background: #f1b02e;
+    color: #fdf8e2;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    transition: all 0.2s;
+}
+
+.comment-actions button:hover {
+    background: #d9981f;
+    transform: translateY(-1px);
+}
+
+.comment-actions button[data-action="c_up"],
+.comment-actions button[data-action="c_down"] {
+    background: #5f764e;
+    font-size: 14px;
+    padding: 4px 10px;
+}
+
+.comment-actions button[data-action="c_up"][data-active="1"] {
+    background: #a3b565;
+    font-weight: bold;
+}
+
+.comment-actions button[data-action="c_down"][data-active="1"] {
+    background: #d9534f;
+    font-weight: bold;
+}
+
+.comment-actions button[data-action="c_up"]:hover,
+.comment-actions button[data-action="c_down"]:hover {
+    background: #504e76;
+}
+
+.comment-actions button[data-action="c_delete"] {
+    background: #d9534f;
+}
+
+.comment-actions button[data-action="c_delete"]:hover {
+    background: #c9302c;
 }
