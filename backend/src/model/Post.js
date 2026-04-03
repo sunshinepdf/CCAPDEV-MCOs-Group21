@@ -36,7 +36,7 @@ const postSchema = new mongoose.Schema(
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     category: {
       type: String,
-      enum: ["discussion", "help", "news"],
+      enum: ["discussion", "help", "news", "CLA", "SOE", "COS", "GCOE", "CCS", "RVRCOB", "BAGCED", "SIS"],
       default: "discussion",
       index: true
     },

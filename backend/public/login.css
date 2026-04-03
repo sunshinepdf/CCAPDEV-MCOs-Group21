@@ -1,6 +1,6 @@
 .login-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     background-image: url('assets/bg.png');
     background-size: cover;
     background-position: center;
@@ -118,9 +118,24 @@
 .remember-me-container {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.5rem;
     width: 100%;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.remember-me-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #504e76;
+    cursor: pointer;
+}
+
+.remember-me-container label {
+    cursor: pointer;
+    user-select: none;
+    font-size: 16px;
 }
 
 .forgot-password-row {
@@ -135,8 +150,9 @@
     color: #504e76;
     cursor: pointer;
     text-decoration: underline;
-    font-size: 13px;
+    font-size: 16px;
     padding: 0;
+    margin-top: 0.5rem;
 }
 
 .forgot-password-panel {

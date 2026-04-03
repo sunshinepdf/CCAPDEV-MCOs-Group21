@@ -58,11 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
   var user = db.users.find(function (u) { return u && u.id === currentUserId; }) || {
     id: currentUserId,
     username: "",
-    bio: "",
+    bio: "Hello! I'm a student at De La Salle University sharing my thoughts on Animo Commons.",
     pronouns: "",
     year: "",
     major: "",
-    photo: "assets/placeholder.png",
+    photo: "assets/profile-icon-default.png",
     tags: []
   };
 
@@ -137,10 +137,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var input = document.createElement("input");
     input.type = "text";
-    input.className = "tag-input";
+    input.className = "tag-input poppins-regular";
     input.id = "newTagInput";
-    input.placeholder = "Add a tag...";
+    input.placeholder = "Add or select a tag...";
+    input.setAttribute("list", "tag-suggestions");
+
+    var datalist = document.createElement("datalist");
+    datalist.id = "tag-suggestions";
+    
+    var tagOptions = [
+      "ID 125", "ID 124", "ID 123", "ID 122", "ID 121", "ID 120",
+      "Study Group", "Tutor", "Cafe Enthusiast", "BS ORG!", "Matcha Lover",
+      "Night Owl", "Early Bird", "Certified Foodie", "Gamer", "Artist", "Musician", 
+      "Athlete", "Bookworm", "Traveler"
+    ];
+    
+    tagOptions.forEach(function(optText) {
+      if (tags.indexOf(optText) === -1) {
+        var opt = document.createElement("option");
+        opt.value = optText;
+        datalist.appendChild(opt);
+      }
+    });
+
     container.appendChild(input);
+    container.appendChild(datalist);
 
     input.addEventListener("keydown", function (event) {
       if (event.key !== "Enter") return;
@@ -240,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
     user.pronouns = "They/them";
     user.year = "2nd Year";
     user.major = "Software Technology";
-    user.photo = "assets/placeholder.png";
+    user.photo = "assets/profile-icon-default.png";
     user.tags = defaultTags.slice();
 
     // Update UI

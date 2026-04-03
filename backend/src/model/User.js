@@ -17,11 +17,11 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, trim: true, unique: true },
     email: { type: String, required: true, trim: true, unique: true, lowercase: true },
     passwordHash: { type: String, required: true },
-    photo: { type: String, default: "assets/placeholder.png" },
+    photo: { type: String, default: "assets/profile-icon-default.png" },
     year: { type: String, default: "" },
     pronouns: { type: String, default: "" },
     major: { type: String, default: "" },
-    bio: { type: String, default: "" },
+    bio: { type: String, default: "Hello! I'm a student at De La Salle University sharing my thoughts on Animo Commons." },
     tags: { type: [String], default: [] }
   },
   { timestamps: true }
