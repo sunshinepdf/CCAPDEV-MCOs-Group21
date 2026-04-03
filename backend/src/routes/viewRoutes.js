@@ -26,26 +26,7 @@ function withQuery(req, targetPath) {
 
 // Define routes for server-rendered views, applying specific flags for CSS/JS includes as needed
 router.get("/", (req, res) => {
-  res.redirect("/index");
-});
-
-// Index route with minimal includes, serving as a landing page or navigation hub
-router.get("/index", (req, res) => {
-  res.render("index", {
-    title: "Animo Commons - Index",
-    includeAppStyles: false,
-    includeAppScripts: false,
-    includeIndexCss: true,
-    pages: [
-      { href: "/home", label: "Home" },
-      { href: "/popular", label: "Popular" },
-      { href: "/discover", label: "Discover" },
-      { href: "/profile", label: "Profile" },
-      { href: "/edit-profile", label: "Edit Profile" },
-      { href: "/login", label: "Login" },
-      { href: "/sign-up", label: "Sign Up" }
-    ]
-  });
+  res.redirect("/home");
 });
 
 // Home route with specific includes for home page styles and scripts

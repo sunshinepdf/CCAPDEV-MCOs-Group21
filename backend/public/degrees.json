@@ -1,0 +1,917 @@
+[
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Literature major in Creative Writing",
+    "code": "AB LIT-CW"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Literature major in Literary and Cultural Studies",
+    "code": "ABLIT-LCS"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Literature major in Literature Across the Professions",
+    "code": "ABLIT-LAP"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies",
+    "code": "BA PhilStud"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Internet Studies",
+    "code": "ABPHS-FISS"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media",
+    "code": "ABPHS-FMM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Sociology",
+    "code": "AB-SOC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies",
+    "code": "AB-SEA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Sports Studies",
+    "code": "AB-SPMS"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts",
+    "code": "AB-CAM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication",
+    "code": "AB-OCM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy",
+    "code": "AB-PLM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science",
+    "code": "AB-POM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology",
+    "code": "AB-PSM"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Science in Psychology",
+    "code": "BS-PSYC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Science in Psychology",
+    "code": "BSPSYCS"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Accountancy",
+    "code": "CAM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Advertising Management",
+    "code": "CAM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Applied Corporate Management",
+    "code": "CAM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Business Management",
+    "code": "CAM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Entrepreneurship",
+    "code": "CAM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Legal Management",
+    "code": "CAM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Management of Financial Institutions",
+    "code": "CAM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Communication Arts and Bachelor of Science in Marketing Management",
+    "code": "CAM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Accountancy",
+    "code": "OCM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Advertising Management",
+    "code": "OCM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Applied Corporate Management",
+    "code": "OCM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Business Management",
+    "code": "OCM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Entrepreneurship",
+    "code": "OCM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Legal Management",
+    "code": "OCM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Management of Financial Institutions",
+    "code": "OCM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Organizational Communication and Bachelor of Science in Marketing Management",
+    "code": "OCM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Accountancy",
+    "code": "PHM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Advertising Management",
+    "code": "PHM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Applied Corporate Management",
+    "code": "PHM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Business Management",
+    "code": "PHM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Entrepreneurship",
+    "code": "PHM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Legal Management",
+    "code": "PHM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Management of Financial Institutions",
+    "code": "PHM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philippine Studies major in Filipino in Mass Media and Bachelor of Science in Marketing Management",
+    "code": "PHM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Accountancy",
+    "code": "PLM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Advertising Management",
+    "code": "PLM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Applied Corporate Management",
+    "code": "PLM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Business Management",
+    "code": "PLM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Entrepreneurship",
+    "code": "PLM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Legal Management",
+    "code": "PLM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Management of Financial Institutions",
+    "code": "PLM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Philosophy and Bachelor of Science in Marketing Management",
+    "code": "PLM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Accountancy",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Advertising Management",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Applied Corporate Management",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Business Management",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Entrepreneurship",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Legal Management",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Management of Financial Institutions",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Philosophy and Artificial Intelligence and Bachelor of Science in Marketing Management",
+    "code": "ABPLAI"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Accountancy",
+    "code": "POM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Advertising Management",
+    "code": "POM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Applied Corporate Management",
+    "code": "POM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Business Management",
+    "code": "POM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Entrepreneurship",
+    "code": "POM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Legal Management",
+    "code": "POM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Management of Financial Institutions",
+    "code": "POM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Political Science and Bachelor of Science in Marketing Management",
+    "code": "POM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Accountancy",
+    "code": "PSM-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Advertising Management",
+    "code": "PSM-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Applied Corporate Management",
+    "code": "PSM-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Business Management",
+    "code": "PSM-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Entrepreneurship",
+    "code": "PSM-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Legal Management",
+    "code": "PSM-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Management of Financial Institutions",
+    "code": "PSM-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts major in Psychology and Bachelor of Science in Marketing Management",
+    "code": "PSM-MKT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Accountancy",
+    "code": "SEA-BSA"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Advertising Management",
+    "code": "SEA-ADV"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Applied Corporate Management",
+    "code": "SEA-APC"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Business Management",
+    "code": "SEA-MGT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Entrepreneurship",
+    "code": "SEA-ENT"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Legal Management",
+    "code": "SEA-LGL"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Management of Financial Institutions",
+    "code": "SEA-FIN"
+  },
+  {
+    "college": "College of Liberal Arts (CLA)",
+    "title": "Bachelor of Arts in Southeast Asian Studies and Bachelor of Science in Marketing Management",
+    "code": "SEA-MKT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics",
+    "code": "AB-ECM"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics",
+    "code": "BSAEC"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics and Data Science (2 years in Laguna, 2 years in Manila) reversed 2 + 2",
+    "code": "BSAEDSS"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics",
+    "code": "BS-AEF"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics",
+    "code": "BS-AEI"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Accountancy",
+    "code": "ECM-BSA"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Advertising Management",
+    "code": "ECM-ADV"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Applied Corporate Management",
+    "code": "ECM-APC"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Business Management",
+    "code": "ECM-MGT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Legal Management",
+    "code": "ECM-LGL"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Management of Financial Institutions",
+    "code": "ECM-FIN"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Arts major in Economics and Bachelor of Science in Marketing Management",
+    "code": "ECM-MKT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Accountancy",
+    "code": "AEF-BSA"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Advertising Management",
+    "code": "AEF-ADV"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Applied Corporate Management",
+    "code": "AEF-APC"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Business Management",
+    "code": "AEF-MGT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Legal Management",
+    "code": "AEF-LGL"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Management of Financial Institutions",
+    "code": "AEF-FIN"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Financial Economics and Bachelor of Science in Marketing Management",
+    "code": "AEF-MKT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Accountancy",
+    "code": "AEI-BSA"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Advertising Management",
+    "code": "AEI-ADV"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Applied Corporate Management",
+    "code": "AEI-APC"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Business Management",
+    "code": "AEI-MGT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Legal Management",
+    "code": "AEI-LGL"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Management of Financial Institutions",
+    "code": "AEI-MKT"
+  },
+  {
+    "college": "Carlos L. Tiu School of Economics (CLT-SOE)",
+    "title": "Bachelor of Science in Applied Economics major in Industrial Economics and Bachelor of Science in Marketing Management",
+    "code": "AEI-FIN"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Animal Biology",
+    "code": "BSABIO"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Applied Physics",
+    "code": "BSAPHS"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Biochemistry",
+    "code": "BSBCHEM"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Biology major in Medical Biology (Laguna)",
+    "code": "BSBIO-MED"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Biology major in Medical Biology (Manila)",
+    "code": "BSBIOMEDS"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Biology major in Molecular Biology and Biotechnology",
+    "code": "BSBIO-MBB"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Biology major in Systematics and Ecology",
+    "code": "BSBIO-SEC"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Chemistry",
+    "code": "BS-CHY"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Chemistry major in Food Science (2 years in Manila, 2 years in Laguna)",
+    "code": "BSCHY-FSS"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Chemistry minor in Business Studies",
+    "code": "BS-CHYB"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Human Biology (Laguna)",
+    "code": "BSHUM-BIO"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Human Biology (Manila)",
+    "code": "BSHUMBIOS"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Mathematics with specialization in Business Applications",
+    "code": "BSMTH-BAP"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Physics",
+    "code": "BSPHY"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Physics minor in Economics",
+    "code": "BSPHYEC"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Physics minor in Finance",
+    "code": "BSPHYFI"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Physics with specialization in Materials Science",
+    "code": "BSPHY-MAT"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Physics with specialization in Medical Instrumentation",
+    "code": "BSPHY-MED"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Premed Physics",
+    "code": "BSPHYPMDS"
+  },
+  {
+    "college": "College of Science (COS)",
+    "title": "Bachelor of Science in Statistics major in Actuarial Science",
+    "code": "BS-STAT"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Aeronautical Engineering",
+    "code": "BSAEROS"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Biomedical Engineering (2 years in Manila, 2 years in Laguna)",
+    "code": "BSBMES"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Chemical Engineering",
+    "code": "BSCHE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Chemical Engineering and Master of Science in Chemical Engineering",
+    "code": "BSMSCHE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Civil Engineering",
+    "code": "BS-CIV"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Civil Engineering and Master of Science in Civil Engineering",
+    "code": "BSMSCE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Computer Engineering",
+    "code": "BS-CPE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Electrical Engineering",
+    "code": "BSEES"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Electronics Engineering",
+    "code": "BSECE2"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Electronics Engineering and Master of Science in Electronics and Communications Engineering",
+    "code": "BSMSECE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Industrial Engineering",
+    "code": "BS-IE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Industrial Engineering with specialization in Data Analytics",
+    "code": "BSIE-DAS"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Industrial Engineering with specialization in Information Technology",
+    "code": "BSIE-IT21"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Industrial Engineering with specialization in Service Management",
+    "code": "BSIE-SM21"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Industrial Engineering and Master of Science in Industrial Engineering",
+    "code": "BSMSIE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Manufacturing and Robotics Engineering",
+    "code": "BSMRE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Manufacturing and Robotics Engineering with specialization in Human-Robot Interaction",
+    "code": "BSMR-RI"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Manufacturing and Robotics Engineering with specialization in Industrial Robotics Systems",
+    "code": "BSMR-IR"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Manufacturing Engineering and Management with specialization in Mechatronics and Robotics Engineering and Master of Science in Manufacturing Engineering",
+    "code": "BSMSMEM"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Mechanical Engineering",
+    "code": "BSME"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Mechanical Engineering with specialization in Mechatronics Engineering",
+    "code": "BSMEE"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Mechanical Engineering with specialization in Mechatronics Engineering and Master of Science in Mechanical Engineering",
+    "code": "BSMSME"
+  },
+  {
+    "college": "Gokongwei College of Engineering (GCOE)",
+    "title": "Bachelor of Science in Mobility Engineering",
+    "code": "BSMOBES"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Computer Science",
+    "code": "BSCS"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Computer Science and Master of Science in Computer Science",
+    "code": "BSMSCS"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Computer Science major in Computer Systems Engineering",
+    "code": "BSCS-CSE"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Computer Science major in Network and Information Security",
+    "code": "BSCS-NIS"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Data Science (2 years in Laguna, 2 years in Manila)  reverse 2 + 2",
+    "code": "BSDSCIS"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Information Security",
+    "code": "BSINFSC"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Information Systems",
+    "code": "BSINSYS"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Information Technology",
+    "code": "BSIT"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Information Technology (Laguna)",
+    "code": "BSIT-CBL"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Interactive Entertainment major in Game Art and Design (2 years in Manila, 2 years in Laguna)",
+    "code": "BSIET-AD"
+  },
+  {
+    "college": "College of Computer Studies (CCS)",
+    "title": "Bachelor of Science in Interactive Entertainment major in Game Development (2 years in Manila, 2 years in Laguna)",
+    "code": "BSIET-GD"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Accountancy",
+    "code": "BSA"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Advertising Management",
+    "code": "BSADV"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Applied Corporate Management",
+    "code": "BSAPC"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Business Management",
+    "code": "BSMGT"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Business Management with specialization in Business Analytics (6 trimesters (first 2 years) in Manila, 4 trimesters (1 1/3 years) in Laguna)",
+    "code": "BSMGT-BAS"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Entrepreneurship",
+    "code": "BS-ENT"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "BS in Entrepreneurship Challenge Based Learning",
+    "code": "BS-ENTS"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Financial Engineering",
+    "code": "BSFES"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Interdisciplinary Business Studies",
+    "code": "BSIBS"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Legal Management",
+    "code": "BSLGL"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Management Accounting with specialization in Business Analytics",
+    "code": "BSMA-BA"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Management of Financial Institutions",
+    "code": "BSFIN"
+  },
+  {
+    "college": "Ramon V. Del Rosario College of Business (RVRCOB)",
+    "title": "Bachelor of Science in Marketing Management",
+    "code": "BSMKT"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Arts in English Language Studies",
+    "code": "ABELS"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Early Childhood Education",
+    "code": "BECED"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education",
+    "code": "BSED"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education Major in English",
+    "code": "BSE-ENG"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education major in Mathematics",
+    "code": "BSE-MAT"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education major in Science with specialization in Biology",
+    "code": "BSESCIB"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education major in Science with specialization in Chemistry",
+    "code": "BSESCIC"
+  },
+  {
+    "college": "Br. Andrew Gonzalez FSC College of Education (BAGCED)",
+    "title": "Bachelor of Secondary Education major in Science with specialization in Physics",
+    "code": "BSESCIP"
+  },
+  {
+    "college": "School of Innovation and Sustainability (SIS)",
+    "title": "Bachelor of Science in Materials Science and Engineering",
+    "code": "BSMTSCS"
+  }
+]

@@ -28,7 +28,7 @@
       id: user.id || user._id || "",
       username: user.username || "Unknown",
       email: user.email || "",
-      photo: user.photo || "assets/placeholder.png",
+      photo: user.photo || "assets/profile-icon-default.png",
       year: user.year || "",
       pronouns: user.pronouns || "",
       major: user.major || "",
