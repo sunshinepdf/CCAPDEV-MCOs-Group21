@@ -18,6 +18,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+  <!-- Cropper.css & Cropper.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
   {{#if includeAppStyles}}
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
@@ -56,6 +60,21 @@
   {{/if}}
 </head>
 <body>
+
+  <!-- Global Cropper Modal -->
+  <div id="global-cropper-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; text-align: center;">
+      <h3 style="margin-top: 0; font-family: 'Poppins', sans-serif; font-weight: 800;">Crop Profile Picture</h3>
+      <div style="max-height: 60vh; overflow: hidden; margin-bottom: 20px; display: flex; justify-content: center;">
+        <img id="global-cropper-image" src="" style="max-width: 100%; display: block;" />
+      </div>
+      <div>
+        <button id="global-cropper-cancel-btn" style="font-family: 'Poppins', sans-serif; padding: 8px 16px; margin-right: 10px; cursor: pointer; background: #ccc; border: none; border-radius: 4px;">Cancel</button>
+        <button id="global-cropper-save-btn" style="font-family: 'Poppins', sans-serif; padding: 8px 16px; cursor: pointer; background: #504e76; color: white; border: none; border-radius: 4px;">Crop & Save</button>
+      </div>
+    </div>
+  </div>
+
   {{{body}}}
 
   {{#if includeAppScripts}}

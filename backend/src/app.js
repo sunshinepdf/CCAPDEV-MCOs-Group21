@@ -23,6 +23,7 @@ import * as exphbs from "express-handlebars";
 import env from "./config/env.js";
 import routes from "./routes/index.js";
 import viewRoutes from "./routes/viewRoutes.js";
+import { requireCsrf } from "./middleware/csrf.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 // Initialize Express app and set up paths for views and static files
@@ -79,7 +80,7 @@ app.use("/", viewRoutes);
 app.use(express.static(publicPath));
 
 // API routes are prefixed with /api to separate them from view routes
-app.use("/api", routes);
+app.use("/api", requireCsrf, routes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

@@ -41,6 +41,11 @@
     return "Discussion";
   }
 
+  function prettyCollege(college) {
+    var c = String(college || "").toUpperCase();
+    return c;
+  }
+
   function excerpt(text, n) {
     var t = String(text || "").trim().replace(/\s+/g, " ");
     if (t.length <= n) return t;
@@ -264,7 +269,7 @@
     // -------------------------
     // Post Editing / Deletion
     // -------------------------
-    editPost(postId, newTitle, newContent) {
+    editPost(postId, newTitle, newContent, newCategory, newCollege) {
       var post = this.getPostById(postId);
       if (!post) return false;
 
@@ -273,10 +278,15 @@
 
       var title = String(newTitle || "").trim();
       var content = String(newContent || "").trim();
-      var contentChanged = title !== post.title || content !== post.content;
+      var category = String(newCategory || post.category || "").trim();
+      var college = newCollege !== undefined ? String(newCollege).trim() : post.college;
+      
+      var contentChanged = title !== post.title || content !== post.content || category !== post.category || college !== post.college;
 
       post.title = title;
       post.content = content;
+      post.category = category;
+      post.college = college;
       
       if (contentChanged) {
         var now = new Date();
@@ -294,7 +304,7 @@
         // PATCH: update post title/content/category
         window.apiRequest("/api/posts/" + encodeURIComponent(postId), {
           method: "PATCH",
-          body: JSON.stringify({ title: post.title, content: post.content, category: post.category })
+          body: JSON.stringify({ title: post.title, content: post.content, category: post.category, college: post.college })
         }).then(() => this.refreshFromApi()).catch(() => {});
       }
       return true;
@@ -347,7 +357,7 @@
       return true;
     }
 
-    createPost(authorId, title, content, category) {
+    createPost(authorId, title, content, category, college) {
       var cat = String(category || "").trim().toLowerCase();
       if (!["discussion", "news", "help"].includes(cat)) cat = "discussion";
 
@@ -355,6 +365,7 @@
         id: "p" + Date.now(),
         authorId: authorId,
         category: cat,
+        college: String(college || "").trim(),
         title: String(title || "").trim(),
         content: String(content || "").trim(),
         date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
@@ -373,7 +384,7 @@
         // POST: create a new post
         window.apiRequest("/api/posts", {
           method: "POST",
-          body: JSON.stringify({ title: post.title, content: post.content, category: post.category })
+          body: JSON.stringify({ title: post.title, content: post.content, category: post.category, college: post.college })
         }).then(() => this.refreshFromApi()).catch(() => {});
       }
       return post;
@@ -479,19 +490,52 @@
             '<div class="global-create-post-card">' +
               '<button class="global-create-close" id="global-create-close" type="button">&times;</button>' +
               '<h2 class="poppins-extrabold">Create New Post</h2>' +
-              '<input type="text" id="global-create-title" class="global-create-input" placeholder="Post Title" />' +
-              '<textarea id="global-create-content" class="global-create-textarea" rows="6" placeholder="Write your post here..."></textarea>' +
-              '<select id="global-create-category" class="global-create-input">' +
-                '<option value="">Select Category</option>' +
+              '<div class="global-create-field">' +
+                '<input type="text" id="global-create-title" class="global-create-input" placeholder="Post Title" maxlength="100" />' +
+                '<div id="global-create-title-counter" class="global-create-counter poppins-regular">0 / 100</div>' +
+              '</div>' +
+              '<div class="global-create-field">' +
+                '<textarea id="global-create-content" class="global-create-textarea" rows="6" placeholder="Write your post here..." maxlength="500"></textarea>' +
+                '<div id="global-create-content-counter" class="global-create-counter poppins-regular">0 / 500</div>' +
+              '</div>' +
+              '<select id="global-create-category" class="global-create-input" style="margin-bottom: 15px;">' +
+                '<option value="" disabled selected>Select Category</option>' +
                 '<option value="discussion">Discussion</option>' +
                 '<option value="news">News</option>' +
                 '<option value="help">Help</option>' +
+              '</select>' +
+              '<select id="global-create-college" class="global-create-input" style="margin-bottom: 15px;">' +
+                '<option value="">Select College (Optional)</option>' +
+                '<option value="CLA">CLA</option>' +
+                '<option value="SOE">SOE</option>' +
+                '<option value="COS">COS</option>' +
+                '<option value="GCOE">GCOE</option>' +
+                '<option value="CCS">CCS</option>' +
+                '<option value="RVRCOB">RVRCOB</option>' +
+                '<option value="BAGCED">BAGCED</option>' +
+                '<option value="SIS">SIS</option>' +
               '</select>' +
               '<button id="global-create-submit" class="global-create-submit poppins-extrabold" type="button">Publish Post</button>' +
             '</div>' +
           '</div>';
 
         document.body.appendChild(modal);
+
+        var titleInput = document.getElementById("global-create-title");
+        var titleCounter = document.getElementById("global-create-title-counter");
+        if (titleInput && titleCounter) {
+          titleInput.addEventListener("input", function() {
+            titleCounter.textContent = titleInput.value.length + " / 100";
+          });
+        }
+        
+        var contentInput = document.getElementById("global-create-content");
+        var contentCounter = document.getElementById("global-create-content-counter");
+        if (contentInput && contentCounter) {
+          contentInput.addEventListener("input", function() {
+            contentCounter.textContent = contentInput.value.length + " / 500";
+          });
+        }
       }
 
       if (this._globalCreateUIBound) return;
@@ -567,11 +611,13 @@
       var title = document.getElementById("global-create-title");
       var content = document.getElementById("global-create-content");
       var category = document.getElementById("global-create-category");
+      var college = document.getElementById("global-create-college");
       if (!title || !content || !category) return;
 
       var titleVal = title.value.trim();
       var contentVal = content.value.trim();
       var categoryVal = category.value.trim();
+      var collegeVal = college ? college.value.trim() : "";
       var currentUserId = getCurrentUserId();
 
       if (!currentUserId) {
@@ -594,11 +640,18 @@
         return;
       }
 
-      this.createPost(currentUserId, titleVal, contentVal, categoryVal);
+      this.createPost(currentUserId, titleVal, contentVal, categoryVal, collegeVal);
 
       title.value = "";
       content.value = "";
       category.value = "";
+      if (college) college.value = "";
+      
+      var titleCounter = document.getElementById("global-create-title-counter");
+      if (titleCounter) titleCounter.textContent = "0 / 100";
+      var contentCounter = document.getElementById("global-create-content-counter");
+      if (contentCounter) contentCounter.textContent = "0 / 500";
+
       this.closeGlobalCreatePostModal();
 
       AlertModal.show("Post created successfully!", "success");
@@ -693,6 +746,12 @@
       el.setAttribute("data-id", post.id);
       el.setAttribute("data-locked", locked ? "1" : "0");
       el.setAttribute("data-category", String(post.category || "discussion").toLowerCase());
+      el.setAttribute("data-college", String(post.college || ""));
+
+      let tagsHtml = '<span>' + prettyCategory(post.category) + '</span>';
+      if (post.college) {
+        tagsHtml += ' <span>' + escapeHtml(prettyCollege(post.college)) + '</span>';
+      }
 
       el.innerHTML =
         '<div class="post-author-header poppins-regular">' +
@@ -711,7 +770,7 @@
         '</span></div>' +
         '<div class="rule"></div>' +
         '<p class="excerpt poppins-regular">' + escapeHtml(excerpt(post.content, 180)) + '</p>' +
-        '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>' +
+        '<div class="tags-mini">' + tagsHtml + '</div>' +
         '<div class="article-actions">' +
           '<div class="vote">' +
             '<button type="button" data-action="up" data-id="' + escapeHtml(post.id) + '"' + upActive + '>▲</button>' +
@@ -1345,12 +1404,38 @@
         '</div>' +
         '<div class="rule"></div>' +
         '<p class="excerpt poppins-regular">' + escapeHtml(post.content || "") + '</p>' +
-        '<div class="tags-mini"><span>' + prettyCategory(post.category) + '</span></div>' +
+        '<div class="tags-mini">' +
+          '<span>' + prettyCategory(post.category) + '</span>' +
+          (post.college ? '<span>' + escapeHtml(prettyCollege(post.college)) + '</span>' : '') +
+        '</div>' +
         (isOwner
           ? (
             '<div data-post-edit-box style="display:none; margin-top:12px;">' +
-              '<input type="text" data-post-edit-title class="comment-textarea" style="min-height:auto; margin-bottom:8px;" value="' + escapeHtml(post.title || "") + '">' +
-              '<textarea data-post-edit-content class="comment-textarea" rows="5">' + escapeHtml(post.content || "") + '</textarea>' +
+              '<div style="position: relative;">' +
+                '<input type="text" data-post-edit-title class="comment-textarea" style="min-height:auto; margin-bottom:8px;" value="' + escapeHtml(post.title || "") + '" maxlength="100">' +
+                '<div data-post-title-counter class="poppins-regular" style="font-size: 11px; color: #777; text-align: right; margin-top: -8px; margin-bottom: 10px; margin-right: 5px;">' + (post.title || "").length + ' / 100</div>' +
+              '</div>' +
+              '<div style="position: relative;">' +
+                '<textarea data-post-edit-content class="comment-textarea" rows="5" maxlength="500">' + escapeHtml(post.content || "") + '</textarea>' +
+                '<div data-post-content-counter class="poppins-regular" style="font-size: 11px; color: #777; text-align: right; margin-top: -8px; margin-bottom: 10px; margin-right: 5px;">' + (post.content || "").length + ' / 500</div>' +
+              '</div>' +
+              '<select data-post-edit-category class="comment-textarea" style="min-height: auto; margin-bottom: 15px; width: 100%;">' +
+                '<option value="" disabled' + (!post.category ? ' selected' : '') + '>Select Category</option>' +
+                '<option value="discussion"' + (post.category === 'discussion' ? ' selected' : '') + '>Discussion</option>' +
+                '<option value="news"' + (post.category === 'news' ? ' selected' : '') + '>News</option>' +
+                '<option value="help"' + (post.category === 'help' ? ' selected' : '') + '>Help</option>' +
+              '</select>' +
+              '<select data-post-edit-college class="comment-textarea" style="min-height: auto; margin-bottom: 15px; width: 100%;">' +
+                '<option value=""' + (!post.college ? ' selected' : '') + '>Select College (Optional)</option>' +
+                '<option value="CLA"' + (post.college === 'CLA' ? ' selected' : '') + '>CLA</option>' +
+                '<option value="SOE"' + (post.college === 'SOE' ? ' selected' : '') + '>SOE</option>' +
+                '<option value="COS"' + (post.college === 'COS' ? ' selected' : '') + '>COS</option>' +
+                '<option value="GCOE"' + (post.college === 'GCOE' ? ' selected' : '') + '>GCOE</option>' +
+                '<option value="CCS"' + (post.college === 'CCS' ? ' selected' : '') + '>CCS</option>' +
+                '<option value="RVRCOB"' + (post.college === 'RVRCOB' ? ' selected' : '') + '>RVRCOB</option>' +
+                '<option value="BAGCED"' + (post.college === 'BAGCED' ? ' selected' : '') + '>BAGCED</option>' +
+                '<option value="SIS"' + (post.college === 'SIS' ? ' selected' : '') + '>SIS</option>' +
+              '</select>' +
               '<div style="display:flex; gap:8px; margin-top:8px;">' +
                 '<button type="button" class="submit-comment-btn poppins-extrabold" data-post-action="edit_save">Save Changes</button>' +
                 '<button type="button" class="submit-comment-btn poppins-extrabold" data-post-action="edit_cancel" style="background:#504e76;">Cancel</button>' +
@@ -1369,6 +1454,22 @@
     var editCancelBtn = modalContent.querySelector('[data-post-action="edit_cancel"]');
     var editSaveBtn = modalContent.querySelector('[data-post-action="edit_save"]');
     var deleteBtn = modalContent.querySelector('[data-post-action="delete"]');
+    
+    var titleEditInput = modalContent.querySelector("[data-post-edit-title]");
+    var contentEditInput = modalContent.querySelector("[data-post-edit-content]");
+    var titleCounterLabel = modalContent.querySelector("[data-post-title-counter]");
+    var contentCounterLabel = modalContent.querySelector("[data-post-content-counter]");
+    
+    if (titleEditInput && titleCounterLabel) {
+      titleEditInput.addEventListener("input", function() {
+        titleCounterLabel.textContent = titleEditInput.value.length + " / 100";
+      });
+    }
+    if (contentEditInput && contentCounterLabel) {
+      contentEditInput.addEventListener("input", function() {
+        contentCounterLabel.textContent = contentEditInput.value.length + " / 500";
+      });
+    }
 
     if (menuToggleBtn && menuDropdown) {
       menuToggleBtn.onclick = function (e) {
@@ -1424,8 +1525,13 @@
       editSaveBtn.onclick = function () {
         var nextTitleEl = modalContent.querySelector("[data-post-edit-title]");
         var nextContentEl = modalContent.querySelector("[data-post-edit-content]");
+        var nextCategoryEl = modalContent.querySelector("[data-post-edit-category]");
+        var nextCollegeEl = modalContent.querySelector("[data-post-edit-college]");
+
         var nextTitle = nextTitleEl ? String(nextTitleEl.value || "").trim() : "";
         var nextContent = nextContentEl ? String(nextContentEl.value || "").trim() : "";
+        var nextCategory = nextCategoryEl ? nextCategoryEl.value.trim() : (post.category || "");
+        var nextCollege = nextCollegeEl ? nextCollegeEl.value.trim() : (post.college || "");
 
         if (!nextTitle) {
           AlertModal.show("Title cannot be empty", "error");
@@ -1436,7 +1542,7 @@
           return;
         }
 
-        var ok = window.PostsComponent_Instance.editPost(postId, nextTitle, nextContent);
+        var ok = window.PostsComponent_Instance.editPost(postId, nextTitle, nextContent, nextCategory, nextCollege);
         if (!ok) {
           AlertModal.show("You can only edit your own post.", "error");
           return;

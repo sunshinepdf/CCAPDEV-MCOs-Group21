@@ -997,7 +997,21 @@
 
 #edit-post-modal .modal-textarea {
   min-height: 170px;
-  resize: vertical;
+  resize: none;
+}
+
+#edit-post-modal .edit-post-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#edit-post-modal .edit-post-counter {
+  font-size: 11px;
+  color: #777;
+  text-align: right;
+  margin: 0 4px 2px 0;
+  line-height: 1;
 }
 
 #edit-post-modal #modal-save-btn {

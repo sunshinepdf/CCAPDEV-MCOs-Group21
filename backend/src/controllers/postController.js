@@ -47,6 +47,7 @@ export async function listPosts(req, res, next) {
     const {
       sortBy = "recent",
       category,
+      college,
       authorId,
       q,
       page = "1",
@@ -56,6 +57,9 @@ export async function listPosts(req, res, next) {
     const query = {};
     if (category) {
       query.category = assertValidCategory(category);
+    }
+    if (college) {
+      query.college = String(college);
     }
     if (authorId) {
       if (!mongoose.Types.ObjectId.isValid(authorId)) {
@@ -127,7 +131,7 @@ export async function getPostById(req, res, next) {
 // Controller function to create a new post, with validation and ownership assignment
 export async function createPost(req, res, next) {
   try {
-    const { title, content, category } = req.body;
+    const { title, content, category, college } = req.body;
     if (!title || !content) {
       throw new HttpError(400, "title and content are required");
     }
@@ -135,6 +139,7 @@ export async function createPost(req, res, next) {
     const post = await Post.create({
       authorId: req.user._id,
       category: assertValidCategory(category),
+      college: college || "",
       title: String(title).trim(),
       content: String(content).trim(),
       lastInteraction: new Date()
@@ -150,7 +155,7 @@ export async function createPost(req, res, next) {
 export async function updatePost(req, res, next) {
   try {
     const { postId } = req.params;
-    const { title, content, category } = req.body;
+    const { title, content, category, college } = req.body;
 
     const post = await Post.findById(postId);
     if (!post) {
@@ -164,18 +169,21 @@ export async function updatePost(req, res, next) {
     const nextTitle = title != null ? String(title).trim() : post.title;
     const nextContent = content != null ? String(content).trim() : post.content;
     const nextCategory = category != null ? assertValidCategory(category) : post.category;
+    const nextCollege = college != null ? String(college) : post.college;
 
     const titleChanged = title != null && nextTitle !== post.title;
     const contentChanged = content != null && nextContent !== post.content;
     const categoryChanged = category != null && nextCategory !== post.category;
+    const collegeChanged = college != null && nextCollege !== post.college;
 
-    if (!titleChanged && !contentChanged && !categoryChanged) {
+    if (!titleChanged && !contentChanged && !categoryChanged && !collegeChanged) {
       return res.json({ success: true, post: mapPost(post) });
     }
 
     if (titleChanged) post.title = nextTitle;
     if (contentChanged) post.content = nextContent;
     if (categoryChanged) post.category = nextCategory;
+    if (collegeChanged) post.college = nextCollege;
     if (titleChanged || contentChanged) {
       post.editedAt = new Date();
     }

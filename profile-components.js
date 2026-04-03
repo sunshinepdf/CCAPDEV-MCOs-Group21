@@ -210,11 +210,25 @@ class ProfilePosts extends HTMLElement {
                     const modal = document.getElementById('edit-post-modal');
                     const titleInput = document.getElementById('edit-post-title');
                     const contentInput = document.getElementById('edit-post-content');
+                    const categoryInput = document.getElementById('edit-post-category');
+                    const collegeInput = document.getElementById('edit-post-college');
                     const saveBtn = document.getElementById('modal-save-btn');
                     
                     // Populate modal with current post data
                     titleInput.value = post.title;
                     contentInput.value = post.content;
+                    if (categoryInput) {
+                        categoryInput.value = post.category || 'discussion';
+                    }
+                    if (collegeInput) {
+                        collegeInput.value = post.college || '';
+                    }
+
+                    // Update counters
+                    const titleCounter = document.getElementById('title-counter');
+                    const contentCounter = document.getElementById('content-counter');
+                    if (titleCounter) titleCounter.textContent = titleInput.value.length + " / 100";
+                    if (contentCounter) contentCounter.textContent = contentInput.value.length + " / 500";
                     
                     // Show modal
                     modal.style.display = 'flex';
@@ -223,6 +237,8 @@ class ProfilePosts extends HTMLElement {
                     const saveHandler = () => {
                         const newTitle = titleInput.value.trim();
                         const newContent = contentInput.value.trim();
+                        const newCategory = categoryInput ? categoryInput.value.trim() : (post.category || '');
+                        const newCollege = collegeInput ? collegeInput.value.trim() : (post.college || '');
                         
                         if (newTitle === '') {
                             if (typeof AlertModal !== 'undefined') {
@@ -238,7 +254,7 @@ class ProfilePosts extends HTMLElement {
                             return;
                         }
                         
-                        PostsComponent_Instance.editPost(postId, newTitle, newContent);
+                        PostsComponent_Instance.editPost(postId, newTitle, newContent, newCategory, newCollege);
                         if (typeof AlertModal !== 'undefined') {
                             AlertModal.show('Post updated!', 'success');
                         }

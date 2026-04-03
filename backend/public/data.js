@@ -1,6 +1,8 @@
 (function () {
   var AUTH_TOKEN_KEY = "authToken";
   var CURRENT_USER_ID_KEY = "currentUserId";
+  var CSRF_TOKEN_PATH = "/api/csrf-token";
+  var csrfTokenCache = "";
 
   function toDisplayDate(value) {
     if (!value) return "";
@@ -49,6 +51,7 @@
       id: post.id || post._id || "",
       authorId: author ? normalizeId(author) : normalizeId(post.authorId),
       category: post.category || "discussion",
+      college: post.college || "",
       title: post.title || "",
       content: post.content || "",
       date: toDisplayDate(post.createdAt || post.date),
@@ -90,10 +93,39 @@
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(CURRENT_USER_ID_KEY);
     localStorage.removeItem("rememberMeToken");
+    csrfTokenCache = "";
+  }
+
+  function isStateChangingMethod(method) {
+    var normalized = String(method || "GET").toUpperCase();
+    return normalized === "POST" || normalized === "PUT" || normalized === "PATCH" || normalized === "DELETE";
+  }
+
+  async function fetchCsrfToken(forceRefresh) {
+    if (!forceRefresh && csrfTokenCache) {
+      return csrfTokenCache;
+    }
+
+    var response = await fetch(CSRF_TOKEN_PATH, {
+      method: "GET",
+      credentials: "include"
+    });
+
+    var payload = null;
+    try { payload = await response.json(); }
+    catch (error) { payload = null; }
+
+    if (!response.ok || !payload || !payload.csrfToken) {
+      throw new Error("Failed to fetch CSRF token");
+    }
+
+    csrfTokenCache = String(payload.csrfToken);
+    return csrfTokenCache;
   }
 
   async function apiRequest(path, options) {
     var opts = options || {};
+    var method = String(opts.method || "GET").toUpperCase();
     var headers = Object.assign({}, opts.headers || {});
     var token = getAuthToken();
 
@@ -101,24 +133,50 @@
       headers.Authorization = "Bearer " + token;
     }
 
+    if (isStateChangingMethod(method) && !headers["X-CSRF-Token"] && !headers["x-csrf-token"]) {
+      headers["X-CSRF-Token"] = await fetchCsrfToken(false);
+    }
+
     var hasBody = typeof opts.body !== "undefined";
     if (hasBody && !headers["Content-Type"]) {
       headers["Content-Type"] = "application/json";
     }
 
-    var fetchOpts = Object.assign({ credentials: "include" }, opts, { headers: headers });
-    var response = await fetch(path, fetchOpts);
-    var payload = null;
+    async function runRequest(requestHeaders) {
+      var fetchOpts = Object.assign({ credentials: "include" }, opts, { method: method, headers: requestHeaders });
+      var response = await fetch(path, fetchOpts);
+      var payload = null;
 
-    try { payload = await response.json(); }
-    catch (error) { payload = null; }
+      try { payload = await response.json(); }
+      catch (error) { payload = null; }
 
-    if (!response.ok) {
-      var message = payload && payload.message ? payload.message : ("Request failed: " + response.status);
-      throw new Error(message);
+      return { response: response, payload: payload };
     }
 
-    return payload;
+    var firstAttempt = await runRequest(headers);
+    if (firstAttempt.response.ok) {
+      return firstAttempt.payload;
+    }
+
+    if (firstAttempt.response.status === 403 && isStateChangingMethod(method)) {
+      var refreshedToken = await fetchCsrfToken(true);
+      headers["X-CSRF-Token"] = refreshedToken;
+
+      var retryAttempt = await runRequest(headers);
+      if (retryAttempt.response.ok) {
+        return retryAttempt.payload;
+      }
+
+      var retryMessage = retryAttempt.payload && retryAttempt.payload.message
+        ? retryAttempt.payload.message
+        : ("Request failed: " + retryAttempt.response.status);
+      throw new Error(retryMessage);
+    }
+
+    var message = firstAttempt.payload && firstAttempt.payload.message
+      ? firstAttempt.payload.message
+      : ("Request failed: " + firstAttempt.response.status);
+    throw new Error(message);
   }
 
   async function bootstrapMockDatabase() {
@@ -172,7 +230,7 @@
 
   async function logout() {
     try {
-      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      await apiRequest("/api/auth/logout", { method: "POST" });
     } catch (e) {
       console.error("Logout failed:", e);
     }

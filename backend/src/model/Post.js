@@ -36,12 +36,18 @@ const postSchema = new mongoose.Schema(
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     category: {
       type: String,
-      enum: ["discussion", "help", "news", "CLA", "SOE", "COS", "GCOE", "CCS", "RVRCOB", "BAGCED", "SIS"],
+      enum: ["discussion", "help", "news"],
       default: "discussion",
       index: true
     },
-    title: { type: String, required: true, trim: true },
-    content: { type: String, required: true, trim: true },
+    college: {
+      type: String,
+      enum: ["", "CLA", "SOE", "COS", "GCOE", "CCS", "RVRCOB", "BAGCED", "SIS"],
+      default: "",
+      index: true
+    },
+    title: { type: String, required: true, trim: true, maxlength: 100 },
+    content: { type: String, required: true, trim: true, maxlength: 500 },
     editedAt: { type: Date, default: null },
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },

@@ -1,4 +1,5 @@
 let selectedCategories = [];
+let selectedColleges = [];
 
 function normalizeText(text) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -7,6 +8,10 @@ function normalizeText(text) {
 function capitalize(text) {
   text = String(text || "");
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function normalizeCollegeValue(value) {
+  return normalizeText(value).toUpperCase();
 }
 
 
@@ -35,7 +40,7 @@ function renderDiscoverPosts() {
     return;
   }
 
-  generateCategoryFilters(db);
+  generateCategoryFilters();
 
   const sortedPosts = PostsComponent_Instance.getFilteredPosts({ sortBy: "hot" });
   const isLoggedIn = (localStorage.getItem("currentUserId") || "").trim().length > 0;
@@ -72,32 +77,55 @@ document.addEventListener("click", function (event) {
   }
 });
 
-function generateCategoryFilters(db) {
+function generateCategoryFilters() {
   const container = document.getElementById("dynamicFilters");
   if (!container) return;
-  container.innerHTML = "";
+  container.innerHTML = `
+    <h4>Main Tags</h4>
+    <div id="mainTagsFilter" class="filter-section"></div>
+    <h4>College</h4>
+    <div id="collegeTagsFilter" class="filter-section"></div>
+  `;
 
-  const categories = [...new Set(
-    (db.posts || []).map(post => String(post.category || "discussion").toLowerCase())
-  )];
+  const mainTagsContainer = document.getElementById("mainTagsFilter");
+  const collegeTagsContainer = document.getElementById("collegeTagsFilter");
 
+  const categories = ["discussion", "help", "news"];
   categories.forEach(category => {
     const label = document.createElement("label");
     label.className = "filter-option";
     label.innerHTML = `
-      <input type="checkbox" value="${category}">
+      <input type="checkbox" value="${category}" data-type="category">
       <span class="tags-preview"><span>${capitalize(category)}</span></span>
     `;
-    container.appendChild(label);
+    mainTagsContainer.appendChild(label);
+  });
+
+  const colleges = ["CLA", "SOE", "COS", "GCOE", "CCS", "RVRCOB", "BAGCED", "SIS"];
+  colleges.forEach(college => {
+    const label = document.createElement("label");
+    label.className = "filter-option";
+    label.innerHTML = `
+      <input type="checkbox" value="${college}" data-type="college">
+      <span class="tags-preview"><span>${college}</span></span>
+    `;
+    collegeTagsContainer.appendChild(label);
   });
 }
 
 function applyFilters() {
   const checkboxes = document.querySelectorAll(".filter-panel input[type='checkbox']");
   selectedCategories = [];
+  selectedColleges = [];
 
   checkboxes.forEach(cb => {
-    if (cb.checked) selectedCategories.push(String(cb.value || "").toLowerCase());
+    if (cb.checked) {
+      if (cb.dataset.type === "category") {
+        selectedCategories.push(String(cb.value || "").toLowerCase());
+      } else if (cb.dataset.type === "college") {
+        selectedColleges.push(String(cb.value || ""));
+      }
+    }
   });
 
   filterPostsWithCategories();
@@ -114,11 +142,18 @@ function filterPostsWithCategories() {
     const title = normalizeText(post.querySelector(".headline")?.innerText || "");
     const content = normalizeText(post.querySelector(".excerpt")?.innerText || "");
     const category = String(post.getAttribute("data-category") || "discussion").toLowerCase();
+    const college = String(post.getAttribute("data-college") || "");
+    const normalizedPostCollege = normalizeCollegeValue(college);
 
     const matchesSearch = searchInput === "" || title.includes(searchInput) || content.includes(searchInput);
+    
+    // Default matching: if selectedCategories/Colleges is empty, we match everything
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(category);
+    const matchesCollege = selectedColleges.length === 0 || selectedColleges.some(function (selectedCollege) {
+      return normalizeCollegeValue(selectedCollege) === normalizedPostCollege;
+    });
 
-    post.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
+    post.style.display = (matchesSearch && matchesCategory && matchesCollege) ? "block" : "none";
   });
 }
 

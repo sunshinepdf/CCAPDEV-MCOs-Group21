@@ -13,19 +13,46 @@
 
       <h2 class="poppins-extrabold">Edit Post</h2>
 
-      <input
-        type="text"
-        id="edit-post-title"
-        placeholder="Post Title"
-        class="modal-input"
-      />
+      <div class="edit-post-field">
+        <input
+          type="text"
+          id="edit-post-title"
+          placeholder="Post Title"
+          class="modal-input"
+          maxlength="100"
+        />
+        <div id="title-counter" class="char-counter edit-post-counter poppins-regular">0 / 100</div>
+      </div>
 
-      <textarea
-        id="edit-post-content"
-        placeholder="Post Content"
-        rows="6"
-        class="modal-textarea"
-      ></textarea>
+      <div class="edit-post-field">
+        <textarea
+          id="edit-post-content"
+          placeholder="Post Content"
+          rows="6"
+          class="modal-textarea"
+          maxlength="500"
+        ></textarea>
+        <div id="content-counter" class="char-counter edit-post-counter poppins-regular">0 / 500</div>
+      </div>
+      
+      <select id="edit-post-category" class="modal-input" style="margin-bottom: 15px;">
+        <option value="" disabled selected>Select Category</option>
+        <option value="discussion">Discussion</option>
+        <option value="news">News</option>
+        <option value="help">Help</option>
+      </select>
+
+      <select id="edit-post-college" class="modal-input" style="margin-bottom: 15px;">
+        <option value="">Select College (Optional)</option>
+        <option value="CLA">College of Liberal Arts</option>
+        <option value="SOE">School of Economics</option>
+        <option value="COS">College of Science</option>
+        <option value="GCOE">Gokongwei College of Engineering</option>
+        <option value="CCS">College of Computer Studies</option>
+        <option value="RVRCOB">Ramon V. Del Rosario College of Business</option>
+        <option value="BAGCED">Br. Andrew Gonzalez FSC College of Education</option>
+        <option value="SIS">School of Innovation and Sustainability</option>
+      </select>
 
       <button
         id="modal-save-btn"
@@ -35,4 +62,37 @@
       </button>
     </div>
   </div>
+  <script>
+    // Setup character counters dynamically
+    document.addEventListener("DOMContentLoaded", function() {
+      const titleInput = document.getElementById("edit-post-title");
+      const titleCounter = document.getElementById("title-counter");
+      const contentTextarea = document.getElementById("edit-post-content");
+      const contentCounter = document.getElementById("content-counter");
+
+      if(titleInput && titleCounter) {
+        titleInput.addEventListener("input", function() {
+          titleCounter.textContent = titleInput.value.length + " / 100";
+        });
+      }
+      if(contentTextarea && contentCounter) {
+        contentTextarea.addEventListener("input", function() {
+          contentCounter.textContent = contentTextarea.value.length + " / 500";
+        });
+      }
+    });
+
+    // Observer to handle when data is injected into modal
+    const modalEl = document.getElementById("edit-post-modal");
+    if (modalEl) {
+      new MutationObserver(() => {
+        if(modalEl.style.display !== 'none') {
+           const titleInput = document.getElementById("edit-post-title");
+           const contentTextarea = document.getElementById("edit-post-content");
+           if(titleInput) document.getElementById("title-counter").textContent = titleInput.value.length + " / 100";
+           if(contentTextarea) document.getElementById("content-counter").textContent = contentTextarea.value.length + " / 500";
+        }
+      }).observe(modalEl, { attributes: true, attributeFilter: ['style'] });
+    }
+  </script>
 </div>

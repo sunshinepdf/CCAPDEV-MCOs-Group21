@@ -249,8 +249,22 @@
     background: #fffdf3;
 }
 
+.global-create-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.global-create-counter {
+    font-size: 11px;
+    color: #777;
+    text-align: right;
+    margin: 0 4px 2px 0;
+    line-height: 1;
+}
+
 .global-create-textarea {
-    resize: vertical;
+    resize: none;
 }
 
 .global-create-submit {

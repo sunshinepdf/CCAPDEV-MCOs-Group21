@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+  const MAX_PROFILE_PHOTO_BYTES = 2 * 1024 * 1024;
+  const DEFAULT_CROPPED_PHOTO_SIZE_PX = 512;
+  const MAX_CROPPED_PHOTO_SIZE_PX = 1024;
+
   // Helper functions for user authentication and database access (mocked or real)
   function isLoggedIn() {
     return (localStorage.getItem("currentUserId") || "").trim().length > 0;
@@ -39,6 +44,33 @@ document.addEventListener("DOMContentLoaded", function () {
       return String(opt.value || "").toLowerCase() === normalized;
     });
     return match ? match.value : rawValue;
+  }
+
+  function validateProfilePhotoFile(file) {
+    if (!file) return null;
+
+    if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
+      return "Only .png, .jpg, and .jpeg files are allowed.";
+    }
+
+    if (file.size > MAX_PROFILE_PHOTO_BYTES) {
+      return "Profile picture must be less than 2MB.";
+    }
+
+    return null;
+  }
+
+  function getOutputPhotoMimeType(file) {
+    if (file && file.type === "image/png") return "image/png";
+    return "image/jpeg";
+  }
+
+  function getAdaptiveCropSize(cropper) {
+    if (!cropper) return DEFAULT_CROPPED_PHOTO_SIZE_PX;
+    const data = cropper.getData(true) || {};
+    const detectedSide = Math.round(Number(data.width) || 0);
+    if (!detectedSide || detectedSide < 1) return DEFAULT_CROPPED_PHOTO_SIZE_PX;
+    return Math.min(detectedSide, MAX_CROPPED_PHOTO_SIZE_PX);
   }
 
   if (!isLoggedIn()) {
@@ -241,15 +273,67 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var pendingAvatarDataUrl = ""; 
+  let cropperInstance = null;
+  let selectedAvatarFile = null;
+
   if (avatarInput && avatarPreview) {
     avatarInput.addEventListener("change", function () {
       var file = avatarInput.files && avatarInput.files[0];
       if (!file) return;
+      selectedAvatarFile = file;
+
+      var fileValidationError = validateProfilePhotoFile(file);
+      if (fileValidationError) {
+        AlertModal.show(fileValidationError, "error");
+        avatarInput.value = "";
+        return;
+      }
 
       var reader = new FileReader();
-      reader.onload = function () {
-        pendingAvatarDataUrl = String(reader.result);
-        avatarPreview.src = pendingAvatarDataUrl;
+      reader.onload = function (evt) {
+        const modal = document.getElementById('global-cropper-modal');
+        const image = document.getElementById('global-cropper-image');
+        const cancelBtn = document.getElementById('global-cropper-cancel-btn');
+        const saveBtn = document.getElementById('global-cropper-save-btn');
+
+        image.src = evt.target.result;
+        modal.style.display = 'flex';
+
+        if (cropperInstance) {
+          cropperInstance.destroy();
+        }
+        cropperInstance = new Cropper(image, {
+          aspectRatio: 1,
+          viewMode: 1,
+          autoCropArea: 1,
+        });
+
+        cancelBtn.onclick = function() {
+          modal.style.display = 'none';
+          if(cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+          avatarInput.value = '';
+          pendingAvatarDataUrl = "";
+          selectedAvatarFile = null;
+        };
+
+        saveBtn.onclick = function() {
+          if (!cropperInstance) return;
+          const cropSize = getAdaptiveCropSize(cropperInstance);
+          const canvas = cropperInstance.getCroppedCanvas({
+            width: cropSize,
+            height: cropSize,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+          });
+          const outputMimeType = getOutputPhotoMimeType(selectedAvatarFile);
+          pendingAvatarDataUrl = outputMimeType === "image/png"
+            ? canvas.toDataURL(outputMimeType)
+            : canvas.toDataURL(outputMimeType, 0.95);
+          avatarPreview.src = pendingAvatarDataUrl;
+          modal.style.display = 'none';
+          cropperInstance.destroy();
+          cropperInstance = null;
+        };
       };
       reader.readAsDataURL(file);
     });
