@@ -82,12 +82,13 @@ class Navbar extends HTMLElement {
     const logoutBtn = this.querySelector('[data-auth-action="logout"]');
     if (!logoutBtn) return;
 
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', async () => {
       if (typeof logout === 'function') {
-        logout();
+        await logout();
         return;
       }
 
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
       localStorage.removeItem("currentUserId");
       localStorage.removeItem("rememberMeToken");
       localStorage.removeItem("authToken");

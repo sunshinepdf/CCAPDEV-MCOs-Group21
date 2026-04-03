@@ -106,7 +106,8 @@
       headers["Content-Type"] = "application/json";
     }
 
-    var response = await fetch(path, Object.assign({}, opts, { headers: headers }));
+    var fetchOpts = Object.assign({ credentials: "include" }, opts, { headers: headers });
+    var response = await fetch(path, fetchOpts);
     var payload = null;
 
     try { payload = await response.json(); }
@@ -169,7 +170,12 @@
     return;
   }
 
-  function logout() {
+  async function logout() {
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    } catch (e) {
+      console.error("Logout failed:", e);
+    }
     clearSession();
     window.location.href = "/login";
   }

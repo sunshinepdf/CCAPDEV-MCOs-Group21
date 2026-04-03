@@ -14,6 +14,7 @@ dotenv.config();
 const env = {
   port: Number(process.env.PORT || 3000),
   mongoUri: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/animo_commons",
+  sessionSecret: process.env.SESSION_SECRET || "development-session-secret",
   jwtSecret: process.env.JWT_SECRET || "development-secret",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d"
 };

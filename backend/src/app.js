@@ -14,10 +14,13 @@
 
 // Import necessary modules and middleware
 import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as exphbs from "express-handlebars";
+import env from "./config/env.js";
 import routes from "./routes/index.js";
 import viewRoutes from "./routes/viewRoutes.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
@@ -32,8 +35,30 @@ const partialsPath = path.join(viewsPath, "partials");
 const publicPath = path.join(__dirname, "..", "public");
 
 // Configure middleware for CORS, JSON parsing, and Handlebars templating
-app.use(cors()); // Enable CORS for all routes - adjust as needed for production
+app.use(cors({
+  origin: true,
+  credentials: true
+})); // Enable CORS for all routes with credentials
 app.use(express.json({ limit: "2mb" })); // Limit JSON payload size to prevent abuse
+
+// Configure Session Middleware
+app.use(
+  session({
+    secret: env.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: env.mongoUri,
+      collectionName: "sessions"
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production"
+    }
+  })
+);
+
 app.engine(
 	// Set up Handlebars as the view engine with custom configuration
 	"hbs",

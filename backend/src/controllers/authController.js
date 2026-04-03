@@ -15,15 +15,9 @@
 
 // Import necessary modules and models
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import env from "../config/env.js";
 import User from "../model/User.js";
 import HttpError from "../utils/httpError.js";
-
-// Helper function to sign a JWT token with the user's ID as payload
-function signToken(userId) {
-  return jwt.sign({ userId }, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
-}
 
 // Controller function to handle user registration
 export async function register(req, res, next) {
@@ -60,9 +54,9 @@ export async function register(req, res, next) {
       passwordHash
     });
 
-    // Sign a JWT token for the newly registered user and return it along with the user data (excluding passwordHash)
-    const token = signToken(user.id);
-    res.status(201).json({ success: true, token, user: user.toJSON() });
+    // Save user ID to the session
+    req.session.userId = user.id;
+    res.status(201).json({ success: true, user: user.toJSON() });
   } catch (error) {
     next(error);
   }
@@ -90,8 +84,22 @@ export async function login(req, res, next) {
       throw new HttpError(401, "Invalid credentials");
     }
 
-    const token = signToken(user.id);
-    res.json({ success: true, token, user: user.toJSON() });
+    req.session.userId = user.id;
+    res.json({ success: true, user: user.toJSON() });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function logout(req, res, next) {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        return next(new HttpError(500, "Could not log out"));
+      }
+      res.clearCookie("connect.sid");
+      return res.json({ success: true, message: "Logged out successfully" });
+    });
   } catch (error) {
     next(error);
   }

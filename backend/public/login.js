@@ -72,11 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify({ usernameOrEmail: usernameOrEmail, password: password })
     });
 
-    if (!payload || !payload.user || !payload.token) {
+    if (!payload || !payload.user) {
       return false;
     }
 
-    window.setAuthSession(payload.user, payload.token);
+    window.setAuthSession(payload.user);
     await window.bootstrapMockDatabase();
     return true;
   }

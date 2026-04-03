@@ -30,12 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify({ username: username, email: email, password: password })
       });
 
-      if (!payload || !payload.user || !payload.token) {
+      if (!payload || !payload.user) {
         AlertModal.show("Registration failed. Please try again.", "error");
         return;
       }
 
-      window.setAuthSession(payload.user, payload.token);
+      window.setAuthSession(payload.user);
       await window.bootstrapMockDatabase();
 
       AlertModal.show("Account created successfully! Welcome to Animo Commons!", "success");
