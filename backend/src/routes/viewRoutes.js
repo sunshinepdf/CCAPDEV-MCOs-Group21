@@ -9,6 +9,11 @@
 
 // Import necessary modules
 import { Router } from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize router and define common view options for app pages
 const router = Router();
@@ -73,6 +78,16 @@ router.get("/discover", (req, res) => {
 // Legacy route redirect for /discover.html to maintain compatibility with old links or bookmarks
 router.get("/discover.html", (req, res) => {
   res.redirect(withQuery(req, "/discover"));
+});
+
+router.get("/about", (req, res) => {
+  const aboutFile = path.join(__dirname, "..", "..", "public", "about.html");
+  res.sendFile(aboutFile);
+});
+
+// Legacy route redirect for /about.html to maintain compatibility with old links or bookmarks
+router.get("/about.html", (req, res) => {
+  res.redirect(withQuery(req, "/about"));
 });
 
 

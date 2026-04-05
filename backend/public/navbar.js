@@ -22,7 +22,8 @@ class Navbar extends HTMLElement {
       home: { color: "#a3b565", text: "#fdf8e2", icon: "home-icon.png", hoverIcon: "home-icon-hover.png" },
       profile: { color: "#504e76", text: "#fdf8e2", icon: "profile-icon.png", hoverIcon: "profile-icon-hover.png" },
       popular: { color: "#f1642e", text: "#fdf8e2", icon: "popular-icon.png", hoverIcon: "popular-icon-hover.png" },
-      discover: { color: "#f1b02e", text: "#fdf8e2", icon: "discover-icon.png", hoverIcon: "discover-icon-hover.png" }
+      discover: { color: "#f1b02e", text: "#fdf8e2", icon: "discover-icon.png", hoverIcon: "discover-icon-hover.png" },
+      about: { color: "#b793cc", text: "#fdf8e2", icon: "about-icon.png", hoverIcon: "about-icon-hover.png" }
     };
     const pageColor = tabs[active]?.color || "#83c578";
     
@@ -34,6 +35,7 @@ class Navbar extends HTMLElement {
       ${this.tab("profile", "/profile", tabs.profile.color, tabs.profile.text, tabs.profile.icon, tabs.profile.hoverIcon, active)}
       ${this.tab("popular", "/popular", tabs.popular.color, tabs.popular.text, tabs.popular.icon, tabs.popular.hoverIcon, active)}
       ${this.tab("discover", "/discover", tabs.discover.color, tabs.discover.text, tabs.discover.icon, tabs.discover.hoverIcon, active)}
+      ${this.tab("about", "/about", tabs.about.color, tabs.about.text, tabs.about.icon, tabs.about.hoverIcon, active)}
     </div>
     <div class="navbar-auth">
       ${isLoggedIn

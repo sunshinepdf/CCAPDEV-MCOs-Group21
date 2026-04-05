@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="global-sidebar.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="about.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="main-content">
+    <header-component></header-component>
+    <global-sidebar></global-sidebar>
+
+    <div class="container">
+      <nav-bar active="about"></nav-bar>
+
+      <div class="page-section" style="--page-color: #b793cc;">
+        <div class="content-box" style="--content-bg: #fdf8e2;">
+          <div class="about-masthead">
+            <h1 class="about-title poppins-extrabold">
+              <img src="assets/about-icon-hover.png" alt="logo" class="about-icon">
+              About Animo Commons
+            </h1>
+          </div>
+
+          <div class="about-content">
+
+            <section class="about-section">
+              <h2 class="poppins-extrabold">Purpose</h2>
+              <p class="poppins-regular">
+                Animo Commons is designed to give everyone a place to post, discover, and interact with content. Our mission is to create a safe, inclusive space for daily discussions and sharing knowledge.
+              </p>
+            </section>
+
+            <section class="about-section">
+              <h2 class="poppins-extrabold">Features</h2>
+              <ul class="poppins-regular">
+                <li>Post updates, questions, or articles.</li>
+                <li>Discover popular and trending posts.</li>
+                <li>Engage with comments and upvotes/downvotes.</li>
+                <li>Personalized profiles and user dashboards.</li>
+              </ul>
+            </section>
+
+            <section class="about-section">
+              <h2 class="poppins-extrabold">Technologies & Libraries</h2>
+              <p class="poppins-regular">
+                This web application uses the following NPM packages and third-party libraries:
+              </p>
+
+              <p class="poppins-regular"><b>Backend (Node.js):</b></p>
+              <ul class="poppins-regular">
+                <li>bcryptjs</li>
+                <li>connect-mongo</li>
+                <li>cors</li>
+                <li>cropperjs</li>
+                <li>dotenv</li>
+                <li>express</li>
+                <li>express-handlebars</li>
+                <li>express-session</li>
+                <li>hbs</li>
+                <li>jsonwebtoken</li>
+                <li>mongoose</li>
+              </ul>
+
+              <p class="poppins-regular"><b>Third-Party Libraries:</b></p>
+              <ul class="poppins-regular">
+                <li>Google Fonts (Poppins)</li>
+              </ul>
+
+            </section>
+
+            <section class="about-section">
+              <h2 class="poppins-extrabold">Credits</h2>
+              <p class="poppins-regular">
+                Developed by: Kyle Villorente, Raina Helaga, Kendrick Bilanes, and Aizy Alcasid
+              </p>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="header.js"></script>
+  <script src="global-sidebar.js"></script>
+  <script src="navbar.js"></script>
+</body>
+</html>
