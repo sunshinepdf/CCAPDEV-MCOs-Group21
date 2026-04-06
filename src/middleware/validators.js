@@ -43,21 +43,21 @@ export const validateRegister = [
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).withMessage("Password must contain at least one uppercase letter, one lowercase letter, and one number"),
   
   body("year")
-    .optional()
+    .optional({ checkFalsy: true })
     .trim(),
   
   body("major")
-    .optional()
+    .optional({ checkFalsy: true })
     .trim()
     .matches(/^[a-zA-Z0-9\s.,&-]*$/).withMessage("Major contains invalid characters"),
   
   body("pronouns")
-    .optional()
+    .optional({ checkFalsy: true })
     .trim()
     .matches(/^[a-zA-Z\s/-]*$/).withMessage("Pronouns can only contain letters, spaces, slashes, and hyphens"),
   
   body("photo")
-    .optional()
+    .optional({ checkFalsy: true })
     .isString().withMessage("Photo must be a string"),
   
   handleValidationErrors

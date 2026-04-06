@@ -1,5 +1,4 @@
 (function () {
-  var AUTH_TOKEN_KEY = "authToken";
   var CURRENT_USER_ID_KEY = "currentUserId";
   var CSRF_TOKEN_PATH = "/api/csrf-token";
   var csrfTokenCache = "";
@@ -77,20 +76,18 @@
   }
 
   function getAuthToken() {
-    return (sessionStorage.getItem(AUTH_TOKEN_KEY) || "").trim();
+    // No longer using token-based auth - using session-based only
+    return "";
   }
 
   function setSession(user, token) {
-    if (token) {
-      sessionStorage.setItem(AUTH_TOKEN_KEY, token);
-    }
+    // No longer storing tokens - all auth is session-based via secure HTTP-only cookies
     if (user && user.id) {
       sessionStorage.setItem(CURRENT_USER_ID_KEY, String(user.id));
     }
   }
 
   function clearSession() {
-    sessionStorage.removeItem(AUTH_TOKEN_KEY);
     sessionStorage.removeItem(CURRENT_USER_ID_KEY);
     localStorage.removeItem("rememberMeToken");
     csrfTokenCache = "";
@@ -127,11 +124,6 @@
     var opts = options || {};
     var method = String(opts.method || "GET").toUpperCase();
     var headers = Object.assign({}, opts.headers || {});
-    var token = getAuthToken();
-
-    if (token && !headers.Authorization) {
-      headers.Authorization = "Bearer " + token;
-    }
 
     if (isStateChangingMethod(method) && !headers["X-CSRF-Token"] && !headers["x-csrf-token"]) {
       headers["X-CSRF-Token"] = await fetchCsrfToken(false);
@@ -210,7 +202,8 @@
         var meMapped = mapUser(mePayload.user);
         if (meMapped && meMapped.id) {
           usersById[meMapped.id] = meMapped;
-          localStorage.setItem(CURRENT_USER_ID_KEY, meMapped.id);
+          sessionStorage.setItem(CURRENT_USER_ID_KEY, meMapped.id);
+          window.CURRENT_USER_ID = meMapped.id;
         }
       }
 
@@ -238,7 +231,7 @@
     window.location.href = "/login";
   }
 
-  window.CURRENT_USER_ID = sessionStorage.getItem(CURRENT_USER_ID_KEY) || "";
+  window.CURRENT_USER_ID = "";
   window.getAuthToken = getAuthToken;
   window.apiRequest = apiRequest;
   window.bootstrapMockDatabase = bootstrapMockDatabase;
