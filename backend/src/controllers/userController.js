@@ -65,7 +65,6 @@ export async function updateMe(req, res, next) {
     if (hasPasswordChangeAttempt) {
       const currentPassword = String(req.body.currentPassword || "");
       const newPassword = String(req.body.newPassword || "");
-      const confirmNewPassword = String(req.body.confirmNewPassword || "");
 
       if (!currentPassword) {
         throw new HttpError(400, "Current password is required to change your password");
@@ -73,14 +72,6 @@ export async function updateMe(req, res, next) {
 
       if (!newPassword) {
         throw new HttpError(400, "New password is required");
-      }
-
-      if (newPassword.length < 6) {
-        throw new HttpError(400, "Password must be at least 6 characters");
-      }
-
-      if (confirmNewPassword !== newPassword) {
-        throw new HttpError(400, "New password confirmation does not match");
       }
 
       const matchesCurrent = await bcrypt.compare(currentPassword, req.user.passwordHash);

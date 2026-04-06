@@ -132,9 +132,6 @@ export async function getPostById(req, res, next) {
 export async function createPost(req, res, next) {
   try {
     const { title, content, category, college } = req.body;
-    if (!title || !content) {
-      throw new HttpError(400, "title and content are required");
-    }
 
     const post = await Post.create({
       authorId: req.user._id,
@@ -219,9 +216,6 @@ export async function deletePost(req, res, next) {
 export async function votePost(req, res, next) {
   try {
     const { direction } = req.body;
-    if (!["up", "down"].includes(String(direction))) {
-      throw new HttpError(400, "direction must be 'up' or 'down'");
-    }
 
     const post = await Post.findById(req.params.postId);
     if (!post) {
@@ -299,9 +293,6 @@ function commentScore(comment) {
 export async function addComment(req, res, next) {
   try {
     const { text, parentId = null } = req.body;
-    if (!text || !String(text).trim()) {
-      throw new HttpError(400, "Comment text is required");
-    }
 
     const post = await Post.findById(req.params.postId);
     if (!post) {
@@ -338,9 +329,6 @@ export async function addComment(req, res, next) {
 export async function updateComment(req, res, next) {
   try {
     const { text } = req.body;
-    if (!text || !String(text).trim()) {
-      throw new HttpError(400, "Comment text is required");
-    }
 
     const post = await Post.findById(req.params.postId);
     if (!post) {

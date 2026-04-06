@@ -50,33 +50,6 @@ export async function register(req, res, next) {
     // Extract username, email, and password from the request body
     const { username, email, password, year, major, pronouns } = req.body;
 
-    if (!username || !email || !password) {
-      throw new HttpError(400, "username, email, and password are required");
-    }
-
-    const usernameRegex = /^[a-zA-Z0-9_.-]{3,20}$/;
-    if (!usernameRegex.test(username)) {
-      throw new HttpError(400, "Username must be 3-20 characters long and can only contain letters, numbers, dots, underscores, and hyphens.");
-    }
-
-    if (major && !/^[a-zA-Z0-9\s.,&-]{0,50}$/.test(major)) {
-      throw new HttpError(400, "Major contains invalid characters.");
-    }
-
-    if (pronouns && !/^[a-zA-Z\s/-]{0,20}$/.test(pronouns)) {
-      throw new HttpError(400, "Pronouns can only contain letters, spaces, slashes, and hyphens.");
-    }
-
-    const emailRegex = /^[^\s@]+@dlsu\.edu\.ph$/;
-    if (!emailRegex.test(email)) {
-      throw new HttpError(400, "Please provide a valid DLSU email address (name@dlsu.edu.ph)");
-    }
-
-    const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!pwRegex.test(password)) {
-      throw new HttpError(400, "Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, and one number.");
-    }
-
     // Check if a user with the same username or email already exists (case-insensitive)
     const existing = await User.findOne({
       $or: [
@@ -128,10 +101,6 @@ export async function register(req, res, next) {
 export async function login(req, res, next) {
   try {
     const { usernameOrEmail, password } = req.body;
-
-    if (!usernameOrEmail || !password) {
-      throw new HttpError(400, "usernameOrEmail and password are required");
-    }
 
     const key = String(usernameOrEmail).trim();
     const user = await User.findOne({
