@@ -43,7 +43,7 @@ app.use(cors({
   origin: true,
   credentials: true
 })); // Enable CORS for all routes with credentials
-app.use(express.json({ limit: "2mb" })); // Limit JSON payload size to prevent abuse
+app.use(express.json({ limit: "5mb" })); // Increased limit to support larger base64 photos
 
 // Configure Session Middleware
 const isProduction = process.env.NODE_ENV === "production";
