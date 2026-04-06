@@ -43,7 +43,7 @@ function renderDiscoverPosts() {
   generateCategoryFilters();
 
   const sortedPosts = PostsComponent_Instance.getFilteredPosts({ sortBy: "hot" });
-  const isLoggedIn = (localStorage.getItem("currentUserId") || "").trim().length > 0;
+  const isLoggedIn = (sessionStorage.getItem("currentUserId") || "").trim().length > 0;
   const FREE_COUNT = typeof PostsComponent_Instance.getGuestFreePostCount === "function"
     ? PostsComponent_Instance.getGuestFreePostCount()
     : 15;

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var mastheadDate = document.getElementById("mastheadDate");
 
   function isLoggedIn() {
-    var id = (localStorage.getItem("currentUserId") || "").trim();
+    var id = (sessionStorage.getItem("currentUserId") || "").trim();
     return id.length > 0;
   }
 
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     var logged = isLoggedIn();
-    var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+    var activeUserId = (sessionStorage.getItem("currentUserId") || "").trim();
 
     var latest = posts
       .slice()
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var article = t.closest(".article");
         var isLocked = article && article.getAttribute("data-locked") === "1";
 
-        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+        var activeUserId = (sessionStorage.getItem("currentUserId") || "").trim();
         var loggedNow = activeUserId.length > 0;
 
         if (!loggedNow || isLocked) {
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var t = e.target.closest(".post-card-mini");
         if (!t) return;
 
-        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+        var activeUserId = (sessionStorage.getItem("currentUserId") || "").trim();
         var loggedNow = activeUserId.length > 0;
         var isLocked = t.getAttribute("data-locked") === "1";
         var id = t.getAttribute("data-id");
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var t = e.target.closest(".post-card-mini");
         if (!t) return;
 
-        var activeUserId = (localStorage.getItem("currentUserId") || "").trim();
+        var activeUserId = (sessionStorage.getItem("currentUserId") || "").trim();
         var loggedNow = activeUserId.length > 0;
         var isLocked = t.getAttribute("data-locked") === "1";
         var id = t.getAttribute("data-id");

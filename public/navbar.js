@@ -17,7 +17,7 @@ class Navbar extends HTMLElement {
 
   render() {
     const active = this.getAttribute('active') || 'home';
-    const isLoggedIn = (localStorage.getItem("currentUserId") || "").trim().length > 0;
+    const isLoggedIn = (sessionStorage.getItem("currentUserId") || "").trim().length > 0;
     const tabs = {
       home: { color: "#a3b565", text: "#fdf8e2", icon: "home-icon.png", hoverIcon: "home-icon-hover.png" },
       profile: { color: "#504e76", text: "#fdf8e2", icon: "profile-icon.png", hoverIcon: "profile-icon-hover.png" },

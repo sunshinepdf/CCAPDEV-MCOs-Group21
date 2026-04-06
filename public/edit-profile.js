@@ -6,11 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Helper functions for user authentication and database access (mocked or real)
   function isLoggedIn() {
-    return (localStorage.getItem("currentUserId") || "").trim().length > 0;
+    return (sessionStorage.getItem("currentUserId") || "").trim().length > 0;
   }
 
   function getCurrentUserId() {
-    return (localStorage.getItem("currentUserId") || "").trim();
+    return (sessionStorage.getItem("currentUserId") || "").trim();
   }
 
   function getDatabase() {

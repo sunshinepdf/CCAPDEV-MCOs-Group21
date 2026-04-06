@@ -82,7 +82,7 @@
   }
 
   function getCurrentUserId() {
-    return (localStorage.getItem("currentUserId") || "").trim();
+    return (sessionStorage.getItem("currentUserId") || "").trim();
   }
 
   function normalizeId(value) {

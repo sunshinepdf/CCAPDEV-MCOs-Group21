@@ -1,6 +1,6 @@
 // Define these functions immediately so they're available to profile-components.js
 function getCurrentUserId() {
-    return (localStorage.getItem("currentUserId") || "").trim();
+    return (sessionStorage.getItem("currentUserId") || "").trim();
 }
 
 // Get the userId from URL parameter if viewing another user's profile
@@ -21,7 +21,7 @@ window.isViewingOwnProfile = isViewingOwnProfile;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Check if user is logged in, lock entire profile if not
-    var isLoggedIn = (localStorage.getItem("currentUserId") || "").trim().length > 0;
+    var isLoggedIn = (sessionStorage.getItem("currentUserId") || "").trim().length > 0;
     if (!isLoggedIn) {
         var contentBox = document.querySelector(".content-box");
         if (contentBox) {

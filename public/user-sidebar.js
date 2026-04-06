@@ -1,7 +1,7 @@
 class UserSidebar extends HTMLElement {
     connectedCallback() {
         const params = new URLSearchParams(window.location.search);
-        const currentUserId = (localStorage.getItem("currentUserId") || "").trim();
+        const currentUserId = (sessionStorage.getItem("currentUserId") || "").trim();
         const userId = params.get('id') || params.get('userId') || currentUserId;
         const db = (typeof window.mockDatabase !== 'undefined' && window.mockDatabase) ? window.mockDatabase : { users: [] };
         const user = (db.users || []).find(u => u && String(u.id) === String(userId)) || {
