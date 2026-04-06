@@ -56,7 +56,7 @@ class ProfileMain extends HTMLElement {
             '<div class="profile-main" id="profile-main">' +
             '<div class="user-profile-header" id="profile-header">' +
             '<div class="profile-avatar" id="profile-avatar">' +
-            '<img src="assets/placeholder.png" alt="Profile photo" id="profile-avatar-img">' +
+            '<img src="assets/profile-icon-default.png" alt="Profile photo" id="profile-avatar-img">' +
             '</div>' +
             '<div class="profile-info">' +
             editButtonHTML +

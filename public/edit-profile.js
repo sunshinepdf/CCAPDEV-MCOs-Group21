@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pronounsInput) setSelectValue(pronounsInput, user.pronouns || "");
     if (yearInput) setSelectValue(yearInput, user.year || "");
     if (majorInput) majorInput.value = user.major || "";
-    if (avatarPreview) avatarPreview.src = user.photo || "assets/placeholder.png";
+    if (avatarPreview) avatarPreview.src = user.photo || "assets/profile-icon-default.png";
     tags = Array.isArray(user.tags) ? user.tags.slice() : [];
     renderEditableTags(tagsEdit);
   }

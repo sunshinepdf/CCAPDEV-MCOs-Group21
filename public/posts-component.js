@@ -684,6 +684,13 @@
         posts.sort((a, b) => {
           var hotA = getHotTimestamp(a);
           var hotB = getHotTimestamp(b);
+          var votedA = (Number(a && a.lastUpvotedAt) || 0) > 0;
+          var votedB = (Number(b && b.lastUpvotedAt) || 0) > 0;
+
+          if (votedA !== votedB) {
+            return votedB ? 1 : -1;
+          }
+
           if (hotB !== hotA) return hotB - hotA;
 
           var scoreA = (Number(a.upvotes) || 0) - (Number(a.downvotes) || 0);
@@ -723,7 +730,7 @@
     // Rendering: Newspaper Article
     // -------------------------
     buildNewspaperArticle(post, index, locked) {
-      var user = this.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
+      var user = this.getUserById(post.authorId) || { username: "Unknown", photo: "assets/profile-icon-default.png" };
       var upvotes = Number(post.upvotes) || 0;
       var downvotes = Number(post.downvotes) || 0;
       var isLead = (index === 0);
@@ -1067,7 +1074,7 @@
           wrapper.className = "comment-item comment-item-thread";
           wrapper.style.marginLeft = (depth * 18) + "px";
 
-          var user = this.getUserById(node.userId) || { username: "Unknown", photo: "assets/placeholder.png" };
+          var user = this.getUserById(node.userId) || { username: "Unknown", photo: "assets/profile-icon-default.png" };
           
           // Calculate upvote and downvote counts
           var upvotes = 0;
@@ -1113,7 +1120,7 @@
           wrapper.innerHTML =
             ownerMenu +
             '<div class="comment-header poppins-regular" style="display:flex; align-items:center; gap:10px;">' +
-              '<img src="' + escapeHtml(user.photo || "assets/placeholder.png") + '" ' +
+              '<img src="' + escapeHtml(user.photo || "assets/profile-icon-default.png") + '" ' +
                    'alt="' + escapeHtml(user.username) + '" ' +
                    'style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">' +
               '<div style="display:flex; flex-direction:column; gap:2px;">' +
@@ -1366,7 +1373,7 @@
     var modalContent = document.getElementById("modal-post-content");
     if (!modalContent) return;
 
-    var user = window.PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
+    var user = window.PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/profile-icon-default.png" };
     var currentUserId = getCurrentUserId();
     var isOwner = currentUserId && String(currentUserId) === String(post.authorId);
 

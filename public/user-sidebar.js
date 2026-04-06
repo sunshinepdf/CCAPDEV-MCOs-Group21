@@ -7,7 +7,7 @@ class UserSidebar extends HTMLElement {
         const user = (db.users || []).find(u => u && String(u.id) === String(userId)) || {
             id: userId,
             username: "Unknown",
-            photo: "assets/placeholder.png",
+            photo: "assets/profile-icon-default.png",
             college: "",
             year: "",
             bio: ""

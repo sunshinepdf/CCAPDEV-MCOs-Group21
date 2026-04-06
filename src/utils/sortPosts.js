@@ -37,6 +37,12 @@ export function applyPostSort(posts, sortBy = "recent") {
 
   if (normalizedSort === "hot") {
     return posts.sort((a, b) => {
+      const aHasVoteTimestamp = getHotTimestamp(a) > 0 && Number(new Date(a.lastUpvotedAt || 0).getTime()) > 0;
+      const bHasVoteTimestamp = getHotTimestamp(b) > 0 && Number(new Date(b.lastUpvotedAt || 0).getTime()) > 0;
+      if (aHasVoteTimestamp !== bHasVoteTimestamp) {
+        return bHasVoteTimestamp ? 1 : -1;
+      }
+
       const timeDiff = getHotTimestamp(b) - getHotTimestamp(a);
       if (timeDiff !== 0) return timeDiff;
       return (Number(b.score) || 0) - (Number(a.score) || 0);

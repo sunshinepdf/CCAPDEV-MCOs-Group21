@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function buildPopularRow(post, locked) {
-    var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
+    var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/profile-icon-default.png" };
     var score = (Number(post.upvotes) || 0) - (Number(post.downvotes) || 0);
 
     var el = document.createElement("div");
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function buildDiscoverCard(post, locked) {
-    var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/placeholder.png" };
+    var user = PostsComponent_Instance.getUserById(post.authorId) || { username: "Unknown", photo: "assets/profile-icon-default.png" };
 
     var el = document.createElement("div");
     el.className = "post-card-mini" + (locked ? " locked" : "");
