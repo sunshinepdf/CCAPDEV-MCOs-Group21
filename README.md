@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-
+This project is the Phase 3 deployment submission for Animo Commons, a forum-style campus community web application built with Node.js, Express, MongoDB, and Handlebars using the MVC architecture. The web app is fully functional with the minimum required features implemented, including user authentication with persistent sessions, password hashing, complete CRUD operations reflected in the database, front-end and back-end form validation, and sample records loaded for the supported features. The deployment is hosted on Railway and uses MongoDB Atlas as the cloud database, and the application is expected to stay aligned with the Phase 2 feedback while providing at least five sample data entries for each applicable feature. The About page must also list the NPM packages and third-party libraries used in the project.
 
 --- 
 
