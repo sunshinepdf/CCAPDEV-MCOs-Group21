@@ -35,6 +35,9 @@ const layoutsPath = path.join(viewsPath, "layouts");
 const partialsPath = path.join(viewsPath, "partials");
 const publicPath = path.join(__dirname, "..", "public");
 
+// Trust proxy for reverse proxies (Railway, Heroku, etc.) - must be set before session middleware
+app.set("trust proxy", 1);
+
 // Configure middleware for CORS, JSON parsing, and Handlebars templating
 app.use(cors({
   origin: true,
@@ -43,6 +46,7 @@ app.use(cors({
 app.use(express.json({ limit: "2mb" })); // Limit JSON payload size to prevent abuse
 
 // Configure Session Middleware
+const isProduction = process.env.NODE_ENV === "production";
 app.use(
   session({
     secret: env.sessionSecret,
@@ -55,7 +59,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production"
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax"
     }
   })
 );
