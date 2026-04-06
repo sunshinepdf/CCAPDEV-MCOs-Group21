@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
   var pronounsInput = document.getElementById("pronouns");
   var profilePicInput = document.getElementById("profile-pic");
 
+  // Pre-fetch CSRF token on page load to initialize session
+  if (typeof window.apiRequest === "function") {
+    window.apiRequest("/api/csrf-token", { method: "GET" }).catch(function (error) {
+      console.warn("Failed to pre-fetch CSRF token:", error);
+    });
+  }
+
   // Password visibility toggle logic
   function initPasswordToggles() {
     document.querySelectorAll("[data-toggle-password]").forEach(function (button) {
